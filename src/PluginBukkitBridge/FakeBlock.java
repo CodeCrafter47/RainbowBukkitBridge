@@ -1,419 +1,299 @@
 package PluginBukkitBridge;
 
+import PluginReference.BlockHelper;
+import PluginReference.MC_Block;
+import PluginReference.MC_World;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
+
 import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.*;
-import org.bukkit.block.*;
-import org.bukkit.inventory.*;
-import org.bukkit.metadata.*;
-import org.bukkit.plugin.*;
-
-import PluginReference.*;
-
 public class FakeBlock implements Block
 {
-	public MC_Block m_block = null;
-	public MC_World m_world = null;
-	public MC_ItemStack is = null;
-	public int x, y, z;
-	int id = -1;
-	byte subType = -1;
+    int x,y,z;
+    MC_World world;
 
-	private int internalGetId()
-	{
-		if(id != -1) return id;
-		return m_block.getId();
-	}
-	private byte internalGetSubtype()
-	{
-		if(subType != -1) return subType ;
-		return (byte)m_block.getSubtype();
-	}
-	
-	public static void FakeDebug(String msg)
-	{
-		System.out.println("FakeBlock Proxy: " + msg);
-	}
+    public FakeBlock(int x, int y, int z, MC_World world) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.world = world;
+    }
 
-	public FakeBlock(MC_Block blk, MC_World world, int tx, int ty, int tz)
-	{
-		m_block = blk;
-		m_world = world;
-		x = tx;
-		y = ty;
-		z = tz;
-		if((blk != null) && (blk != this)) 
-		{
-			id = blk.getId();
-			subType = (byte)blk.getSubtype();
-		}
-	}
-	public FakeBlock(MC_Block blk, MC_World world, int tx, int ty, int tz, int argID, int argSubtype)
-	{
-		m_block = blk;
-		m_world = world;
-		x = tx;
-		y = ty;
-		z = tz;
-		id = argID;
-		subType = (byte)argSubtype;
-	}
-	
-	@Override
-	public List<MetadataValue> getMetadata(String arg0)
-	{
-		FakeDebug("getMetadata");
-		return null;
-	}
+    @Override
+    public byte getData() {
+        return (byte) world.getBlockAt(x,y,z).getSubtype();
+    }
 
-	@Override
-	public boolean hasMetadata(String arg0)
-	{
-				FakeDebug("hasMetadata");
-		return false;
-	}
+    @Override
+    public Block getRelative(int modX, int modY, int modZ) {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public void removeMetadata(String arg0, Plugin arg1)
-	{
-				FakeDebug("removeMetadata");
-		
-	}
+    @Override
+    public Block getRelative(BlockFace face) {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public void setMetadata(String arg0, MetadataValue arg1)
-	{
-				FakeDebug("setMetadata");
-		
-	}
+    @Override
+    public Block getRelative(BlockFace face, int distance) {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public boolean breakNaturally()
-	{
-				FakeDebug("breakNaturally");
-		return false;
-	}
+    @Override
+    public Material getType() {
+        return Material.getMaterial(getTypeId());
+    }
 
-	@Override
-	public boolean breakNaturally(ItemStack arg0)
-	{
-				FakeDebug("breakNaturally");
-		return false;
-	}
+    @Override
+    public int getTypeId() {
+        return world.getBlockAt(x,y,z).getId();
+    }
 
-	@Override
-	public Biome getBiome()
-	{
-				FakeDebug("getBiome");
-		return null;
-	}
+    @Override
+    public byte getLightLevel() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public int getBlockPower()
-	{
-				FakeDebug("getBlockPower");
-		return 0;
-	}
+    @Override
+    public byte getLightFromSky() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public int getBlockPower(BlockFace arg0)
-	{
-				FakeDebug("getBlockPower");
-		return 0;
-	}
+    @Override
+    public byte getLightFromBlocks() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public Chunk getChunk()
-	{
-				FakeDebug("getChunk");
-		return null;
-	}
+    @Override
+    public World getWorld() {
+        return new FakeWorld(world);
+    }
 
-	@Override
-	public byte getData()
-	{
-		return internalGetSubtype();
-	}
+    @Override
+    public int getX() {
+        return x;
+    }
 
-	@Override
-	public Collection<ItemStack> getDrops()
-	{
-		FakeDebug("getDrops");
-		return null;
-	}
+    @Override
+    public int getY() {
+        return y;
+    }
 
-	@Override
-	public Collection<ItemStack> getDrops(ItemStack arg0)
-	{
-				FakeDebug("getDrops");
-		return null;
-	}
+    @Override
+    public int getZ() {
+        return z;
+    }
 
-	@Override
-	public BlockFace getFace(Block arg0)
-	{
-		FakeDebug("getFace");
-		return null;
-	}
+    @Override
+    public Location getLocation() {
+        return new Location(getWorld(), x, y, z);
+    }
 
-	@Override
-	public double getHumidity()
-	{
-				FakeDebug("getHumidity");
-		return 0;
-	}
+    @Override
+    public Location getLocation(Location loc) {
+        loc.setWorld(getWorld());
+        loc.setX(getX());
+        loc.setY(getY());
+        loc.setZ(getZ());
+        return loc;
+    }
 
-	@Override
-	public byte getLightFromBlocks()
-	{
-				FakeDebug("getLightFromBlocks");
-		return 0;
-	}
+    @Override
+    public Chunk getChunk() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public byte getLightFromSky()
-	{
-				FakeDebug("getLightFromSky");
-		return 0;
-	}
+    @Override
+    public void setData(final byte data) {
+        world.setBlockAt(x,y,z, world.getBlockAt(x,y,z), data);
+    }
 
-	@Override
-	public byte getLightLevel()
-	{
-				FakeDebug("getLightLevel");
-		return 0;
-	}
+    @Override
+    public void setData(byte data, boolean applyPhysics) {
+        // MyPlugin.fixme();
+        setData(data);
+    }
 
-	@Override
-	public Location getLocation()
-	{
-		World world = Bukkit.getWorld(m_world.getName());
-		Location loc = new Location(world, x, y, z);
-		return loc;
-	}
+    @Override
+    public void setType(final Material type) {
+        setTypeId(type.getId());
+    }
 
-	@Override
-	public Location getLocation(Location arg0)
-	{
-		FakeDebug("getLocation: " + FakeHelper.LocStringShort(arg0));
-		return null;
-	}
+    @Override
+    public boolean setTypeId(int type) {
+        world.setBlockAt(x,y,z,getBlock(type), getData());
+        return true;
+    }
 
-	@Override
-	public PistonMoveReaction getPistonMoveReaction()
-	{
-		FakeDebug("getPistonMoveReaction");
-		return null;
-	}
+    @Override
+    public boolean setTypeId(int type, boolean applyPhysics) {
+        // MyPlugin.fixme();
+        return setTypeId(type);
+    }
 
-	@Override
-	public Block getRelative(BlockFace face)
-	{
-		int nx = x;
-		int ny = y;
-		int nz = z;
-		
-		if(face == BlockFace.NORTH) nz--; 
-		if(face == BlockFace.SOUTH) nz++;
-		if(face == BlockFace.WEST) nx--;
-		if(face == BlockFace.EAST) nx++;
-		if(face == BlockFace.UP) ny++; 
-		if(face == BlockFace.DOWN) ny--;
-		
-		if(face == BlockFace.NORTH_EAST)
-		{
-			nz--; 
-			nx++;
-		}
-		if(face == BlockFace.NORTH_WEST)
-		{
-			nz--; 
-			nx--;
-		}
-		if(face == BlockFace.SOUTH_WEST)
-		{
-			nz++; 
-			nx--;
-		}
-		if(face == BlockFace.SOUTH_EAST)
-		{
-			nz++; 
-			nx++;
-		}
-		
-		return new FakeBlock(m_world.getBlockAt(nx,  ny, nz), m_world, nx, ny, nz);
-	}
+    @Override
+    public boolean setTypeIdAndData(final int type, final byte data, boolean applyPhysics) {
+        // MyPlugin.fixme();
+        world.setBlockAt(x,y,z,getBlock(type), data);
+        return true;
+    }
 
-	@Override
-	public Block getRelative(BlockFace arg0, int arg1)
-	{
-				FakeDebug("getRelative");
-		return null;
-	}
+    @Override
+    public BlockFace getFace(Block block) {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public Block getRelative(int arg0, int arg1, int arg2)
-	{
-				FakeDebug("getRelative");
-		return null;
-	}
+    @Override
+    public BlockState getState() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public BlockState getState()
-	{
-		FakeDebug("getState");
-		return null;
-	}
+    @Override
+    public Biome getBiome() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public double getTemperature()
-	{
-				FakeDebug("getTemperature");
-		return 0;
-	}
+    @Override
+    public void setBiome(Biome bio) {
+        MyPlugin.fixme();
 
-	@Override
-	public Material getType()
-	{
-		if(m_block == null) return Material.AIR;
-		return Material.getMaterial(internalGetId());
-	}
+    }
 
-	@Override
-	public int getTypeId()
-	{
-		return internalGetId();
-	}
+    @Override
+    public boolean isBlockPowered() {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public World getWorld()
-	{
-		return new FakeWorld(m_world);
-	}
+    @Override
+    public boolean isBlockIndirectlyPowered() {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public int getX()
-	{
-		return x;
-	}
+    @Override
+    public boolean isBlockFacePowered(BlockFace face) {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public int getY()
-	{
-		return y;
-	}
+    @Override
+    public boolean isBlockFaceIndirectlyPowered(BlockFace face) {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public int getZ()
-	{
-		return z;
-}
+    @Override
+    public int getBlockPower(BlockFace face) {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public boolean isBlockFaceIndirectlyPowered(BlockFace arg0)
-	{
-		FakeDebug("isBlockFaceIndirectlyPowered");
-		return false;
-	}
+    @Override
+    public int getBlockPower() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public boolean isBlockFacePowered(BlockFace arg0)
-	{
-				FakeDebug("isBlockFacePowered");
-		return false;
-	}
+    @Override
+    public boolean isEmpty() {
+        return getTypeId() == 0;
+    }
 
-	@Override
-	public boolean isBlockIndirectlyPowered()
-	{
-				FakeDebug("isBlockIndirectlyPowered");
-		return false;
-	}
+    @Override
+    public boolean isLiquid() {
+        return world.getBlockAt(x,y,z).isLiquid();
+    }
 
-	@Override
-	public boolean isBlockPowered()
-	{
-				FakeDebug("isBlockPowered");
-		return false;
-	}
+    @Override
+    public double getTemperature() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public boolean isEmpty()
-	{
-				FakeDebug("isEmpty");
-		return false;
-	}
+    @Override
+    public double getHumidity() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public boolean isLiquid()
-	{
-				FakeDebug("isLiquid");
-		return false;
-	}
+    @Override
+    public PistonMoveReaction getPistonMoveReaction() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public void setBiome(Biome arg0)
-	{
-				FakeDebug("setBiome");
-		
-	}
+    @Override
+    public boolean breakNaturally() {
+        world.breakNaturallyAt(x,y,z);
+        return true;
+    }
 
-	@Override
-	public void setData(byte arg0)
-	{
-		m_world.setBlockAt(x,  y, z, m_block, arg0);
-	}
+    @Override
+    public boolean breakNaturally(ItemStack tool) {
+        world.breakNaturallyAt(x,y,z,Util.getItemStack(tool));
+        return true;
+    }
 
-	@Override
-	public void setData(byte arg0, boolean arg1)
-	{
-		m_world.setBlockAt(x,  y, z, m_block, arg0);
-	}
+    @Override
+    public Collection<ItemStack> getDrops() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public void setType(Material mat)
-	{
-		setTypeId(mat.getId(), true);
-	}
+    @Override
+    public Collection<ItemStack> getDrops(ItemStack tool) {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public boolean setTypeId(int id)
-	{
-		setTypeId(id, true);
-		return true;
-	}
+    @Override
+    public void setMetadata(String metadataKey, MetadataValue newMetadataValue) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public boolean setTypeId(int blkID, boolean arg1)
-	{
-		String blockName = BlockHelper.getBlockName(blkID);
-		MC_Block blk = m_world.getBlockFromName(blockName.toLowerCase());
-		if(blk == null)
-		{
-			FakeDebug("setTypeId: ID=" + blkID + ", flag=" + arg1);
-			return false;
-		}
+    @Override
+    public List<MetadataValue> getMetadata(String metadataKey) {
+        MyPlugin.fixme();
+        return null;
+    }
 
-		m_world.setBlockAt(x,  y, z, blk, 0);
-		
-		return true;
-	}
+    @Override
+    public boolean hasMetadata(String metadataKey) {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public boolean setTypeIdAndData(int blkID, byte blkData, boolean arg2)
-	{
-		String blockName = BlockHelper.getBlockName(blkID);
-		MC_Block blk = m_world.getBlockFromName(blockName.toLowerCase());
-		if(blk == null)
-		{
-			FakeDebug("setTypeIdAndData: ID=" + blkID + ", Data=" + blkData + ", flag=" + arg2);
-			return false;
-		}
+    @Override
+    public void removeMetadata(String metadataKey, Plugin owningPlugin) {
+        MyPlugin.fixme();
+    }
 
-		m_world.setBlockAt(x,  y, z, blk, blkData);
-		
-		return true;
-	}
+    private MC_Block getBlock(int id){
+        MC_Block block = world.getBlockFromName(BlockHelper.getBlockName(id));
+        if(block == null){
+            MyPlugin.logger.warning("Unknown block: " + Material.getMaterial(id).name() + ", using dirt");
+            block = world.getBlockFromName("dirt");
+        }
+        return block;
+    }
 
 }

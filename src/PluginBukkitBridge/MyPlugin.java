@@ -1,33 +1,40 @@
 package PluginBukkitBridge;
 
-import java.io.File;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
-
+import PluginReference.*;
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockFace;
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
-import org.bukkit.event.block.*;
+import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.craftbukkit.help.SimpleHelpMap;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.StandardMessenger;
 
-import PluginReference.*;
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.StreamHandler;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MyPlugin extends PluginReference.PluginBase
 {
 	public static MC_Server server = null;
+    public static Logger logger;
 	public final static FakeConsoleCommandSender consoleCommandSender = new FakeConsoleCommandSender();
 	public final static ServicesManager servicesManager = new SimpleServicesManager();
 	public final static StandardMessenger messenger = new StandardMessenger();
@@ -35,16 +42,35 @@ public class MyPlugin extends PluginReference.PluginBase
 	public final static FakeCraftServer fakeServer = new FakeCraftServer();
 	public final static SimpleCommandMap commandMap = new SimpleCommandMap(fakeServer);
     public final static PluginManager pluginManager = new SimplePluginManager(fakeServer, commandMap);
+    public final static SimpleHelpMap helpMap = new SimpleHelpMap(fakeServer);
+
+    public final static File pluginDir = new File("plugins");
+    public final static File updateDir = new File(pluginDir, "update");
+
+    public static Map<UUID, FakePlayer> players = new HashMap<>();
 
     public static boolean DebugMode = false;
-    
-	public void onStartup(MC_Server argServer)
+
+    public static void fixme() {
+        new UnsupportedOperationException("FIXME").printStackTrace();
+    }
+
+    public MyPlugin() {
+        super();
+        Handler handler = new StreamHandler(System.out, new MyLogFormatter());
+        logger = Logger.getLogger("Minecraft");
+        logger.addHandler(handler);
+        pluginDir.mkdirs();
+        updateDir.mkdirs();
+    }
+
+    public void onStartup(MC_Server argServer)
 	{
 		System.out.println("BukkitBridge v2.4 --- Starting up...");
 		server = argServer;
 		
 		// Initialize Bukkit server object...
-		fakeServer.m_server = server;
+		fakeServer.server = server;
 		Bukkit.setServer(fakeServer);
 		
 		// Load plugin JARs...
@@ -73,14 +99,8 @@ public class MyPlugin extends PluginReference.PluginBase
     public static void loadPlugins()
     {
         pluginManager.registerInterface(JavaPluginLoader.class);
-
-        File pluginFolder = new File("plugins");
-
-        if (!pluginFolder.exists()) {
-            pluginFolder.mkdir();
-        }
         
-        Plugin[] plugins = pluginManager.loadPlugins(pluginFolder);
+        Plugin[] plugins = pluginManager.loadPlugins(pluginDir);
         for (Plugin plugin : plugins) {
             try {
                 String message = String.format("[BukkitBridge] Loading Bukkit plugin: %s", plugin.getDescription().getFullName());
@@ -139,28 +159,10 @@ public class MyPlugin extends PluginReference.PluginBase
 			System.out.println("BukkitBridge -- " + logMsg);
 		}
 
-		// Call Bukkit Event
-		// ------------------------------------------------
-    	FakePlayer player = new FakePlayer();
-    	player.m_loginName = playerName;
-    	player.m_inetSocketAddress = new InetSocketAddress(ip, 0);
-		InetAddress addr = null; 
-    	try
-    	{
-    		addr = InetAddress.getByName(ip);
-    	}
-    	catch(Exception exc)
-    	{
-    		
-    	}
-		PlayerLoginEvent event = new PlayerLoginEvent((Player)player, ip, addr);
-        pluginManager.callEvent(event);
-		// ------------------------------------------------
-		
 
-        // Also call PlayerJoinEvent...
-		PlayerJoinEvent joinEvent = new PlayerJoinEvent((Player)player, ip);
-        pluginManager.callEvent(joinEvent);
+        AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(playerName, new InetSocketAddress(ip, 0).getAddress(), uuid);
+        pluginManager.callEvent(event);
+        // fixme result
 	}
 	
 	public void onPlayerLogout(String playerName, UUID uuid)
@@ -170,14 +172,10 @@ public class MyPlugin extends PluginReference.PluginBase
 			String logMsg = String.format("%s onPlayerLogout. UUID=%s", playerName, uuid.toString());
 			System.out.println("BukkitBridge -- " + logMsg);
 		}
-		
-		// Call Bukkit Event
-		// ------------------------------------------------
-    	FakePlayer player = new FakePlayer();
-    	player.m_loginName = playerName;
-    	PlayerQuitEvent event = new PlayerQuitEvent((Player)player, "Goodbye");
-        pluginManager.callEvent(event);
-		// ------------------------------------------------
+
+        // fixme message
+        pluginManager.callEvent(new PlayerQuitEvent(players.get(uuid), ""));
+        players.remove(uuid);
 		
 	}
 
@@ -201,90 +199,35 @@ public class MyPlugin extends PluginReference.PluginBase
 			String logMsg = String.format("%s onPlayerInput: %s", plr.getName(), msg);
 			System.out.println("BukkitBridge -- " + logMsg);
 		}
-		
-    	FakePlayer player = new FakePlayer();
-    	player.m_player = plr;
-		PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent((Player)player, msg);
-		event.setCancelled(ei.isCancelled);
-        pluginManager.callEvent(event);
-        
-        if(!ei.isCancelled) ei.isCancelled = event.isCancelled();
-        if(ei.isCancelled) return;
 
-
-
-        FakeCommandSender cs = new FakeCommandSender(plr);
-        
-        // Issue chat event...
-        if(!msg.startsWith("/"))
-        {
-        	AsyncPlayerChatEvent chatEvent = new AsyncPlayerChatEvent(false, cs, msg, null);
-        	chatEvent.setCancelled(ei.isCancelled);
-            pluginManager.callEvent(chatEvent);
-            if(!ei.isCancelled) ei.isCancelled = chatEvent.isCancelled(); 
-            return;
+        super.onPlayerInput(plr, msg, ei);
+        Matcher match = Pattern.compile(" */(.*)").matcher(msg);
+        Player player = getPlayer(plr.getName());
+        player.getLocation();
+        if (match.matches()) {
+            PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, msg);
+            pluginManager.callEvent(event);
+            if(!event.isCancelled()) {
+                // fixme message might be changed
+                if (commandMap.dispatch(getPlayer(plr.getName()), match.group(1))) ei.isCancelled = true;
+            }
+        } else {
+            // fixme call PlayerChatEvent ?
         }
-
-        
-        // Call server command...
-    	{
-    		ServerCommandEvent cmdEvent = new ServerCommandEvent(cs, msg);
-    		pluginManager.callEvent(cmdEvent);
-    	}
-        
-        // Call onCommand...
-        //--------------------------------------------------------------
-        // If not a command, skip...
-        if(!msg.startsWith("/") || (msg.length() <= 1) ) return;
-        msg = msg.substring(1);
-        int idxSpace = msg.indexOf(' ');
-        String[] args = new String[0];
-        String cmdName = msg;
-        String argStart = msg;
-        if(idxSpace >= 0) 
-        {
-        	cmdName = msg.substring(0, idxSpace);
-        	argStart = msg.substring(idxSpace+1);
-        	args = argStart.split("\\s+");
-        }
-        
-        Plugin[] plugins = pluginManager.getPlugins();
-        FakeCommand cmd = new FakeCommand(cmdName);
-        cs.m_player = plr;
-        for (Plugin plugin : plugins) {
-        	if(plugin.isEnabled())
-        	{
-        		try
-        		{
-	        		if(plugin.getDescription().getCommands().containsKey(cmdName))
-	        		{
-		        		if(plugin.onCommand(cs, cmd, cmdName, args)) 
-		        		{
-		        			//ei.isCancelled = true;
-		        			//return;
-		        		}
-	        			
-	        			if(DebugMode) System.out.println("BukkitBridge: Assuming " + plugin.getName() + " handles command: " + cmdName);
-	        			ei.isCancelled = true;
-	        			return;
-	        		}
-        		}
-        		catch(Exception exc)
-        		{
-        			exc.printStackTrace();
-        		}
-        	}
-        }
-        
-        
-        //if (this.server.dispatchCommand(event.getPlayer(), event.getMessage().substring(1))) {
-            //return;
-        //}
         
 	} // end of onPlayerInput
-	
 
-	public void onAttemptEntityDamage(MC_Entity ent, MC_DamageType dmgType, double amt, MC_EventInfo ei)
+    public static Player getPlayer(String name) {
+        if (!players.containsKey(UUID.fromString(server.getPlayerUUIDFromName(name)))){
+            MC_Player player = server.getOnlinePlayerByName(name);
+            if(player == null)return null;
+            players.put(player.getUUID(), new FakePlayer(player));
+        }
+        return players.get(UUID.fromString(server.getPlayerUUIDFromName(name)));
+    }
+
+
+    public void onAttemptEntityDamage(MC_Entity ent, MC_DamageType dmgType, double amt, MC_EventInfo ei)
 	{
 		if(DebugMode)
 		{
@@ -300,54 +243,76 @@ public class MyPlugin extends PluginReference.PluginBase
 		
 	}
 
-	//public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei)
-	public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) 
-	{
-	
-		if(DebugMode)
-		{
-			String logMsg = String.format("%s Attempting Block Place or Interact @ %s", plr.getName(), loc.toString());
-			System.out.println("BukkitBridge -- " + logMsg);
-		}
-
-		Player who = new FakePlayer(plr);
-		MC_ItemStack isHand = plr.getItemInHand();
-		ItemStack is = new ItemStack(isHand.getId(), isHand.getCount());
-		
-		MC_World world = plr.getWorld();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		MC_Block blk = world.getBlockAt(x,y,z);
-		FakeBlock block = new FakeBlock(blk, world, x, y, z); 
-		
-		PlayerInteractEvent event = new PlayerInteractEvent(who, Action.RIGHT_CLICK_BLOCK, is, block, BlockFace.SELF);
-		event.setCancelled(ei.isCancelled);
+    @Override
+    public void onBlockBroke(MC_Player plr, MC_Location loc, int blockKey) {
+        super.onBlockBroke(plr, loc, blockKey);
+        BlockBreakEvent event = new BlockBreakEvent(new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
+                server.getWorld(loc.dimension)), getPlayer(plr.getName()));
         pluginManager.callEvent(event);
-        if(!ei.isCancelled) ei.isCancelled = event.isCancelled();       
-	}
-	
-	public void onBlockBroke(MC_Player plr, MC_Location loc, int blockKey)
-	{
-		if(DebugMode) System.out.println("BukkitBridge -- onBlockBroke to BlockBreakEvent");
-		
-		int blockID = BlockHelper.getBlockID_FromKey(blockKey);
-		int blockID_Subtype = BlockHelper.getBlockSubtype_FromKey(blockKey);
-		String strBlockName = BlockHelper.getBlockName(blockID);
-		if(blockID_Subtype != 0) strBlockName += ":" + blockID_Subtype;
+        // fixme result, block break, replace?
+    }
 
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		MC_World world = plr.getWorld();
-		MC_Block blk = world.getBlockAt(x,  y, z);
-
-		FakeBlock fakeBlock = new FakeBlock(blk, world, x, y, z, blockID, blockID_Subtype);
-
-		BlockBreakEvent event = new BlockBreakEvent(fakeBlock, new FakePlayer(plr));
-		
+    public void onPlayerDeath(MC_Player plrVictim, MC_Player plrKiller, MC_DamageType dmgType, String deathMsg) {
+        super.onPlayerDeath(plrVictim, plrKiller, dmgType, deathMsg);
+        // fixme set killer
+        PlayerDeathEvent event = new PlayerDeathEvent(getPlayer(plrVictim.getName()), null, 0, "");
+        // fixme use result
         pluginManager.callEvent(event);
-	}
+    }
+
+    public void onPlayerRespawn(MC_Player plr) {
+        super.onPlayerRespawn(plr);
+        // fixme location, bed spawn
+        PlayerRespawnEvent event = new PlayerRespawnEvent(getPlayer(plr.getName()), Util.getLocation(plr.getLocation()), false);
+        pluginManager.callEvent(event);
+        // fixme result
+    }
+
+    public void onConsoleInput(String cmd, MC_EventInfo ei) {
+        super.onConsoleInput(cmd, ei);
+        if (commandMap.dispatch(consoleCommandSender, cmd)) ei.isCancelled = true;
+    }
+
+    public void onAttemptBlockBreak(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
+        super.onAttemptBlockBreak(plr, loc, ei);
+        // fixme blockFace
+        PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.LEFT_CLICK_BLOCK,
+                Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), BlockFace.DOWN);
+        pluginManager.callEvent(event);
+        ei.isCancelled = event.isCancelled();
+    }
+
+    public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) {
+        super.onAttemptPlaceOrInteract(plr, loc, ei, dir);
+        PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.RIGHT_CLICK_BLOCK,
+                Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), Util.getFace(dir));
+        pluginManager.callEvent(event);
+        ei.isCancelled = event.isCancelled();
+    }
+
+    public void onAttemptPlayerTeleport(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
+        super.onAttemptPlayerTeleport(plr, loc, ei);
+        PlayerTeleportEvent event = new PlayerTeleportEvent(getPlayer(plr.getName()), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
+        pluginManager.callEvent(event);
+        ei.isCancelled = event.isCancelled();
+    }
+
+    public void onAttemptPlayerMove(MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
+        super.onAttemptPlayerMove(plr, locFrom, locTo, ei);
+        PlayerMoveEvent event = new PlayerMoveEvent(getPlayer(plr.getName()), Util.getLocation(locFrom), Util.getLocation(locTo));
+        pluginManager.callEvent(event);
+        ei.isCancelled = event.isCancelled();
+    }
+
+    public void onPlayerJoin(MC_Player plr) {
+        super.onPlayerJoin(plr);
+        PlayerLoginEvent event1 = new PlayerLoginEvent(getPlayer(plr.getName()), plr.getIPAddress(), new InetSocketAddress(plr.getIPAddress(), 0).getAddress());
+        pluginManager.callEvent(event1);
+
+        // fixme result
+        PlayerJoinEvent event = new PlayerJoinEvent(getPlayer(plr.getName()), "");
+        pluginManager.callEvent(event);
+    }
 	
 
 	public void onItemPlaced(MC_Player plr, MC_Location loc, MC_ItemStack isHandItem, MC_Location locPlacedAgainst, MC_DirectionNESWUD dir)
@@ -368,10 +333,10 @@ public class MyPlugin extends PluginReference.PluginBase
 		int z2 = locPlacedAgainst.getBlockZ();
 
 		MC_Block blkPlaced = world.getBlockAt(x,  y, z);
-		FakeBlock fakeBlockPlaced = new FakeBlock(blkPlaced, world, x, y, z, isHandItem.getId(), isHandItem.getDamage());
+		FakeBlock fakeBlockPlaced = new FakeBlock(x, y, z, world);
 
 		MC_Block blkAgainst = world.getBlockAt(x2,  y2, z2);
-		FakeBlock fakeBlockAgainst = new FakeBlock(blkAgainst, world, x2, y2, z2);
+		FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
 				
 		BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced), fakeBlockAgainst, isPlaced, who, true);	
         pluginManager.callEvent(event);

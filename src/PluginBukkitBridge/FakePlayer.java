@@ -1,48 +1,20 @@
 package PluginBukkitBridge;
 
-import java.net.InetSocketAddress;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Achievement;
-import org.bukkit.Bukkit;
-import org.bukkit.Effect;
-import org.bukkit.EntityEffect;
-import org.bukkit.GameMode;
-import org.bukkit.Instrument;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Note;
-import org.bukkit.Server;
-import org.bukkit.Sound;
-import org.bukkit.Statistic;
-import org.bukkit.WeatherType;
-import org.bukkit.World;
+import PluginReference.MC_GameMode;
+import PluginReference.MC_MotionData;
+import PluginReference.MC_Player;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.Snowball;
-import org.bukkit.event.HandlerList;
+import org.bukkit.craftbukkit.CraftSound;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.InventoryView.Property;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
+import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
@@ -53,25 +25,451 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
 
-import PluginReference.MC_ItemStack;
-import PluginReference.MC_Location;
-import PluginReference.MC_Player;
+import java.net.InetSocketAddress;
+import java.util.*;
 
 
 public class FakePlayer implements Player
 {
-	public String m_loginName = null;
-	public InetSocketAddress m_inetSocketAddress = null;
-	public MC_Player m_player = null;
-	
-	public FakePlayer()
-	{
-		
-	}
-	public FakePlayer(MC_Player argPlayer)
-	{
-		m_player = argPlayer;
-	}
+    private MC_Player player;
+    private UUID uuid;
+
+    public FakePlayer(MC_Player player) {
+        this.player = player;
+        uuid = player.getUUID();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return player.getCustomName();
+    }
+
+    @Override
+    public void setDisplayName(String name) {
+        player.setCustomName(name);
+    }
+
+    @Override
+    public String getPlayerListName() {
+        return player.getCustomName();
+    }
+
+    @Override
+    public void setPlayerListName(String name) {
+        player.setCustomName(name);
+    }
+
+    @Override
+    public void setCompassTarget(Location loc) {
+        player.setCompassTarget(Util.getLocation(loc));
+    }
+
+    @Override
+    public Location getCompassTarget() {
+        return Util.getLocation(player.getCompassTarget());
+    }
+
+    @Override
+    public InetSocketAddress getAddress() {
+        return new InetSocketAddress(player.getIPAddress(), 0);
+    }
+    @Override
+    public void sendRawMessage(String message) {
+        // fixme
+        player.sendMessage(message);
+    }
+
+    @Override
+    public boolean performCommand(String command) {
+        return MyPlugin.commandMap.dispatch(this, command);
+    }
+
+    @Override
+    public boolean isSneaking() {
+        return player.isSneaking();
+    }
+
+    @Override
+    public boolean isSprinting() {
+        return player.isSprinting();
+    }
+
+    @Override
+    public void playNote(Location loc, byte instrument, byte note) {
+        String instrumentName = null;
+        switch (instrument) {
+            case 0:
+                instrumentName = "harp";
+                break;
+            case 1:
+                instrumentName = "bd";
+                break;
+            case 2:
+                instrumentName = "snare";
+                break;
+            case 3:
+                instrumentName = "hat";
+                break;
+            case 4:
+                instrumentName = "bassattack";
+                break;
+        }
+        playSound(loc, "note."+instrumentName, 3.0f, note);
+    }
+
+    @Override
+    public void playNote(Location loc, Instrument instrument, Note note) {
+        String instrumentName = null;
+        switch (instrument.ordinal()) {
+            case 0:
+                instrumentName = "harp";
+                break;
+            case 1:
+                instrumentName = "bd";
+                break;
+            case 2:
+                instrumentName = "snare";
+                break;
+            case 3:
+                instrumentName = "hat";
+                break;
+            case 4:
+                instrumentName = "bassattack";
+                break;
+        }
+        playSound(loc, "note." + instrumentName, 3.0f, note.getId());
+    }
+
+    @Override
+    public void playSound(Location location, Sound sound, float volume, float pitch) {
+        playSound(location, CraftSound.getSound(sound), volume, pitch);
+    }
+
+    @Override
+    public void playSound(Location location, String sound, float volume, float pitch) {
+        // fixme location
+        player.playSound(sound, volume, pitch);
+    }
+
+    @Override
+    public long getPlayerTime() {
+        // fixme
+        return getWorld().getTime();
+    }
+
+    @Override
+    public long getPlayerTimeOffset() {
+        // fixme
+        return 0;
+    }
+
+    @Override
+    public boolean isPlayerTimeRelative() {
+        // fixme
+        return false;
+    }
+
+    @Override
+    public void giveExp(int amount) {
+        setExp(getExp() + amount);
+    }
+
+    @Override
+    public void giveExpLevels(int amount) {
+        setLevel(getLevel() + amount);
+    }
+
+    @Override
+    public float getExp() {
+        return player.getExp();
+    }
+    @Override
+    public int getLevel() {
+        return player.getLevel();
+    }
+
+    @Override
+    public int getTotalExperience() {
+        return player.getTotalExperience();
+    }
+
+    @Override
+    public int getFoodLevel() {
+        return player.getFoodLevel();
+    }
+
+    @Override
+    public void setFoodLevel(int value) {
+        player.setFoodLevel(value);
+    }
+
+    @Override
+    public boolean getAllowFlight() {
+        return player.isAllowedFlight();
+    }
+
+    @Override
+    public Location getLocation() {
+        return Util.getLocation(player.getLocation())/*.setDirection(Util.getDirection(player.getMotionData()))*/;
+    }
+
+    @Override
+    public Location getLocation(Location loc) {
+        loc.setX(player.getLocation().x);
+        loc.setY(player.getLocation().y);
+        loc.setZ(player.getLocation().z);
+        loc.setPitch(player.getLocation().pitch);
+        loc.setYaw(player.getLocation().yaw);
+        loc.setWorld(new FakeWorld(player.getWorld()));
+        //loc.setDirection(Util.getDirection(player.getMotionData()));
+        return getLocation();
+    }
+
+    @Override
+    public void setVelocity(Vector velocity) {
+        player.setMotionData(Util.getMotionData(velocity, player.getMotionData()));
+    }
+
+    @Override
+    public Vector getVelocity() {
+        return Util.getDirection(player.getMotionData());
+    }
+
+    @Override
+    public boolean isOnGround() {
+        return player.getMotionData().onGround;
+    }
+
+    @Override
+    public World getWorld() {
+        return new FakeWorld(player.getWorld());
+    }
+
+    @Override
+    public boolean teleport(Location location) {
+        return teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
+
+    @Override
+    public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
+        PlayerTeleportEvent event = new PlayerTeleportEvent(this, getLocation(), location, cause);
+        MyPlugin.pluginManager.callEvent(event);
+        if(event.isCancelled())return false;
+        player.teleport(Util.getLocation(event.getTo()));
+        return true;
+    }
+
+    @Override
+    public boolean teleport(Entity destination) {
+        return teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
+
+    @Override
+    public boolean teleport(Entity destination, PlayerTeleportEvent.TeleportCause cause) {
+        return teleport(destination.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
+
+    @Override
+    public int getFireTicks() {
+        return player.getFireTicks();
+    }
+
+    @Override
+    public void setFireTicks(int ticks) {
+        player.setFireTicks(ticks);
+    }
+
+    @Override
+    public boolean isDead() {
+        return player.isDead();
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
+    public Server getServer() {
+        return Bukkit.getServer();
+    }
+
+    @Override
+    public float getFallDistance() {
+        return (float) player.getMotionData().fallDistance;
+    }
+
+    @Override
+    public void setFallDistance(float distance) {
+        MC_MotionData md = player.getMotionData();
+        md.fallDistance = distance;
+        player.setMotionData(md);
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return uuid;
+    }
+
+
+    @Override
+    public Player getPlayer() {
+        return this;
+    }
+
+    @Override
+    public EntityType getType() {
+        return EntityType.valueOf(player.getType().name());
+    }
+
+    @Override
+    public boolean isFlying() {
+        return player.isFlying();
+    }
+
+    @Override
+    public float getFlySpeed() {
+        return player.getFlySpeed();
+    }
+
+    @Override
+    public float getWalkSpeed() {
+        return player.getWalkSpeed();
+    }
+
+    @Override
+    public void setTexturePack(String url) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setResourcePack(String url) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public Scoreboard getScoreboard() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setScoreboard(Scoreboard scoreboard) throws IllegalArgumentException, IllegalStateException {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setHealthScaled(boolean scale) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setHealthScale(double scale) throws IllegalArgumentException {
+        setHealth(scale);
+    }
+
+    @Override
+    public double getHealthScale() {
+        return getHealth();
+    }
+
+    @Override
+    public void sendMessage(String message) {
+        player.sendMessage(message);
+    }
+
+    @Override
+    public void sendMessage(String[] messages) {
+        for(String msg: messages){
+            sendMessage(msg);
+        }
+    }
+
+    @Override
+    public boolean isOnline() {
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return player.getName();
+    }
+
+    @Override
+    public PlayerInventory getInventory() {
+        return new FakePlayerInventory(player);
+    }
+
+    @Override
+    public ItemStack getItemInHand() {
+        return Util.getItemStack(player.getItemInHand());
+    }
+
+    @Override
+    public void setItemInHand(ItemStack item) {
+        player.setItemInHand(Util.getItemStack(item));
+    }
+
+
+    @Override
+    public boolean isSleeping() {
+        return player.isSleeping();
+    }
+
+
+    @Override
+    public GameMode getGameMode() {
+        return GameMode.valueOf(player.getGameMode().name());
+    }
+
+    @Override
+    public void setGameMode(GameMode mode) {
+        player.setGameMode(MC_GameMode.valueOf(mode.name()));
+    }
+
+
+    @Override
+    public void setCustomName(String name) {
+        player.setCustomName(name);
+    }
+
+    @Override
+    public String getCustomName() {
+        return player.getCustomName();
+    }
+
+
+    @Override
+    public double getHealth() {
+        return player.getHealth();
+    }
+
+    @Override
+    public int _INVALID_getHealth() {
+        return (int) player.getHealth();
+    }
+
+    @Override
+    public void setHealth(double health) {
+        player.setHealth((float) health);
+    }
+
+    @Override
+    public void _INVALID_setHealth(int health) {
+        player.setHealth(health);
+    }
+
+
+    @Override
+    public boolean isOp() {
+        return player.isOp();
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof Player))return false;
+        return ((Player)o).getUniqueId().equals(getUniqueId());
+    }
 	public static void FakeDebug(String msg)
 	{
 		System.out.println("FakePlayer Proxy: " + msg);
@@ -98,38 +496,10 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public GameMode getGameMode()
-	{
-		FakeDebug("getGameMode");
-		return null;
-	}
-
-	@Override
-	public PlayerInventory getInventory()
-	{
-		FakeDebug("getInventory");
-		return null;
-	}
-
-	@Override
-	public ItemStack getItemInHand()
-	{
-		MC_ItemStack is =  m_player.getItemInHand();
-		return new ItemStack(is.getId(), is.getCount());
-	}
-
-	@Override
 	public ItemStack getItemOnCursor()
 	{
 		FakeDebug("getItemOnCursor");
 		return null;
-	}
-
-	@Override
-	public String getName()
-	{
-		if(m_loginName != null) return m_loginName;
-		return m_player.getName();
 	}
 
 	@Override
@@ -150,13 +520,6 @@ public class FakePlayer implements Player
 	public boolean isBlocking()
 	{
 		FakeDebug("isBlocking");
-		return false;
-	}
-
-	@Override
-	public boolean isSleeping()
-	{
-		FakeDebug("isSleeping");
 		return false;
 	}
 
@@ -185,18 +548,6 @@ public class FakePlayer implements Player
 	{
 		FakeDebug("openWorkbench");
 		return null;
-	}
-
-	@Override
-	public void setGameMode(GameMode arg0)
-	{
-		FakeDebug("setGameMode");	
-	}
-
-	@Override
-	public void setItemInHand(ItemStack arg0)
-	{
-		FakeDebug("setItemInHand");
 	}
 
 	@Override
@@ -258,13 +609,6 @@ public class FakePlayer implements Player
 	{
 		FakeDebug("getCanPickupItems");
 		return false;
-	}
-
-	@Override
-	public String getCustomName()
-	{
-		FakeDebug("getCustomName");
-		return null;
 	}
 
 	@Override
@@ -413,12 +757,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public void setCustomName(String arg0)
-	{
-		FakeDebug("setCustomName");
-	}
-
-	@Override
 	public void setCustomNameVisible(boolean arg0)
 	{
 		FakeDebug("setCustomNameVisible");
@@ -503,42 +841,9 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public float getFallDistance()
-	{
-		FakeDebug("getFallDistance");
-		return 0;
-	}
-
-	@Override
-	public int getFireTicks()
-	{
-		FakeDebug("getFireTicks");
-		return 0;
-	}
-
-	@Override
 	public EntityDamageEvent getLastDamageCause()
 	{
 		FakeDebug("getLastDamageCause");
-		return null;
-	}
-
-	@Override
-	public Location getLocation()
-	{
-		MC_Location mloc = m_player.getLocation();
-		
-		World world = Bukkit.getWorld(FakeHelper.GetDimensionName(mloc.dimension));
-		Location loc = new Location(world, mloc.x, mloc.y, mloc.z);
-		
-		//FakeDebug(" --- getLocation returning: " + FakeHelper.LocStringShort(loc));
-		return loc;
-	}
-
-	@Override
-	public Location getLocation(Location arg0)
-	{
-		FakeDebug("getLocation");
 		return null;
 	}
 
@@ -564,14 +869,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public Server getServer()
-	{
-		//FakeDebug("getServer");
-		return MyPlugin.fakeServer;
-		//return null;
-	}
-
-	@Override
 	public int getTicksLived()
 	{
 		FakeDebug("getTicksLived");
@@ -579,45 +876,10 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public EntityType getType()
-	{
-		FakeDebug("getType");
-		return null;
-	}
-
-	@Override
-	public UUID getUniqueId()
-	{
-		//FakeDebug("getUniqueId");
-		if(m_player != null) return m_player.getUUID();
-		return null;
-	}
-
-	@Override
 	public Entity getVehicle()
 	{
 		FakeDebug("getVehicle");
 		return null;
-	}
-
-	@Override
-	public Vector getVelocity()
-	{
-		FakeDebug("getVelocity");
-		return null;
-	}
-
-	@Override
-	public World getWorld()
-	{
-		return new FakeWorld(m_player.getWorld());
-	}
-
-	@Override
-	public boolean isDead()
-	{
-		FakeDebug("isDead");
-		return false;
 	}
 
 	@Override
@@ -631,13 +893,6 @@ public class FakePlayer implements Player
 	public boolean isInsideVehicle()
 	{
 		FakeDebug("isInsideVehicle");
-		return false;
-	}
-
-	@Override
-	public boolean isValid()
-	{
-		FakeDebug("isValid");
 		return false;
 	}
 
@@ -661,18 +916,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public void setFallDistance(float arg0)
-	{
-		FakeDebug("setFallDistance");
-	}
-
-	@Override
-	public void setFireTicks(int arg0)
-	{
-		FakeDebug("setFireTicks");
-	}
-
-	@Override
 	public void setLastDamageCause(EntityDamageEvent arg0)
 	{
 		FakeDebug("setLastDamageCause");
@@ -689,40 +932,6 @@ public class FakePlayer implements Player
 	public void setTicksLived(int arg0)
 	{
 		FakeDebug("setTicksLived");
-	}
-
-	@Override
-	public void setVelocity(Vector arg0)
-	{
-		FakeDebug("setVelocity");
-	}
-
-	@Override
-	public boolean teleport(Location arg0)
-	{
-		FakeDebug("teleport");
-		return false;
-	}
-
-	@Override
-	public boolean teleport(Entity arg0)
-	{
-		FakeDebug("teleport");
-		return false;
-	}
-
-	@Override
-	public boolean teleport(Location arg0, TeleportCause arg1)
-	{
-		FakeDebug("teleport");
-		return false;
-	}
-
-	@Override
-	public boolean teleport(Entity arg0, TeleportCause arg1)
-	{
-		FakeDebug("teleport");
-		return false;
 	}
 
 	@Override
@@ -764,23 +973,10 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public int _INVALID_getHealth()
-	{
-		FakeDebug("_INVALID_getHealth");
-		return 0;
-	}
-
-	@Override
 	public int _INVALID_getMaxHealth()
 	{
 		FakeDebug("_INVALID_getMaxHealth");
 		return 0;
-	}
-
-	@Override
-	public void _INVALID_setHealth(int arg0)
-	{
-		FakeDebug("_INVALID_setHealth");
 	}
 
 	@Override
@@ -802,13 +998,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public double getHealth()
-	{
-		FakeDebug("getHealth");
-		return 0;
-	}
-
-	@Override
 	public double getMaxHealth()
 	{
 		FakeDebug("getMaxHealth");
@@ -819,12 +1008,6 @@ public class FakePlayer implements Player
 	public void resetMaxHealth()
 	{
 		FakeDebug("resetMaxHealth");
-	}
-
-	@Override
-	public void setHealth(double arg0)
-	{
-		FakeDebug("setHealth");
 	}
 
 	@Override
@@ -885,7 +1068,7 @@ public class FakePlayer implements Player
 	@Override
 	public boolean hasPermission(String perm)
 	{
-		return PermissionHelper.hasPermission(m_player,  perm);
+		return PermissionHelper.hasPermission(player,  perm);
 	}
 
 	@Override
@@ -919,13 +1102,6 @@ public class FakePlayer implements Player
 	public void removeAttachment(PermissionAttachment arg0)
 	{
 		FakeDebug("removeAttachment");
-	}
-
-	@Override
-	public boolean isOp()
-	{
-		if(m_player != null) return m_player.isOp();
-		return true;
 	}
 
 	@Override
@@ -967,19 +1143,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public void sendMessage(String arg0)
-	{
-		m_player.sendMessage(arg0);
-	}
-
-	@Override
-	public void sendMessage(String[] arg0)
-	{
-		FakeDebug("sendMessage2");
-		for(String piece : arg0) sendMessage(piece);
-	}
-
-	@Override
 	public long getFirstPlayed()
 	{
 		FakeDebug("getFirstPlayed");
@@ -992,14 +1155,6 @@ public class FakePlayer implements Player
 		FakeDebug("getLastPlayed");
 		return 0;
 	}
-
-	@Override
-	public Player getPlayer()
-	{
-		FakeDebug("getPlayer");
-		return null;
-	}
-
 	@Override
 	public boolean hasPlayedBefore()
 	{
@@ -1011,13 +1166,6 @@ public class FakePlayer implements Player
 	public boolean isBanned()
 	{
 		FakeDebug("isBanned");
-		return false;
-	}
-
-	@Override
-	public boolean isOnline()
-	{
-		FakeDebug("isOnline");
 		return false;
 	}
 
@@ -1125,18 +1273,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public InetSocketAddress getAddress()
-	{
-		return m_inetSocketAddress;
-	}
-
-	@Override
-	public boolean getAllowFlight()
-	{
-		return m_player.isAllowedFlight();
-	}
-
-	@Override
 	public Location getBedSpawnLocation()
 	{
 				FakeDebug("getBedSpawnLocation");
@@ -1144,77 +1280,9 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public Location getCompassTarget()
-	{
-		MC_Location mloc = m_player.getCompassTarget();
-		
-		World world = Bukkit.getWorld(FakeHelper.GetDimensionName(mloc.dimension));
-		Location loc = new Location(world, mloc.x, mloc.y, mloc.z);
-		
-		return loc;
-	}
-
-	@Override
-	public String getDisplayName()
-	{
-		return m_player.getName();
-	}
-
-	@Override
 	public float getExhaustion()
 	{
 		FakeDebug("getExhaustion");
-		return 0;
-	}
-
-	@Override
-	public float getExp()
-	{
-		return m_player.getExp();
-	}
-
-	@Override
-	public float getFlySpeed()
-	{
-		return m_player.getFlySpeed();
-	}
-
-	@Override
-	public int getFoodLevel()	
-	{
-		return m_player.getFoodLevel();
-	}
-
-	@Override
-	public double getHealthScale()
-	{
-		FakeDebug("getHealthScale");
-		return 0;
-	}
-
-	@Override
-	public int getLevel()
-	{
-		return m_player.getLevel();
-	}
-
-	@Override
-	public String getPlayerListName()
-	{
-		return m_player.getName();
-	}
-
-	@Override
-	public long getPlayerTime()
-	{
-		FakeDebug("getPlayerTime");
-		return 0;
-	}
-
-	@Override
-	public long getPlayerTimeOffset()
-	{
-				FakeDebug("getPlayerTimeOffset");
 		return 0;
 	}
 
@@ -1230,13 +1298,6 @@ public class FakePlayer implements Player
 	{
 				FakeDebug("getSaturation");
 		return 0;
-	}
-
-	@Override
-	public Scoreboard getScoreboard()
-	{
-				FakeDebug("getScoreboard");
-		return null;
 	}
 
 	@Override
@@ -1258,31 +1319,6 @@ public class FakePlayer implements Player
 	{
 				FakeDebug("getStatistic");
 		return 0;
-	}
-
-	@Override
-	public int getTotalExperience()
-	{
-				FakeDebug("getTotalExperience");
-		return 0;
-	}
-
-	@Override
-	public float getWalkSpeed()
-	{
-		return m_player.getWalkSpeed();
-	}
-
-	@Override
-	public void giveExp(int arg0)
-	{
-		m_player.giveExp(arg0);
-	}
-
-	@Override
-	public void giveExpLevels(int arg0)
-	{
-		m_player.giveExpLevels(arg0);
 	}
 
 	@Override
@@ -1342,29 +1378,9 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public boolean isFlying()
-	{
-		return m_player.isFlying();
-	}
-
-	@Override
 	public boolean isHealthScaled()
 	{
 				FakeDebug("isHealthScaled");
-		return false;
-	}
-
-	@Override
-	public boolean isOnGround()
-	{
-				FakeDebug("isOnGround");
-		return false;
-	}
-
-	@Override
-	public boolean isPlayerTimeRelative()
-	{
-				FakeDebug("isPlayerTimeRelative");
 		return false;
 	}
 
@@ -1376,21 +1392,9 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public boolean isSneaking()
-	{
-		return m_player.isSneaking();
-	}
-
-	@Override
-	public boolean isSprinting()
-	{
-		return m_player.isSprinting();
-	}
-
-	@Override
 	public void kickPlayer(String arg0)
 	{
-		MyPlugin.server.executeCommand("kick " + m_player.getName() + " " + arg0);
+		MyPlugin.server.executeCommand("kick " + player.getName() + " " + arg0);
 	}
 
 	@Override
@@ -1398,13 +1402,6 @@ public class FakePlayer implements Player
 	{
 				FakeDebug("loadData");
 		
-	}
-
-	@Override
-	public boolean performCommand(String arg0)
-	{
-		m_player.executeCommand(arg0);
-		return true;
 	}
 
 	@Override
@@ -1421,31 +1418,17 @@ public class FakePlayer implements Player
 		
 	}
 
-	@Override
-	public void playNote(Location arg0, byte arg1, byte arg2)
-	{
-		FakeDebug("playNote");
-	}
+    @Override
+    public void showParticle(Location location, Particle particle, float v, float v2, float v3, float v4, int i) {
 
-	@Override
-	public void playNote(Location arg0, Instrument arg1, Note arg2)
-	{
-		FakeDebug("playNote");
-	}
+    }
 
-	@Override
-	public void playSound(Location arg0, Sound arg1, float arg2, float arg3)
-	{
-		FakeDebug("playSound");
-	}
+    @Override
+    public void showParticle(Location location, Particle particle, MaterialData materialData, float v, float v2, float v3, float v4, int i) {
 
-	@Override
-	public void playSound(Location arg0, String arg1, float arg2, float arg3)
-	{
-		FakeDebug("playSound");
-	}
+    }
 
-	@Override
+    @Override
 	public void removeAchievement(Achievement arg0)
 	{
 		FakeDebug("removeAchievement");
@@ -1495,12 +1478,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public void sendRawMessage(String arg0)
-	{
-		FakeDebug("sendRawMessage");
-	}
-
-	@Override
 	public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException
 	{
 		FakeDebug("sendSignChange");
@@ -1509,7 +1486,7 @@ public class FakePlayer implements Player
 	@Override
 	public void setAllowFlight(boolean arg0)
 	{
-		m_player.setAllowFlight(arg0);
+		player.setAllowFlight(arg0);
 	}
 
 	@Override
@@ -1525,18 +1502,6 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public void setCompassTarget(Location arg0)
-	{
-		FakeDebug("setCompassTarget");
-	}
-
-	@Override
-	public void setDisplayName(String arg0)
-	{
-		FakeDebug("setDisplayName");
-	}
-
-	@Override
 	public void setExhaustion(float arg0)
 	{
 		FakeDebug("setExhaustion");
@@ -1545,49 +1510,25 @@ public class FakePlayer implements Player
 	@Override
 	public void setExp(float arg0)
 	{
-		m_player.setExp(arg0);
+		player.setExp(arg0);
 	}
 
 	@Override
 	public void setFlySpeed(float arg0) throws IllegalArgumentException
 	{
-		m_player.setFlySpeed(arg0);
+		player.setFlySpeed(arg0);
 	}
 
 	@Override
 	public void setFlying(boolean arg0)
 	{
-		m_player.setFlying(arg0);
-	}
-
-	@Override
-	public void setFoodLevel(int arg0)
-	{
-		FakeDebug("setFoodLevel");
-	}
-
-	@Override
-	public void setHealthScale(double arg0) throws IllegalArgumentException
-	{
-		FakeDebug("setHealthScale");
-	}
-
-	@Override
-	public void setHealthScaled(boolean arg0)
-	{
-		FakeDebug("setHealthScaled");
+		player.setFlying(arg0);
 	}
 
 	@Override
 	public void setLevel(int arg0)
 	{
-		m_player.setLevel(arg0);
-	}
-
-	@Override
-	public void setPlayerListName(String arg0)
-	{
-		FakeDebug("setPlayerListName");
+		player.setLevel(arg0);
 	}
 
 	@Override
@@ -1603,21 +1544,9 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public void setResourcePack(String arg0)
-	{
-		FakeDebug("setResourcePack");
-	}
-
-	@Override
 	public void setSaturation(float arg0)
 	{
 		FakeDebug("setSaturation");
-	}
-
-	@Override
-	public void setScoreboard(Scoreboard arg0) throws IllegalArgumentException, IllegalStateException
-	{
-		FakeDebug("setScoreboard");
 	}
 
 	@Override
@@ -1657,21 +1586,15 @@ public class FakePlayer implements Player
 	}
 
 	@Override
-	public void setTexturePack(String arg0)
-	{
-		FakeDebug("setTexturePack");
-	}
-
-	@Override
 	public void setTotalExperience(int arg0)
 	{
-		m_player.setTotalExperience(arg0);
+		player.setTotalExperience(arg0);
 	}
 
 	@Override
 	public void setWalkSpeed(float arg0) throws IllegalArgumentException
 	{
-		m_player.setWalkSpeed(arg0);
+		player.setWalkSpeed(arg0);
 	}
 
 	@Override
@@ -1683,7 +1606,7 @@ public class FakePlayer implements Player
 	@Override
 	public void updateInventory()
 	{
-		m_player.updateInventory();
+		player.updateInventory();
 	}
 
 }

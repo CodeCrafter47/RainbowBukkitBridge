@@ -1,39 +1,19 @@
 package PluginBukkitBridge;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.bukkit.BanList;
+import PluginReference.MC_Player;
+import PluginReference.MC_Server;
+import com.avaje.ebean.config.ServerConfig;
+import org.bukkit.*;
 import org.bukkit.BanList.Type;
-import org.bukkit.GameMode;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
-import org.bukkit.UnsafeValues;
 import org.bukkit.Warning.WarningState;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.defaults.PluginsCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.help.HelpMap;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemFactory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.*;
 import org.bukkit.map.MapView;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -43,20 +23,178 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.util.CachedServerIcon;
 
-import PluginReference.MC_Player;
-import PluginReference.MC_Server;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
-import com.avaje.ebean.config.ServerConfig;
 
-
-public class FakeCraftServer 	implements Server 
+public class FakeCraftServer implements Server
 {
-	public static MC_Server m_server = null;
+	public static MC_Server server = null;
 	
 	public static void FakeDebug(String msg)
 	{
 		System.out.println("FakeCraftServer Proxy: " + msg);
 	}
+
+
+
+    @Override
+    public String getName() {
+        return "Rainbow";
+    }
+
+    @Override
+    public String getVersion() {
+        return "v" + server.getRainbowVersion();
+    }
+
+    @Override
+    public String getBukkitVersion() {
+        return "1.8";
+    }
+
+    @Override
+    public Player[] _INVALID_getOnlinePlayers() {
+        Collection<? extends Player> players = getOnlinePlayers();
+        Player pls[] = new Player[players.size()];
+        int i = 0;
+        for(Player p: players)pls[i++] = p;
+        return pls;
+    }
+
+    @Override
+    public Collection<? extends Player> getOnlinePlayers() {
+        List<Player> players = new ArrayList<>();
+        for(MC_Player plr: server.getPlayers())players.add(getPlayer(plr.getUUID()));
+        return players;
+    }
+
+    @Override
+    public int getPort() {
+        return server.getServerPort();
+    }
+
+    @Override
+    public String getServerName() {
+        return getName();
+    }
+
+    @Override
+    public String getServerId() {
+        return getServerName();
+    }
+
+    @Override
+    public int broadcastMessage(String message) {
+        int i = 0;
+        for(Player player: getOnlinePlayers()){
+            player.sendMessage(message);
+            i++;
+        }
+        return i;
+    }
+
+    @Override
+    public String getUpdateFolder() {
+        return MyPlugin.updateDir.getAbsolutePath();
+    }
+
+    @Override
+    public File getUpdateFolderFile() {
+        return MyPlugin.updateDir;
+    }
+
+    @Override
+    public Player getPlayer(String name) {
+        Player p = getPlayerExact(server.getPlayerExactName(name));
+        return p;
+    }
+
+    @Override
+    public Player getPlayerExact(String name) {
+        return MyPlugin.getPlayer(name);
+    }
+
+    @Override
+    public List<Player> matchPlayer(String name) {
+        List<Player> list = new ArrayList<>();
+        for(String s: server.getMatchingOnlinePlayerNames(name)){
+            list.add(getPlayer(s));
+        }
+        return list;
+    }
+
+    @Override
+    public Player getPlayer(UUID id) {
+        if(MyPlugin.players.containsKey(id))return MyPlugin.players.get(id);
+        return getPlayerExact(server.getLastKnownPlayerNameFromUUID(id.toString()));
+    }
+
+    @Override
+    public PluginManager getPluginManager() {
+        return MyPlugin.pluginManager;
+    }
+
+    @Override
+    public BukkitScheduler getScheduler() {
+        return MyPlugin.scheduler;
+    }
+
+    @Override
+    public ServicesManager getServicesManager() {
+        return MyPlugin.servicesManager;
+    }
+
+    @Override
+    public Logger getLogger() {
+        return MyPlugin.logger;
+    }
+
+    @Override
+    public boolean dispatchCommand(CommandSender sender, String commandLine) throws CommandException {
+        // fixme also execute rainbow commands
+        return MyPlugin.commandMap.dispatch(sender, commandLine);
+    }
+
+    @Override
+    public int getSpawnRadius() {
+        return server.getSpawnProtectionRadius();
+    }
+
+    @Override
+    public boolean getOnlineMode() {
+        return server.getOnlineMode();
+    }
+
+    @Override
+    public int broadcast(String message, String permission) {
+        int i = 0;
+        for(Player player: getOnlinePlayers()){
+            if(player.hasPermission(permission)){
+                player.sendMessage(message);
+                i++;
+            }
+        }
+        return i;
+    }
+
+    @Override
+    public ConsoleCommandSender getConsoleSender() {
+        return MyPlugin.consoleCommandSender;
+    }
+
+    @Override
+    public Messenger getMessenger() {
+        return MyPlugin.messenger;
+    }
+
+    @Override
+    public HelpMap getHelpMap() {
+        return MyPlugin.helpMap;
+    }
 	
 	@Override
 	public Set<String> getListeningPluginChannels()
@@ -88,22 +226,6 @@ public class FakeCraftServer 	implements Server
 		
 		FakeDebug("banIP: " + arg0);
 		
-	}
-
-	@Override
-	public int broadcast(String arg0, String arg1)
-	{
-		FakeDebug("broadcast: arg0=" + arg0 + ", arg1=" + arg1);
-		
-		return 0;
-	}
-
-	@Override
-	public int broadcastMessage(String arg0)
-	{
-		FakeDebug("broadcastMessage: arg0=" + arg0);
-		
-		return 0;
 	}
 
 	@Override
@@ -171,14 +293,6 @@ public class FakeCraftServer 	implements Server
 	}
 
 	@Override
-	public boolean dispatchCommand(CommandSender arg0, String arg1) throws CommandException
-	{
-		FakeDebug("dispatchCommand");
-		
-		return false;
-	}
-
-	@Override
 	public boolean getAllowEnd()
 	{
 		FakeDebug("getAllowEnd");
@@ -234,12 +348,6 @@ public class FakeCraftServer 	implements Server
 	}
 
 	@Override
-	public String getBukkitVersion()
-	{
-		return "Bridge 1.7.9";
-	}
-
-	@Override
 	public Map<String, String[]> getCommandAliases()
 	{
 		FakeDebug("getCommandAliases");
@@ -256,15 +364,6 @@ public class FakeCraftServer 	implements Server
 	}
 
 	@Override
-	public ConsoleCommandSender getConsoleSender()
-	{
-		//FakeDebug("getConsoleSender");
-		return MyPlugin.consoleCommandSender;
-		
-		//return null;
-	}
-
-	@Override
 	public GameMode getDefaultGameMode()
 	{
 		FakeDebug("getDefaultGameMode");
@@ -278,14 +377,6 @@ public class FakeCraftServer 	implements Server
 		FakeDebug("getGenerateStructures");
 		
 		return false;
-	}
-
-	@Override
-	public HelpMap getHelpMap()
-	{
-		FakeDebug("getHelpMap");
-		
-		return null;
 	}
 
 	@Override
@@ -318,34 +409,6 @@ public class FakeCraftServer 	implements Server
 		return new FakeItemFactory();
 	}
 
-	public Logger m_logger = null;
-	@Override
-	public Logger getLogger()
-	{
-		if(m_logger == null)
-		{
-			//FakeDebug("getLogger");
-			//ConsoleHandler handler = new ConsoleHandler();
-			ConsoleHandler handler = new ConsoleHandler();
-			handler.setFormatter(new MyLogFormatter());
-			//m_logger = Logger.getLogger("jkc");
-			m_logger = Logger.getLogger("Minecraft");
-			//m_logger.setLevel(Level.OFF);
-			m_logger.addHandler(handler);
-			return m_logger;
-		}
-		return m_logger;
-		/*handler.setFormatter(new MyLogFormatter());
-		
-		Logger logger = Logger.getLogger(
-		logger.
-		return Logger.getAnonymousLogger();*/
-				
-		//return Logger.getGlobal();
-		
-		//return null;
-	}
-
 	@Override
 	public MapView getMap(short arg0)
 	{
@@ -363,15 +426,6 @@ public class FakeCraftServer 	implements Server
 	}
 
 	@Override
-	public Messenger getMessenger()
-	{
-		//FakeDebug("getMessenger");
-		
-		//return null;
-		return MyPlugin.messenger;
-	}
-
-	@Override
 	public int getMonsterSpawnLimit()
 	{
 		FakeDebug("getMonsterSpawnLimit");
@@ -386,13 +440,13 @@ public class FakeCraftServer 	implements Server
 		return null;
 	}
 
-	@Override
-	public String getName()
-	{
-		return "Rainbow Mod (BukkitBridge)";
-	}
+    @Override
+    public String getShutdownMessage() {
+        FakeDebug("getShutdownMessage");
+        return null;
+    }
 
-	@Override
+    @Override
 	public OfflinePlayer getOfflinePlayer(String arg0)
 	{
 		FakeDebug("getOfflinePlayer");
@@ -410,7 +464,11 @@ public class FakeCraftServer 	implements Server
 
 	@Override
 	public OfflinePlayer[] getOfflinePlayers()
-	{	
+	{
+        FakeDebug("getOfflinePlayer");
+
+        return null;
+        /*
 		List<MC_Player> mcPlayers = MyPlugin.server.getOfflinePlayers();
 
 		int len = mcPlayers.size();
@@ -422,60 +480,13 @@ public class FakeCraftServer 	implements Server
 			plr.m_loginName = plr.m_player.getName();
 			result[i] = plr;
 		}
-		return result;
-	}
-
-	@Override
-	public boolean getOnlineMode()
-	{
-		return MyPlugin.server.getOnlineMode();
-	}
-
-	@Override
-	public Player[] getOnlinePlayers()
-	{
-		//FakeDebug("getOnlinePlayers");
-		List<MC_Player> mcPlayers = MyPlugin.server.getPlayers();
-
-		int len = mcPlayers.size();
-		Player[] result = new Player[mcPlayers.size()];
-		for(int i=0; i<len; i++)
-		{
-			FakePlayer plr = new FakePlayer();
-			plr.m_player = mcPlayers.get(i);
-			plr.m_loginName = plr.m_player.getName();
-			result[i] = plr;
-		}
-		return result;
+		return result;*/
 	}
 
 	@Override
 	public Set<OfflinePlayer> getOperators()
 	{
 		FakeDebug("getOperators");
-		return null;
-	}
-
-	@Override
-	public Player getPlayer(String arg0)
-	{
-		FakeDebug("getPlayer");
-		return null;
-	}
-
-	@Override
-	public Player getPlayer(UUID arg0)
-	{
-		FakeDebug("getPlayer");
-		
-		return null;
-	}
-
-	@Override
-	public Player getPlayerExact(String arg0)
-	{
-		FakeDebug("getPlayerExact");
-		
 		return null;
 	}
 
@@ -489,30 +500,11 @@ public class FakeCraftServer 	implements Server
 	}
 
 	@Override
-	public PluginManager getPluginManager()
-	{
-		//FakeDebug("getPluginManager");
-		return MyPlugin.pluginManager;
-	}
-
-	@Override
-	public int getPort()
-	{
-		return MyPlugin.server.getServerPort();
-	}
-
-	@Override
 	public List<Recipe> getRecipesFor(ItemStack arg0)
 	{
 		FakeDebug("getRecipesFor");
 		
 		return null;
-	}
-
-	@Override
-	public BukkitScheduler getScheduler()
-	{
-		return MyPlugin.scheduler;
 	}
 
 	@Override
@@ -529,41 +521,6 @@ public class FakeCraftServer 	implements Server
 		FakeDebug("getServerIcon");
 		
 		return null;
-	}
-
-	@Override
-	public String getServerId()
-	{
-		FakeDebug("getServerId");
-		
-		return null;
-	}
-
-	@Override
-	public String getServerName()
-	{
-		FakeDebug("getServerName");
-		
-		return null;
-	}
-
-	@Override
-	public ServicesManager getServicesManager()
-	{
-		return MyPlugin.servicesManager;
-	}
-
-	@Override
-	public String getShutdownMessage()
-	{
-		FakeDebug("getShutdownMessage");		
-		return null;
-	}
-
-	@Override
-	public int getSpawnRadius()
-	{
-		return MyPlugin.server.getSpawnProtectionRadius();
 	}
 
 	@Override
@@ -588,29 +545,6 @@ public class FakeCraftServer 	implements Server
 		FakeDebug("getUnsafe");
 		
 		return null;
-	}
-
-	@Override
-	public String getUpdateFolder()
-	{
-		//FakeDebug("getUpdateFolder");
-		return "bkt_updates";
-		
-		//return null;
-	}
-
-	@Override
-	public File getUpdateFolderFile()
-	{
-		FakeDebug("getUpdateFolderFile");
-		
-		return null;
-	}
-
-	@Override
-	public String getVersion()
-	{
-		return "1.0";
 	}
 
 	@Override
@@ -734,14 +668,6 @@ public class FakeCraftServer 	implements Server
 	public CachedServerIcon loadServerIcon(BufferedImage arg0) throws IllegalArgumentException, Exception
 	{
 		FakeDebug("loadServerIcon");
-		
-		return null;
-	}
-
-	@Override
-	public List<Player> matchPlayer(String arg0)
-	{
-		FakeDebug("matchPlayer");
 		
 		return null;
 	}

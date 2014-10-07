@@ -1,36 +1,102 @@
 package PluginBukkitBridge;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
+import PluginReference.MC_Entity;
+import PluginReference.MC_Player;
+import PluginReference.MC_World;
 import org.bukkit.*;
-import org.bukkit.block.*;
+import org.bukkit.block.Biome;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
-import org.bukkit.generator.*;
-import org.bukkit.inventory.*;
-import org.bukkit.metadata.*;
-import org.bukkit.plugin.*;
-import org.bukkit.util.*;
+import org.bukkit.generator.BlockPopulator;
+import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
+import org.bukkit.metadata.MetadataValue;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 
-import PluginReference.*;
+import java.io.File;
+import java.util.*;
 
 public class FakeWorld implements World
 {
-	public MC_World m_world = null;
+	public MC_World world = null;
 	
 	public static void FakeDebug(String msg)
 	{
 		System.out.println("FakeWorld Proxy: " + msg);
 	}
 
-	public FakeWorld(MC_World world)
-	{
-		m_world = world;
-	}
+    public FakeWorld(MC_World world) {
+        this.world = world;
+    }
+
+    @Override
+    public Block getBlockAt(int x, int y, int z) {
+        return new FakeBlock(x,y,z,world);
+    }
+
+    @Override
+    public Block getBlockAt(Location location) {
+        return getBlockAt(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+
+    }
+
+    @Override
+    public int getBlockTypeIdAt(int x, int y, int z) {
+        return getBlockAt(x,y,z).getTypeId();
+    }
+
+    @Override
+    public int getBlockTypeIdAt(Location location) {
+        return getBlockTypeIdAt(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
+
+    @Override
+    public boolean isChunkLoaded(Chunk chunk) {
+        // fixme
+        // rainbow doesn't care
+        return true;
+    }
+
+    @Override
+    public boolean isChunkLoaded(int x, int z) {
+        // fixme
+        // rainbow doesn't care
+        return true;
+    }
+
+    @Override
+    public List<Player> getPlayers() {
+        List<Player> list = new ArrayList<>();
+        for(MC_Player player: MyPlugin.server.getPlayers()){
+            if(player.getWorld().equals(world))list.add(MyPlugin.getPlayer(player.getName()));
+        }
+        return list;
+    }
+
+    @Override
+    public Location getSpawnLocation() {
+        return Util.getLocation(world.getSpawnLocation());
+    }
+
+    @Override
+    public int getMaxHeight() {
+        return MyPlugin.server.getMaxBuildHeight();
+    }
+
+    @Override
+    public void playSound(Location location, Sound sound, float volume, float pitch) {
+        for(Player player: getPlayers()){
+            player.playSound(location,sound,volume,pitch);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if(!(o instanceof FakeWorld))return false;
+        return world.getName().equals(((FakeWorld)o).world.getName());
+    }
 	
 	@Override
 	public Set<String> getListeningPluginChannels()
@@ -180,32 +246,6 @@ public class FakeWorld implements World
 	}
 
 	@Override
-	public Block getBlockAt(Location loc)
-	{
-		return getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-	}
-
-	@Override
-	public Block getBlockAt(int x, int y, int z)
-	{
-		MC_Block blk = m_world.getBlockAt(x,y,z);
-		return new FakeBlock(blk, m_world, x, y, z);
-	}
-
-	@Override
-	public int getBlockTypeIdAt(Location loc)
-	{
-		return getBlockTypeIdAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-	}
-
-	@Override
-	public int getBlockTypeIdAt(int x, int y, int z)
-	{
-		MC_Block blk = m_world.getBlockAt(x,y,z);
-		return blk.getId();
-	}
-
-	@Override
 	public Chunk getChunkAt(Location arg0)
 	{
 		FakeDebug("getChunkAt");
@@ -244,7 +284,7 @@ public class FakeWorld implements World
 	public List<Entity> getEntities()
 	{
 		ArrayList<Entity> arr = new ArrayList<Entity>();
-		for(MC_Entity ent : m_world.getEntities()) arr.add(new FakeEntity(ent));
+		for(MC_Entity ent : world.getEntities()) arr.add(new FakeEntity(ent));
 		return arr;
 	}
 
@@ -361,13 +401,6 @@ public class FakeWorld implements World
 	}
 
 	@Override
-	public int getMaxHeight()
-	{
-		FakeDebug("getMaxHeight");
-		return 0;
-	}
-
-	@Override
 	public int getMonsterSpawnLimit()
 	{
 		FakeDebug("getMonsterSpawnLimit");
@@ -377,7 +410,7 @@ public class FakeWorld implements World
 	@Override
 	public String getName()
 	{
-		return m_world.getName();
+		return world.getName();
 	}
 
 	@Override
@@ -385,17 +418,6 @@ public class FakeWorld implements World
 	{
 		FakeDebug("getPVP");
 		return false;
-	}
-
-	@Override
-	public List<Player> getPlayers()
-	{
-		ArrayList<Player> arr = new ArrayList<Player>();
-		for(MC_Player plr : MyPlugin.server.getPlayers()) 
-		{
-			arr.add(new FakePlayer(plr));
-		}
-		return arr;
 	}
 
 	@Override
@@ -417,13 +439,6 @@ public class FakeWorld implements World
 	{
 		FakeDebug("getSeed");
 		return 0;
-	}
-
-	@Override
-	public Location getSpawnLocation()
-	{
-		MC_Location loc = m_world.getSpawnLocation();
-		return new Location(this, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()); 
 	}
 
 	@Override
@@ -518,27 +533,23 @@ public class FakeWorld implements World
 	}
 
 	@Override
-	public boolean isChunkLoaded(Chunk arg0)
-	{
-		FakeDebug("isChunkLoaded");
-		return false;
-	}
-
-	@Override
-	public boolean isChunkLoaded(int arg0, int arg1)
-	{
-		FakeDebug("isChunkLoaded");
-		return false;
-	}
-
-	@Override
 	public boolean isGameRule(String arg0)
 	{
 		FakeDebug("isGameRule");
 		return false;
 	}
 
-	@Override
+    @Override
+    public void showParticle(Location location, Particle particle, float v, float v2, float v3, float v4, int i) {
+        FakeDebug("showParticle");
+    }
+
+    @Override
+    public void showParticle(Location location, Particle particle, MaterialData materialData, float v, float v2, float v3, float v4, int i) {
+        FakeDebug("showParticle");
+    }
+
+    @Override
 	public boolean isThundering()
 	{
 		FakeDebug("isThundering");
@@ -591,13 +602,6 @@ public class FakeWorld implements World
 	public <T> void playEffect(Location arg0, Effect arg1, T arg2, int arg3)
 	{
 		FakeDebug("playEffect");
-		
-	}
-
-	@Override
-	public void playSound(Location arg0, Sound arg1, float arg2, float arg3)
-	{
-		FakeDebug("playSound");
 		
 	}
 
