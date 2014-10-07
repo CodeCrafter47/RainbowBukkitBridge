@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Joe/Desktop/Java References/bukkit-1.7.9-R0.1-20140501.232652-9.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Joe/Desktop/Joe Builds/PluginReference.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
