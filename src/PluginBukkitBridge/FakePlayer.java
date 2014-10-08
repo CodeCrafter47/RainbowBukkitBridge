@@ -1,7 +1,6 @@
 package PluginBukkitBridge;
 
 import PluginReference.MC_GameMode;
-import PluginReference.MC_MotionData;
 import PluginReference.MC_Player;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -15,7 +14,6 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.InventoryView.Property;
 import org.bukkit.map.MapView;
 import org.bukkit.material.MaterialData;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -29,12 +27,13 @@ import java.net.InetSocketAddress;
 import java.util.*;
 
 
-public class FakePlayer implements Player
+public class FakePlayer extends FakeEntity implements Player
 {
     private MC_Player player;
     private UUID uuid;
 
     public FakePlayer(MC_Player player) {
+        super(player);
         this.player = player;
         uuid = player.getUUID();
     }
@@ -209,108 +208,6 @@ public class FakePlayer implements Player
     }
 
     @Override
-    public Location getLocation() {
-        return Util.getLocation(player.getLocation())/*.setDirection(Util.getDirection(player.getMotionData()))*/;
-    }
-
-    @Override
-    public Location getLocation(Location loc) {
-        loc.setX(player.getLocation().x);
-        loc.setY(player.getLocation().y);
-        loc.setZ(player.getLocation().z);
-        loc.setPitch(player.getLocation().pitch);
-        loc.setYaw(player.getLocation().yaw);
-        loc.setWorld(new FakeWorld(player.getWorld()));
-        //loc.setDirection(Util.getDirection(player.getMotionData()));
-        return getLocation();
-    }
-
-    @Override
-    public void setVelocity(Vector velocity) {
-        player.setMotionData(Util.getMotionData(velocity, player.getMotionData()));
-    }
-
-    @Override
-    public Vector getVelocity() {
-        return Util.getDirection(player.getMotionData());
-    }
-
-    @Override
-    public boolean isOnGround() {
-        return player.getMotionData().onGround;
-    }
-
-    @Override
-    public World getWorld() {
-        return new FakeWorld(player.getWorld());
-    }
-
-    @Override
-    public boolean teleport(Location location) {
-        return teleport(location, PlayerTeleportEvent.TeleportCause.PLUGIN);
-    }
-
-    @Override
-    public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
-        PlayerTeleportEvent event = new PlayerTeleportEvent(this, getLocation(), location, cause);
-        MyPlugin.pluginManager.callEvent(event);
-        if(event.isCancelled())return false;
-        Location to = event.getTo();
-        if(to == null){
-            to = location;
-        }
-        player.teleport(Util.getLocation(to));
-        return true;
-    }
-
-    @Override
-    public boolean teleport(Entity destination) {
-        return teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
-    }
-
-    @Override
-    public boolean teleport(Entity destination, PlayerTeleportEvent.TeleportCause cause) {
-        return teleport(destination.getLocation(), PlayerTeleportEvent.TeleportCause.PLUGIN);
-    }
-
-    @Override
-    public int getFireTicks() {
-        return player.getFireTicks();
-    }
-
-    @Override
-    public void setFireTicks(int ticks) {
-        player.setFireTicks(ticks);
-    }
-
-    @Override
-    public boolean isDead() {
-        return player.isDead();
-    }
-
-    @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    @Override
-    public Server getServer() {
-        return Bukkit.getServer();
-    }
-
-    @Override
-    public float getFallDistance() {
-        return (float) player.getMotionData().fallDistance;
-    }
-
-    @Override
-    public void setFallDistance(float distance) {
-        MC_MotionData md = player.getMotionData();
-        md.fallDistance = distance;
-        player.setMotionData(md);
-    }
-
-    @Override
     public UUID getUniqueId() {
         return uuid;
     }
@@ -391,7 +288,7 @@ public class FakePlayer implements Player
 
     @Override
     public boolean isOnline() {
-        return true;
+        return isValid();
     }
 
     @Override
@@ -471,8 +368,7 @@ public class FakePlayer implements Player
 
     @Override
     public boolean equals(Object o){
-        if(!(o instanceof Player))return false;
-        return ((Player)o).getUniqueId().equals(getUniqueId());
+        return o instanceof Player && ((Player) o).getUniqueId().equals(getUniqueId());
     }
 	public static void FakeDebug(String msg)
 	{
@@ -936,32 +832,6 @@ public class FakePlayer implements Player
 	public void setTicksLived(int arg0)
 	{
 		FakeDebug("setTicksLived");
-	}
-
-	@Override
-	public List<MetadataValue> getMetadata(String arg0)
-	{
-		FakeDebug("getMetadata");
-		return null;
-	}
-
-	@Override
-	public boolean hasMetadata(String arg0)
-	{
-		FakeDebug("hasMetadata");
-		return false;
-	}
-
-	@Override
-	public void removeMetadata(String arg0, Plugin arg1)
-	{
-		FakeDebug("removeMetadata");
-	}
-
-	@Override
-	public void setMetadata(String arg0, MetadataValue arg1)
-	{
-		FakeDebug("setMetadata");
 	}
 
 	@Override
@@ -1612,5 +1482,28 @@ public class FakePlayer implements Player
 	{
 		player.updateInventory();
 	}
+
+    @Override
+    public boolean teleport(Entity destination, PlayerTeleportEvent.TeleportCause cause) {
+        return teleport(destination.getLocation());
+    }
+
+    @Override
+    public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
+        PlayerTeleportEvent event = new PlayerTeleportEvent(this, getLocation(), location, cause);
+        MyPlugin.pluginManager.callEvent(event);
+        if(event.isCancelled())return false;
+        Location to = event.getTo();
+        if(to == null){
+            to = location;
+        }
+        player.teleport(Util.getLocation(to));
+        return true;
+    }
+
+    @Override
+    public boolean teleport(Entity destination) {
+        return teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
+    }
 
 }

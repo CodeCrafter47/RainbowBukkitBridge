@@ -1,24 +1,22 @@
 package PluginBukkitBridge;
 
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.EntityEffect;
-import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.entity.*;
+import PluginReference.MC_Entity;
+import PluginReference.MC_MotionData;
+import org.bukkit.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
-import PluginReference.*;
+import java.util.List;
+import java.util.UUID;
 
 public class FakeEntity implements Entity
 {
-	public MC_Entity m_ent = null;
+	public MC_Entity m_ent;
 	
 	public FakeEntity(MC_Entity argEnt)
 	{
@@ -71,19 +69,10 @@ public class FakeEntity implements Entity
 		return 0;
 	}
 
-	@Override
-	public float getFallDistance()
-	{
-		FakeDebug("getFallDistance");
-		return 0;
-	}
-
-	@Override
-	public int getFireTicks()
-	{
-		FakeDebug("getFireTicks");
-		return 0;
-	}
+    @Override
+    public Server getServer() {
+        return Bukkit.getServer();
+    }
 
 	@Override
 	public EntityDamageEvent getLastDamageCause()
@@ -92,19 +81,10 @@ public class FakeEntity implements Entity
 		return null;
 	}
 
-	@Override
-	public Location getLocation()
-	{
-		FakeDebug("getLocation");
-		return null;
-	}
-
-	@Override
-	public Location getLocation(Location arg0)
-	{
-		FakeDebug("getLocation");
-		return null;
-	}
+    @Override
+    public Location getLocation() {
+        return Util.getLocation(m_ent.getLocation());
+    }
 
 	@Override
 	public int getMaxFireTicks()
@@ -128,13 +108,6 @@ public class FakeEntity implements Entity
 	}
 
 	@Override
-	public Server getServer()
-	{
-		FakeDebug("getServer");
-		return null;
-	}
-
-	@Override
 	public int getTicksLived()
 	{
 		FakeDebug("getTicksLived");
@@ -147,7 +120,19 @@ public class FakeEntity implements Entity
 		return FakeHelper.GetEntityType(m_ent.getType());
 	}
 
-	@Override
+    @Override
+    public void setFallDistance(float distance) {
+        MC_MotionData md = m_ent.getMotionData();
+        md.fallDistance = distance;
+        m_ent.setMotionData(md);
+    }
+
+    @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
 	public UUID getUniqueId()
 	{
 		FakeDebug("getUniqueId");
@@ -161,21 +146,22 @@ public class FakeEntity implements Entity
 		return null;
 	}
 
-	@Override
-	public Vector getVelocity()
-	{
-		FakeDebug("getVelocity");
-		return null;
-	}
+    @Override
+    public void setVelocity(Vector velocity) {
+        m_ent.setMotionData(Util.getMotionData(velocity, m_ent.getMotionData()));
+    }
 
-	@Override
-	public World getWorld()
-	{
-		FakeDebug("getWorld");
-		return null;
-	}
+    @Override
+    public boolean isOnGround() {
+        return m_ent.getMotionData().onGround;
+    }
 
-	@Override
+    @Override
+    public void setFireTicks(int ticks) {
+        m_ent.setFireTicks(ticks);
+    }
+
+    @Override
 	public boolean isDead()
 	{
 		return m_ent.isDead();
@@ -195,19 +181,10 @@ public class FakeEntity implements Entity
 		return false;
 	}
 
-	@Override
-	public boolean isOnGround()
-	{
-		FakeDebug("isOnGround");
-		return false;
-	}
-
-	@Override
-	public boolean isValid()
-	{
-		FakeDebug("isValid");
-		return false;
-	}
+    @Override
+    public Vector getVelocity() {
+        return Util.getDirection(m_ent.getMotionData());
+    }
 
 	@Override
 	public boolean leaveVehicle()
@@ -220,29 +197,23 @@ public class FakeEntity implements Entity
 	public void playEffect(EntityEffect arg0)
 	{
 		FakeDebug("playEffect");
-		
 	}
 
 	@Override
 	public void remove()
 	{
 		FakeDebug("remove");
-		
 	}
 
-	@Override
-	public void setFallDistance(float arg0)
-	{
-		FakeDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		
-	}
+    @Override
+    public float getFallDistance() {
+        return (float) m_ent.getMotionData().fallDistance;
+    }
 
-	@Override
-	public void setFireTicks(int arg0)
-	{
-		FakeDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		
-	}
+    @Override
+    public int getFireTicks() {
+        return m_ent.getFireTicks();
+    }
 
 	@Override
 	public void setLastDamageCause(EntityDamageEvent arg0)
@@ -265,35 +236,42 @@ public class FakeEntity implements Entity
 		
 	}
 
-	@Override
-	public void setVelocity(Vector arg0)
-	{
-		FakeDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		
-	}
+    @Override
+    public Location getLocation(Location loc) {
+        loc.setX(m_ent.getLocation().x);
+        loc.setY(m_ent.getLocation().y);
+        loc.setZ(m_ent.getLocation().z);
+        loc.setPitch(m_ent.getLocation().pitch);
+        loc.setYaw(m_ent.getLocation().yaw);
+        loc.setWorld(new FakeWorld(m_ent.getWorld()));
+        return getLocation();
+    }
 
-	@Override
-	public boolean teleport(Location arg0)
-	{
-		FakeDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-		return false;
-	}
+    @Override
+    public World getWorld() {
+        return new FakeWorld(m_ent.getWorld());
+    }
 
-	@Override
+    @Override
 	public boolean teleport(Entity arg0)
 	{
 		FakeDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 		return false;
 	}
 
-	@Override
+    @Override
+    public boolean teleport(Location location) {
+        return teleport(location, TeleportCause.PLUGIN);
+    }
+
+    @Override
 	public boolean teleport(Location arg0, TeleportCause arg1)
 	{
 		FakeDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 		return false;
 	}
 
-	@Override
+    @Override
 	public boolean teleport(Entity arg0, TeleportCause arg1)
 	{
 		FakeDebug("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
