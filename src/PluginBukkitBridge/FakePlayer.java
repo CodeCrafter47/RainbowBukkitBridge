@@ -255,7 +255,11 @@ public class FakePlayer implements Player
         PlayerTeleportEvent event = new PlayerTeleportEvent(this, getLocation(), location, cause);
         MyPlugin.pluginManager.callEvent(event);
         if(event.isCancelled())return false;
-        player.teleport(Util.getLocation(event.getTo()));
+        Location to = event.getTo();
+        if(to == null){
+            to = location;
+        }
+        player.teleport(Util.getLocation(to));
         return true;
     }
 

@@ -313,7 +313,7 @@ public class FakeWorld implements World
 	public Environment getEnvironment()
 	{
 		FakeDebug("getEnvironment");
-		return null;
+		return Environment.NORMAL;
 	}
 
 	@Override

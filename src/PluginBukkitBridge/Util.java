@@ -30,9 +30,11 @@ public class Util {
     }
     public static ItemStack getItemStack(MC_ItemStack i){
         // fixme enchantments, lore, etc
+        if(i.getId() == 0 || i.getCount() == 0)return null;
         return new ItemStack(i.getId(), i.getCount(), (short)i.getDamage());
     }
     public static MC_ItemStack getItemStack(final ItemStack is){
+        if(is == null)return MyPlugin.server.createItemStack(0,0,0);
         return MyPlugin.server.createItemStack(is.getTypeId(), is.getAmount(), is.getDurability());
     }
     public static BlockFace getFace(MC_DirectionNESWUD dir){
