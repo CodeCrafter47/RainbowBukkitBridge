@@ -42,7 +42,7 @@ public class MyPlugin extends PluginReference.PluginBase
 	public final static FakeCraftServer fakeServer = new FakeCraftServer();
 	public final static SimpleCommandMap commandMap = new SimpleCommandMap(fakeServer);
     public final static PluginManager pluginManager = new SimplePluginManager(fakeServer, commandMap);
-    public final static SimpleHelpMap helpMap = new SimpleHelpMap(fakeServer);
+    public static SimpleHelpMap helpMap;
 
     public final static File pluginDir = new File("plugins");
     public final static File updateDir = new File(pluginDir, "update");
@@ -62,6 +62,7 @@ public class MyPlugin extends PluginReference.PluginBase
         logger.addHandler(handler);
         pluginDir.mkdirs();
         updateDir.mkdirs();
+        helpMap = new SimpleHelpMap(fakeServer);
     }
 
     public void onStartup(MC_Server argServer)

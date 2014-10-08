@@ -37,6 +37,7 @@ public class Util {
         if(is == null)return MyPlugin.server.createItemStack(0,0,0);
         return MyPlugin.server.createItemStack(is.getTypeId(), is.getAmount(), is.getDurability());
     }
+
     public static BlockFace getFace(MC_DirectionNESWUD dir){
         return BlockFace.valueOf(dir.name());
     }
