@@ -1,94 +1,96 @@
 package PluginBukkitBridge;
 
-import java.util.Map;
-import java.util.UUID;
-
+import PluginReference.MC_Player;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
+import java.util.UUID;
+
 public class FakeOfflinePlayer implements OfflinePlayer
 {
-	public String m_name = "";
+	public MC_Player player;
 
 	public static void FakeDebug(String msg)
 	{
 		System.out.println("FakeOfflinePlayer Proxy: " + msg);
 	}
-	
-	@Override
+
+    public FakeOfflinePlayer(MC_Player m_name) {
+        this.player = player;
+    }
+
+    @Override
 	public boolean isOp()
 	{
-		FakeDebug("isOp");
-		return false;
+		return player.isOp();
 	}
 
 	@Override
 	public void setOp(boolean arg0)
 	{
-				FakeDebug("setOp");
+		FakeDebug("setOp");
 		
 	}
 
 	@Override
 	public Map<String, Object> serialize()
 	{
-				FakeDebug("serialize");
+		FakeDebug("serialize");
 		return null;
 	}
 
 	@Override
 	public Location getBedSpawnLocation()
 	{
-				FakeDebug("getBedSpawnLocation");
+		FakeDebug("getBedSpawnLocation");
 		return null;
 	}
 
 	@Override
 	public long getFirstPlayed()
 	{
-				FakeDebug("getFirstPlayed");
+		FakeDebug("getFirstPlayed");
 		return 0;
 	}
 
 	@Override
 	public long getLastPlayed()
 	{
-				FakeDebug("getLastPlayed");
+		FakeDebug("getLastPlayed");
 		return 0;
 	}
 
 	@Override
 	public String getName()
 	{
-		return m_name;
+		return player.getName();
 	}
 
 	@Override
 	public Player getPlayer()
 	{
-				FakeDebug("getPlayer");
-		return null;
+		return MyPlugin.getPlayer(getName());
 	}
 
 	@Override
 	public UUID getUniqueId()
 	{
-				FakeDebug("getUniqueId");
-		return null;
+		return player.getUUID();
 	}
 
 	@Override
 	public boolean hasPlayedBefore()
 	{
-				FakeDebug("hasPlayedBefore");
+		FakeDebug("hasPlayedBefore");
 		return false;
 	}
 
 	@Override
 	public boolean isBanned()
 	{
-				FakeDebug("isBanned");
+		FakeDebug("isBanned");
 		return false;
 	}
 
@@ -101,22 +103,21 @@ public class FakeOfflinePlayer implements OfflinePlayer
 	@Override
 	public boolean isWhitelisted()
 	{
-				FakeDebug("isWhitelisted");
+		FakeDebug("isWhitelisted");
 		return false;
 	}
 
 	@Override
 	public void setBanned(boolean arg0)
 	{
-				FakeDebug("setBanned");
+		FakeDebug("setBanned");
 		
 	}
 
 	@Override
 	public void setWhitelisted(boolean arg0)
 	{
-				FakeDebug("setWhitelisted");
-		
+		FakeDebug("setWhitelisted");
 	}
 
 }

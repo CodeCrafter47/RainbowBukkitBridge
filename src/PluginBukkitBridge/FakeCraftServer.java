@@ -449,38 +449,31 @@ public class FakeCraftServer implements Server
     @Override
 	public OfflinePlayer getOfflinePlayer(String arg0)
 	{
-		FakeDebug("getOfflinePlayer");
-		
-		return null;
+		return getOfflinePlayer(UUID.fromString(server.getPlayerUUIDFromName(arg0)));
 	}
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(UUID arg0)
 	{
-		FakeDebug("getOfflinePlayer");
-		
+        for(OfflinePlayer player: getOfflinePlayers()){
+            if(player.getUniqueId().equals(arg0))return player;
+        }
 		return null;
 	}
 
 	@Override
 	public OfflinePlayer[] getOfflinePlayers()
 	{
-        FakeDebug("getOfflinePlayer");
-
-        return null;
-        /*
 		List<MC_Player> mcPlayers = MyPlugin.server.getOfflinePlayers();
 
 		int len = mcPlayers.size();
-		Player[] result = new Player[mcPlayers.size()];
+        OfflinePlayer[] result = new OfflinePlayer[mcPlayers.size()];
 		for(int i=0; i<len; i++)
 		{
-			FakePlayer plr = new FakePlayer();
-			plr.m_player = mcPlayers.get(i);
-			plr.m_loginName = plr.m_player.getName();
+			FakeOfflinePlayer plr = new FakeOfflinePlayer(mcPlayers.get(i));
 			result[i] = plr;
 		}
-		return result;*/
+		return result;
 	}
 
 	@Override
