@@ -313,7 +313,6 @@ public class MyPlugin extends PluginReference.PluginBase
         PlayerJoinEvent event = new PlayerJoinEvent(getPlayer(plr.getName()), "");
         pluginManager.callEvent(event);
     }
-	
 
 	public void onItemPlaced(MC_Player plr, MC_Location loc, MC_ItemStack isHandItem, MC_Location locPlacedAgainst, MC_DirectionNESWUD dir)
 	{
@@ -332,13 +331,19 @@ public class MyPlugin extends PluginReference.PluginBase
 		int y2 = locPlacedAgainst.getBlockY();
 		int z2 = locPlacedAgainst.getBlockZ();
 
-		MC_Block blkPlaced = world.getBlockAt(x,  y, z);
 		FakeBlock fakeBlockPlaced = new FakeBlock(x, y, z, world);
 
-		MC_Block blkAgainst = world.getBlockAt(x2,  y2, z2);
 		FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
 				
 		BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced), fakeBlockAgainst, isPlaced, who, true);	
         pluginManager.callEvent(event);
 	}
+
+    @Override
+    public void onAttemptItemUse(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
+        PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.RIGHT_CLICK_AIR,
+                Util.getItemStack(is), null, null);
+        pluginManager.callEvent(event);
+        ei.isCancelled = event.isCancelled();
+    }
 }
