@@ -1033,7 +1033,8 @@ public class FakePlayer extends FakeEntity implements Player
 	public boolean hasPlayedBefore()
 	{
 		FakeDebug("hasPlayedBefore");
-		return false;
+        // return true as work around for AuthMe
+		return true;
 	}
 
 	@Override

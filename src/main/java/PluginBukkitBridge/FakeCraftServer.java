@@ -68,7 +68,11 @@ public class FakeCraftServer implements Server
     @Override
     public Collection<? extends Player> getOnlinePlayers() {
         List<Player> players = new ArrayList<>();
-        for(MC_Player plr: server.getPlayers())players.add(getPlayer(plr.getUUID()));
+        try {
+            for (MC_Player plr : server.getPlayers()) players.add(getPlayer(plr.getUUID()));
+        } catch (NullPointerException ex){
+            // server is not yet initialized
+        }
         return players;
     }
 
@@ -400,7 +404,7 @@ public class FakeCraftServer implements Server
 	{
 		FakeDebug("getIp");
 		
-		return null;
+		return "127.0.0.0";
 	}
 
 	@Override
@@ -436,8 +440,7 @@ public class FakeCraftServer implements Server
 	@Override
 	public String getMotd()
 	{
-		FakeDebug("getMotd");
-		return null;
+		return server.getServerMOTD() == null ? "MOTD" : server.getServerMOTD();
 	}
 
     @Override

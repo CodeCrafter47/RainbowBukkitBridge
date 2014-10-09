@@ -76,7 +76,7 @@ public class MyPlugin extends PluginReference.PluginBase
 		
 		// Load plugin JARs...
         loadPlugins();
-        
+
         // Call onEnable for plugins...
         enablePlugins(PluginLoadOrder.STARTUP);
         enablePlugins(PluginLoadOrder.POSTWORLD);
