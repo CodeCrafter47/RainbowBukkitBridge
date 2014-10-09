@@ -1,5 +1,7 @@
 package PluginBukkitBridge;
 
+import PluginReference.MC_Enchantment;
+import PluginReference.MC_ItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -12,90 +14,96 @@ import java.util.Map;
  * Created by florian on 08.10.14.
  */
 public class FakeItemMeta implements ItemMeta {
-    private String displayName;
-    List<String> lore;
-    Map<Enchantment, Integer> enchantments;
+    public MC_ItemStack is;
 
-    public FakeItemMeta() {
-        displayName = null;
-        lore = null;
-        enchantments = new HashMap<>();
-    }
-
-    public FakeItemMeta(FakeItemMeta fakeItemMeta) {
-        displayName = fakeItemMeta.displayName;
-        lore = fakeItemMeta.lore;
-        enchantments = fakeItemMeta.enchantments;
+    public FakeItemMeta(MC_ItemStack is) {
+        this.is = is;
     }
 
     @Override
     public boolean hasDisplayName() {
-        return displayName != null;
+        return is.hasCustomName();
     }
 
     @Override
     public String getDisplayName() {
-        return displayName;
+        return is.getFriendlyName();
     }
 
     @Override
     public void setDisplayName(String s) {
-        displayName = s;
+        if(s == null)is.removeCustomName();
+        is.setCustomName(s);
     }
 
     @Override
     public boolean hasLore() {
-        return lore != null;
+        return is.getHasCustomDetails();
     }
 
     @Override
     public List<String> getLore() {
-        return new ArrayList<>(lore);
+        return new ArrayList<>(is.getLore());
     }
 
     @Override
     public void setLore(List<String> strings) {
-        lore = new ArrayList<>(strings);
+        is.setLore(strings);
     }
 
     @Override
     public boolean hasEnchants() {
-        return !enchantments.isEmpty();
+        return !is.getEnchantments().isEmpty();
     }
 
     @Override
     public boolean hasEnchant(Enchantment enchantment) {
-        return enchantments.containsKey(enchantment);
+        return 0 != is.getEnchantmentLevel(Util.wrapEnchantmentType(enchantment.getId()));
     }
 
     @Override
     public int getEnchantLevel(Enchantment enchantment) {
-        if(!hasEnchant(enchantment))return 0;
-        return enchantments.get(enchantment);
+        return is.getEnchantmentLevel(Util.wrapEnchantmentType(enchantment.getId()));
     }
 
     @Override
     public Map<Enchantment, Integer> getEnchants() {
-        return new HashMap<>(enchantments);
+        Map<Enchantment, Integer> map = new HashMap<>();
+        for(MC_Enchantment e: is.getEnchantments()){
+            map.put(Util.wrapEnchantmentType(e.type), e.level);
+        }
+        return map;
     }
 
     @Override
     public boolean addEnchant(Enchantment enchantment, int level, boolean ignoreRestrictions) {
+        MyPlugin.fixme();
         if (ignoreRestrictions || level >= enchantment.getStartLevel() && level <= enchantment.getMaxLevel()) {
-            Integer old = enchantments.put(enchantment, level);
-            return old == null || old != level;
+            int old = getEnchantLevel(enchantment);
+            is.setEnchantmentLevel(Util.wrapEnchantmentType(enchantment.getId()), level);
+            return old != level;
         }
         return false;
     }
 
     @Override
     public boolean removeEnchant(Enchantment enchantment) {
-        return hasEnchants() && enchantments.remove(enchantment) != null;
+        boolean removed = false;
+        List<MC_Enchantment> list = new ArrayList<>(is.getEnchantments());
+        for(int i = 0; i< list.size(); i++){
+            if(list.get(i).type == Util.wrapEnchantmentType(enchantment.getId())){
+                removed = true;
+                list.remove(i);
+                i--;
+            }
+        }
+        is.setEnchantments(list);
+        return removed;
     }
 
     @Override
     public boolean hasConflictingEnchant(Enchantment enchantment) {
-        return checkConflictingEnchants(enchantments, enchantment);
+        return checkConflictingEnchants(getEnchants(), enchantment);
     }
 
     static boolean checkConflictingEnchants(Map<Enchantment, Integer> enchantments, Enchantment ench) {
@@ -114,7 +122,7 @@ public class FakeItemMeta implements ItemMeta {
 
     @Override
     public ItemMeta clone() {
-        return new FakeItemMeta(this);
+        return new FakeItemMeta(is.getDuplicate());
     }
 
     @Override

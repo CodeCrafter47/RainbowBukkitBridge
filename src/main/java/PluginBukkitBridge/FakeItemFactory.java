@@ -16,15 +16,17 @@ public class FakeItemFactory implements ItemFactory
 	@Override
 	public ItemMeta asMetaFor(ItemMeta arg0, ItemStack arg1) throws IllegalArgumentException
 	{
-		FakeDebug("asMetaFor");
-		return null;
+		return asMetaFor(arg0, arg1.getType());
 	}
 
 	@Override
 	public ItemMeta asMetaFor(ItemMeta arg0, Material arg1) throws IllegalArgumentException
 	{
-		FakeDebug("asMetaFor");
-		return null;
+        if(arg0 != null){
+            ((FakeItemMeta)arg0).is = MyPlugin.server.createItemStack(arg1.getId(), 1, 1);
+            return arg0;
+        }
+		return new FakeItemMeta(MyPlugin.server.createItemStack(arg1.getId(), 1, 1));
 	}
 
 	@Override
@@ -44,22 +46,19 @@ public class FakeItemFactory implements ItemFactory
 	@Override
 	public ItemMeta getItemMeta(Material arg0)
 	{
-		FakeDebug("getItemMeta");
-		return null;
+		return new FakeItemMeta(MyPlugin.server.createItemStack(arg0.getId(), 1, 1));
 	}
 
 	@Override
 	public boolean isApplicable(ItemMeta arg0, ItemStack arg1) throws IllegalArgumentException
 	{
-		FakeDebug("isApplicable");
-		return false;
+		return arg1 != null;
 	}
 
 	@Override
 	public boolean isApplicable(ItemMeta arg0, Material arg1) throws IllegalArgumentException
 	{
-		FakeDebug("isApplicable");
-		return false;
+		return arg1 != Material.AIR;
 	}
 
 }
