@@ -142,7 +142,7 @@ public class FakePlayerInventory implements PlayerInventory {
 
     @Override
     public int getSize() {
-        return 36;
+        return player.getInventory().size();
     }
 
     @Override
@@ -186,9 +186,13 @@ public class FakePlayerInventory implements PlayerInventory {
     @Override
     public void setContents(ItemStack[] items) throws IllegalArgumentException {
         List<MC_ItemStack> inv = player.getInventory();
-        List<MC_ItemStack> inv2 = new ArrayList<>();
-        for(int i = 0; i < inv.size(); i++)inv.add(Util.getItemStack(items[i]));
-        player.setInventory(inv2);
+        for(int i = 0; i < inv.size(); i++){
+            inv.remove(i);
+            MC_ItemStack is = Util.getItemStack(items[i]);
+            if(is==null)is=MyPlugin.server.createItemStack(0,0,0);
+            inv.add(i, is);
+        }
+        player.setInventory(inv);
     }
 
     @Override

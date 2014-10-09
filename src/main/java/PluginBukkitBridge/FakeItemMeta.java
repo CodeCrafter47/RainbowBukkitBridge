@@ -38,7 +38,7 @@ public class FakeItemMeta implements ItemMeta {
 
     @Override
     public boolean hasLore() {
-        return is.getHasCustomDetails();
+        return !(is.getLore() == null || is.getLore().isEmpty());
     }
 
     @Override
@@ -48,6 +48,7 @@ public class FakeItemMeta implements ItemMeta {
 
     @Override
     public void setLore(List<String> strings) {
+        if(strings==null)return;
         is.setLore(strings);
     }
 

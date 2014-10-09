@@ -2,6 +2,7 @@ package PluginBukkitBridge;
 
 import PluginReference.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.help.SimpleHelpMap;
@@ -302,6 +303,12 @@ public class MyPlugin extends PluginReference.PluginBase
         super.onAttemptPlayerMove(plr, locFrom, locTo, ei);
         PlayerMoveEvent event = new PlayerMoveEvent(getPlayer(plr.getName()), Util.getLocation(locFrom), Util.getLocation(locTo));
         pluginManager.callEvent(event);
+        Location to = event.getTo();
+        if(!to.equals(Util.getLocation(locTo))){
+            ei.isCancelled = true;
+            plr.teleport(Util.getLocation(to));
+            return;
+        }
         ei.isCancelled = event.isCancelled();
     }
 
