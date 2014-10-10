@@ -17,7 +17,7 @@ public class FakeOfflinePlayer implements OfflinePlayer
 		System.out.println("FakeOfflinePlayer Proxy: " + msg);
 	}
 
-    public FakeOfflinePlayer(MC_Player m_name) {
+    public FakeOfflinePlayer(MC_Player player) {
         this.player = player;
     }
 
