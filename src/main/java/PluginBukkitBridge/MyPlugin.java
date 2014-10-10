@@ -359,4 +359,12 @@ public class MyPlugin extends PluginReference.PluginBase
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
     }
+
+    @Override
+    public void onAttemptItemDrop(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
+        PlayerDropItemEvent event = new PlayerDropItemEvent(getPlayer(plr.getName()), new FakeItem(Util.getItemStack(is)));
+        event.setCancelled(false);
+        pluginManager.callEvent(event);
+        if(event.isCancelled())ei.isCancelled=true;
+    }
 }
