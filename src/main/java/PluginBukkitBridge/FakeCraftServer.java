@@ -743,9 +743,7 @@ public class FakeCraftServer implements Server
 	@Override
 	public void shutdown()
 	{
-		FakeDebug("shutdown");
-		
-		
+		server.executeCommand("stop");
 	}
 
 	@Override
