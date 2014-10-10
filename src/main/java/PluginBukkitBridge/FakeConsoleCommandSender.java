@@ -1,7 +1,5 @@
 package PluginBukkitBridge;
 
-import java.util.Set;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
@@ -11,6 +9,8 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
+
+import java.util.Set;
 
 public class FakeConsoleCommandSender implements ConsoleCommandSender
 {
@@ -41,7 +41,7 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender
 	@Override
 	public void sendMessage(String[] arg0)
 	{
-		for(String piece : arg0) sendMessage(arg0);
+		for(String piece : arg0) sendMessage(piece);
 	}
 
 	@Override
@@ -87,33 +87,25 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender
 	@Override
 	public boolean hasPermission(String arg0)
 	{
-		FakeDebug("hasPermission");		
-		
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean hasPermission(Permission arg0)
 	{
-		FakeDebug("hasPermission");		
-		
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isPermissionSet(String arg0)
 	{
-		FakeDebug("isPermissionSet");		
-		
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean isPermissionSet(Permission arg0)
 	{
-		FakeDebug("isPermissionSet");		
-		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -135,65 +127,51 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender
 	@Override
 	public boolean isOp()
 	{
-		FakeDebug("isOp");		
-		
-		return false;
+		return true;
 	}
 
 	@Override
 	public void setOp(boolean arg0)
 	{
-		FakeDebug("setOp");		
-		
-		
+		FakeDebug("setOp");
 	}
 
 	@Override
 	public void abandonConversation(Conversation arg0)
 	{
-		FakeDebug("abandonConversation");		
-		
-		
+		FakeDebug("abandonConversation");
 	}
 
 	@Override
 	public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1)
 	{
-		FakeDebug("abandonConversation");		
-		
-		
+		FakeDebug("abandonConversation");
 	}
 
 	@Override
 	public void acceptConversationInput(String arg0)
 	{
-		FakeDebug("acceptConversationInput");		
-		
-		
+		FakeDebug("acceptConversationInput");
 	}
 
 	@Override
 	public boolean beginConversation(Conversation arg0)
 	{
-		FakeDebug("beginConversation");		
-		
+		FakeDebug("beginConversation");
 		return false;
 	}
 
 	@Override
 	public boolean isConversing()
 	{
-		FakeDebug("isConversing");		
-		
+		FakeDebug("isConversing");
 		return false;
 	}
 
 	@Override
 	public void sendRawMessage(String arg0)
 	{
-		FakeDebug("sendRawMessage");		
-		
-		
+		FakeDebug("sendRawMessage");
 	}
 
 }
