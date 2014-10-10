@@ -33,7 +33,7 @@ public class FakeItemFactory implements ItemFactory
 	public boolean equals(ItemMeta arg0, ItemMeta arg1) throws IllegalArgumentException
 	{
 		FakeDebug("equals");
-		return false;
+		return true;
 	}
 
 	@Override

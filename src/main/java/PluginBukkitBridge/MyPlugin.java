@@ -292,7 +292,9 @@ public class MyPlugin extends PluginReference.PluginBase
         ei.isCancelled = event.isCancelled();
     }
 
+    boolean allowTeleport = false;
     public void onAttemptPlayerTeleport(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
+        if(allowTeleport)return;
         super.onAttemptPlayerTeleport(plr, loc, ei);
         PlayerTeleportEvent event = new PlayerTeleportEvent(getPlayer(plr.getName()), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
         pluginManager.callEvent(event);
@@ -304,9 +306,11 @@ public class MyPlugin extends PluginReference.PluginBase
         PlayerMoveEvent event = new PlayerMoveEvent(getPlayer(plr.getName()), Util.getLocation(locFrom), Util.getLocation(locTo));
         pluginManager.callEvent(event);
         Location to = event.getTo();
-        if(!to.equals(Util.getLocation(locTo))){
+        if(to.getX() != locTo.x || to.getY() != locTo.y || to.getZ() != locTo.z){
             ei.isCancelled = true;
+            allowTeleport = true;
             plr.teleport(Util.getLocation(to));
+            allowTeleport = false;
             return;
         }
         ei.isCancelled = event.isCancelled();
@@ -351,6 +355,7 @@ public class MyPlugin extends PluginReference.PluginBase
     public void onAttemptItemUse(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
         PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.RIGHT_CLICK_AIR,
                 Util.getItemStack(is), null, null);
+        event.setCancelled(false);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
     }

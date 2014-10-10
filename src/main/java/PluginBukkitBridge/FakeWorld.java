@@ -248,22 +248,19 @@ public class FakeWorld implements World
 	@Override
 	public Chunk getChunkAt(Location arg0)
 	{
-		FakeDebug("getChunkAt");
-		return null;
+		return getChunkAt(arg0.getBlockX()/16, arg0.getBlockZ()/16);
 	}
 
 	@Override
 	public Chunk getChunkAt(Block arg0)
 	{
-		FakeDebug("getChunkAt");
-		return null;
+		return getChunkAt(arg0.getLocation());
 	}
 
 	@Override
 	public Chunk getChunkAt(int arg0, int arg1)
 	{
-		FakeDebug("getChunkAt");
-		return null;
+		return new FakeChunk(arg0, arg1, this);
 	}
 
 	@Override
@@ -312,8 +309,9 @@ public class FakeWorld implements World
 	@Override
 	public Environment getEnvironment()
 	{
-		FakeDebug("getEnvironment");
-		return Environment.NORMAL;
+        if(getName().contains("_nether"))return Environment.NETHER;
+        if(getName().contains("_the_end"))return Environment.THE_END;
+        return Environment.NORMAL;
 	}
 
 	@Override

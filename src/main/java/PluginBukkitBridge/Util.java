@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class Util {
+
     public static MC_Location getLocation(Location loc){
         return new MC_Location(loc.getX(), loc.getY(), loc.getZ(), loc.getWorld().getEnvironment().getId(), loc.getYaw(), loc.getPitch());
     }
@@ -31,7 +32,17 @@ public class Util {
         return is;
     }
     public static MC_ItemStack getItemStack(final ItemStack is){
-        if(is == null)return MyPlugin.server.createItemStack(0,0,0);
+        if(is == null){
+            MC_ItemStack is2 = MyPlugin.server.createItemStack(1, 1, 1);
+            try {
+                is2.getClass().getDeclaredField("is").set(is2, null);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+            return is2;
+        }
         MC_ItemStack is2 = ((FakeItemMeta)is.getItemMeta()).is;
         is2.setCount(is.getAmount());
         is2.setDamage(is.getDurability());
