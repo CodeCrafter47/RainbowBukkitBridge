@@ -849,14 +849,13 @@ public class FakePlayer extends FakeEntity implements Player
 	@Override
 	public int _INVALID_getMaxHealth()
 	{
-		FakeDebug("_INVALID_getMaxHealth");
-		return 0;
+		return (int) player.getMaxHealth();
 	}
 
 	@Override
 	public void _INVALID_setMaxHealth(int arg0)
 	{
-		FakeDebug("_INVALID_setMaxHealth");
+		player.setMaxHealth(arg0);
 	}
 
 	@Override
@@ -874,8 +873,7 @@ public class FakePlayer extends FakeEntity implements Player
 	@Override
 	public double getMaxHealth()
 	{
-		FakeDebug("getMaxHealth");
-		return 0;
+		return player.getMaxHealth();
 	}
 
 	@Override
@@ -887,7 +885,7 @@ public class FakePlayer extends FakeEntity implements Player
 	@Override
 	public void setMaxHealth(double arg0)
 	{
-		FakeDebug("setMaxHealth");
+		player.setMaxHealth((float) arg0);
 	}
 
 	@Override

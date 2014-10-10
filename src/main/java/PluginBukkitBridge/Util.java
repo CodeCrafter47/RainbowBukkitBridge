@@ -25,7 +25,7 @@ public class Util {
         return md;
     }
     public static ItemStack getItemStack(MC_ItemStack i){
-        // fixme enchantments, lore, etc
+        if(i == null)return null;
         if(i.getId() == 0 || i.getCount() == 0)return null;
         ItemStack is = new ItemStack(i.getId(), i.getCount(), (short)i.getDamage());
         is.setItemMeta(new FakeItemMeta(i));
