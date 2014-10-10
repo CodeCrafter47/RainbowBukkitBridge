@@ -367,4 +367,12 @@ public class MyPlugin extends PluginReference.PluginBase
         pluginManager.callEvent(event);
         if(event.isCancelled())ei.isCancelled=true;
     }
+
+    @Override
+    public void onAttemptItemPickup(MC_Player plr, MC_ItemStack is, boolean isXpOrb, MC_EventInfo ei) {
+        PlayerPickupItemEvent event = new PlayerPickupItemEvent(getPlayer(plr.getName()), new FakeItem(Util.getItemStack(is)), 0);
+        event.setCancelled(false);
+        pluginManager.callEvent(event);
+        if(event.isCancelled())ei.isCancelled=true;
+    }
 }
