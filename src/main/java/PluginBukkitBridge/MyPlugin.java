@@ -1,5 +1,7 @@
 package PluginBukkitBridge;
 
+import PluginBukkitBridge.entity.FakeEntity;
+import PluginBukkitBridge.entity.FakePlayer;
 import PluginReference.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -208,7 +210,9 @@ public class MyPlugin extends PluginReference.PluginBase
         player.getLocation();
         if (match.matches()) {
             PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, msg);
+            event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
+            ei.isCancelled = event.isCancelled();
             if(!event.isCancelled()) {
                 // fixme message might be changed
                 if (commandMap.dispatch(getPlayer(plr.getName()), match.group(1))) ei.isCancelled = true;
@@ -241,7 +245,7 @@ public class MyPlugin extends PluginReference.PluginBase
 		EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
 		event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
-		
+		ei.isCancelled = event.isCancelled();
 		
 	}
 
@@ -280,6 +284,7 @@ public class MyPlugin extends PluginReference.PluginBase
         // fixme blockFace
         PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.LEFT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), BlockFace.DOWN);
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
     }
@@ -288,6 +293,7 @@ public class MyPlugin extends PluginReference.PluginBase
         super.onAttemptPlaceOrInteract(plr, loc, ei, dir);
         PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.RIGHT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), Util.getFace(dir));
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
     }
@@ -297,6 +303,7 @@ public class MyPlugin extends PluginReference.PluginBase
         if(allowTeleport)return;
         super.onAttemptPlayerTeleport(plr, loc, ei);
         PlayerTeleportEvent event = new PlayerTeleportEvent(getPlayer(plr.getName()), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
     }
@@ -304,9 +311,10 @@ public class MyPlugin extends PluginReference.PluginBase
     public void onAttemptPlayerMove(MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
         super.onAttemptPlayerMove(plr, locFrom, locTo, ei);
         PlayerMoveEvent event = new PlayerMoveEvent(getPlayer(plr.getName()), Util.getLocation(locFrom), Util.getLocation(locTo));
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         Location to = event.getTo();
-        if(to.getX() != locTo.x || to.getY() != locTo.y || to.getZ() != locTo.z){
+        if(!event.isCancelled() && (to.getX() != locTo.x || to.getY() != locTo.y || to.getZ() != locTo.z)){
             ei.isCancelled = true;
             allowTeleport = true;
             plr.teleport(Util.getLocation(to));
@@ -355,7 +363,7 @@ public class MyPlugin extends PluginReference.PluginBase
     public void onAttemptItemUse(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
         PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.RIGHT_CLICK_AIR,
                 Util.getItemStack(is), null, null);
-        event.setCancelled(false);
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
     }
@@ -363,16 +371,16 @@ public class MyPlugin extends PluginReference.PluginBase
     @Override
     public void onAttemptItemDrop(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
         PlayerDropItemEvent event = new PlayerDropItemEvent(getPlayer(plr.getName()), new FakeItem(Util.getItemStack(is)));
-        event.setCancelled(false);
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
-        if(event.isCancelled())ei.isCancelled=true;
+        ei.isCancelled = event.isCancelled();
     }
 
     @Override
     public void onAttemptItemPickup(MC_Player plr, MC_ItemStack is, boolean isXpOrb, MC_EventInfo ei) {
         PlayerPickupItemEvent event = new PlayerPickupItemEvent(getPlayer(plr.getName()), new FakeItem(Util.getItemStack(is)), 0);
-        event.setCancelled(false);
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
-        if(event.isCancelled())ei.isCancelled=true;
+        ei.isCancelled = event.isCancelled();
     }
 }
