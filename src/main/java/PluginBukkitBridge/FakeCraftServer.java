@@ -39,8 +39,6 @@ public class FakeCraftServer implements Server
 		System.out.println("FakeCraftServer Proxy: " + msg);
 	}
 
-
-
     @Override
     public String getName() {
         return "Rainbow";
@@ -593,8 +591,8 @@ public class FakeCraftServer implements Server
 		if(worldName.equalsIgnoreCase("world_the_end")) return worldMap.get("world_the_end");
 		if(worldName.equalsIgnoreCase("PlotWorld")) return worldMap.get("PlotWorld");
 
-		FakeDebug("getWorld: " + worldName + " -- returning 'world' instead...");
-		return worldMap.get("world");	}
+		return null;
+    }
 
 	@Override
 	public World getWorld(UUID arg0)
@@ -623,9 +621,16 @@ public class FakeCraftServer implements Server
 	@Override
 	public List<World> getWorlds()
 	{
-		FakeDebug("getWorlds");
+        if(worldMap == null)
+        {
+            worldMap = new ConcurrentHashMap<String, FakeWorld>();
+            worldMap.put("world", new FakeWorld(MyPlugin.server.getWorld(0)));
+            worldMap.put("world_nether", new FakeWorld(MyPlugin.server.getWorld(-1)));
+            worldMap.put("world_the_end", new FakeWorld(MyPlugin.server.getWorld(1)));
+            worldMap.put("PlotWorld", new FakeWorld(MyPlugin.server.getWorld(2)));
+        }
 		
-		return null;
+		return new ArrayList<World>(worldMap.values());
 	}
 
 	@Override

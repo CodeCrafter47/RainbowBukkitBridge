@@ -1,6 +1,5 @@
 package PluginBukkitBridge;
 
-import PluginBukkitBridge.entity.FakeEntity;
 import PluginBukkitBridge.entity.FakePlayer;
 import PluginReference.*;
 import org.bukkit.Bukkit;
@@ -8,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.help.SimpleHelpMap;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -56,6 +56,10 @@ public class MyPlugin extends PluginReference.PluginBase
 
     public static void fixme() {
         new UnsupportedOperationException("FIXME").printStackTrace();
+    }
+
+    public static void fixme(String s){
+        logger.info("FIXME: " + s + " at " + new UnsupportedOperationException().getStackTrace()[1].toString());
     }
 
     public MyPlugin() {
@@ -241,7 +245,7 @@ public class MyPlugin extends PluginReference.PluginBase
 			System.out.println("BukkitBridge -- " + logMsg);
 		}
 		
-		FakeEntity fakeEnt = new FakeEntity(ent);
+		Entity fakeEnt = Util.wrapEntity(ent);
 		EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
 		event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -370,7 +374,7 @@ public class MyPlugin extends PluginReference.PluginBase
 
     @Override
     public void onAttemptItemDrop(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
-        PlayerDropItemEvent event = new PlayerDropItemEvent(getPlayer(plr.getName()), new FakeItem(Util.getItemStack(is)));
+        PlayerDropItemEvent event = new PlayerDropItemEvent(getPlayer(plr.getName()), new FakedFakeItem(Util.getItemStack(is)));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
@@ -378,7 +382,7 @@ public class MyPlugin extends PluginReference.PluginBase
 
     @Override
     public void onAttemptItemPickup(MC_Player plr, MC_ItemStack is, boolean isXpOrb, MC_EventInfo ei) {
-        PlayerPickupItemEvent event = new PlayerPickupItemEvent(getPlayer(plr.getName()), new FakeItem(Util.getItemStack(is)), 0);
+        PlayerPickupItemEvent event = new PlayerPickupItemEvent(getPlayer(plr.getName()), new FakedFakeItem(Util.getItemStack(is)), 0);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();

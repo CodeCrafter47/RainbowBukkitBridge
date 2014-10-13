@@ -1,9 +1,12 @@
 package PluginBukkitBridge;
 
+import PluginBukkitBridge.entity.*;
 import PluginReference.*;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Horse;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -175,4 +178,200 @@ public class Util {
         return null;
     }
 
+    public static Entity wrapEntity(MC_Entity entity)
+    {
+        try {
+            switch (entity.getType()){
+                case UNSPECIFIED:
+                    return new FakeEntity(entity);
+                case PLAYER:
+                    return MyPlugin.getPlayer(entity.getName());
+                case BAT:
+                    return new FakeBat(entity);
+                case CHICKEN:
+                    return new FakeChicken((MC_EntityAgeable) entity);
+                case COW:
+                    return new FakeCow((MC_EntityAgeable) entity);
+                case HORSE:
+                    return new FakeHorse((MC_Horse) entity);
+                case MUSHROOM_COW:
+                    return new FakeMushroomCow((MC_EntityAgeable) entity);
+                case OCELOT:
+                    return new FakeOcelot((MC_Ocelot) entity);
+                case PIG:
+                    return new FakePig((MC_EntityAgeable) entity);
+                case RABBIT:
+                    // fixme
+                    return new FakeAnimal((MC_EntityAgeable) entity);
+                case SHEEP:
+                    return new FakeSheep((MC_EntityAgeable) entity);
+                case SNOWMAN:
+                    return new FakeSnowman(entity);
+                case SQUID:
+                    return new FakeSquid(entity);
+                case VILLAGER_GOLEM:
+                    return new FakeGolem(entity);
+                case WOLF:
+                    return new FakeWolf((MC_Wolf) entity);
+                case VILLAGER:
+                    return new FakeVillager((MC_EntityAgeable) entity);
+                case ENDERDRAGON:
+                    return new FakeEnderdragon(entity);
+                case WITHERBOSS:
+                    return new FakeWither(entity);
+                case BLAZE:
+                    return new FakeBlaze(entity);
+                case CAVE_SPIDER:
+                    return new FakeCaveSpider(entity);
+                case CREEPER:
+                    return new FakeCreeper(entity);
+                case ENDERMAN:
+                    return new FakeEnderman(entity);
+                case ENDERMITE:
+                    // fixme
+                    break;
+                case GHAST:
+                    return new FakeGhast(entity);
+                case GIANT:
+                    return new FakeGiant(entity);
+                case GUARDIAN:
+                    // fixme
+                    break;
+                case LAVA_SLIME:
+                    return new FakeMagmaCube(entity);
+                case PIG_ZOMBIE:
+                    return new FakePigZombie(entity);
+                case SILVERFISH:
+                    return new FakeSilverfish(entity);
+                case SKELETON:
+                    return new FakeSkeleton(entity);
+                case SLIME:
+                    return new FakeSlime(entity);
+                case SPIDER:
+                    return new FakeSpider(entity);
+                case WITCH:
+                    return new FakeWitch(entity);
+                case ZOMBIE:
+                    return new FakeZombie(entity);
+                case FISHING_HOOK:
+                    return new FakeFishingHook(entity);
+                case ARROW:
+                    return new FakeArrow(entity);
+                case SMALL_FIREBALL:
+                    return new FakeSmallFireball(entity);
+                case FIREBALL:
+                    return new FakeLargeFireball(entity);
+                case SNOWBALL:
+                    return new FakeSnowball(entity);
+                case THROWN_ENDERPEARL:
+                    return new FakeEnderPearl(entity);
+                case EYE_OF_ENDER_SIGNAL:
+                    return new FakeEnderSignal(entity);
+                case THROWN_EGG:
+                    return new FakeEgg(entity);
+                case THROWN_POTION:
+                    return new FakeThrownPotion(entity);
+                case THROWN_EXP_BOTTLE:
+                    return new FakeThrownExpBottle(entity);
+                case FIREWORK:
+                    return new FakeFirework(entity);
+                case ITEM:
+                    return new FakeItem(entity);
+                case MINECART:
+                    return new FakeMinecart(entity);
+                case BOAT:
+                    return new FakeBoat(entity);
+                case PRIMED_TNT:
+                    return new FakeTNTPrimed(entity);
+                case FALLING_SAND:
+                    return new FakeFallingBlock(entity);
+                case HANGING:
+                    return new FakeHanging(entity);
+                case ARMOR_STAND:
+                    // fixme
+                    break;
+                case XP_ORB:
+                    return new FakeExperienceOrb(entity);
+                case ENDER_CRYSTAL:
+                    return new FakeEnderCrystal(entity);
+            }
+        } catch (Exception ignored) {
+        }
+        MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
+        return new FakeEntity(entity);
+    }
+
+    public static Horse.Variant wrapHorseType(MC_HorseType type){
+        switch (type) {
+            case HORSE:
+                return Horse.Variant.HORSE;
+            case DONKEY:
+                return Horse.Variant.DONKEY;
+            case MULE:
+                return Horse.Variant.MULE;
+            case ZOMBIE:
+                return Horse.Variant.UNDEAD_HORSE;
+            case SKELETON:
+                return Horse.Variant.SKELETON_HORSE;
+            case UNKNOWN:
+                return Horse.Variant.HORSE;
+        }
+        return Horse.Variant.HORSE;
+    }
+
+    public static MC_HorseType wrapHorseType(Horse.Variant type){
+        switch (type) {
+            case HORSE:
+                return MC_HorseType.HORSE;
+            case DONKEY:
+                return MC_HorseType.DONKEY;
+            case MULE:
+                return MC_HorseType.MULE;
+            case UNDEAD_HORSE:
+                return MC_HorseType.ZOMBIE;
+            case SKELETON_HORSE:
+                return MC_HorseType.SKELETON;
+        }
+        return MC_HorseType.UNKNOWN;
+    }
+
+    public static MC_HorseVariant wrapHorseVariant(Horse.Style type){
+        MyPlugin.fixme("cry");
+        switch (type) {
+            case NONE:
+                return MC_HorseVariant.BROWN;
+            case WHITE:
+                return MC_HorseVariant.WHITE;
+            case WHITEFIELD:
+                return MC_HorseVariant.CREAMY;
+            case WHITE_DOTS:
+                return MC_HorseVariant.CHESTNUT;
+            case BLACK_DOTS:
+                return MC_HorseVariant.DARK_BROWN;
+        }
+        return MC_HorseVariant.UNKNOWN;
+    }
+
+    public static Horse.Style wrapHorseVariant(MC_HorseVariant type){
+        MyPlugin.fixme("cry");
+        switch (type) {
+            case WHITE:
+                return Horse.Style.WHITE;
+            case CREAMY:
+                return Horse.Style.WHITEFIELD;
+            case CHESTNUT:
+                return Horse.Style.WHITE_DOTS;
+            case BROWN:
+                return Horse.Style.NONE;
+            case BLACK:
+                return Horse.Style.NONE;
+            case GRAY:
+                return Horse.Style.NONE;
+            case DARK_BROWN:
+                return Horse.Style.NONE;
+            case UNKNOWN:
+                return Horse.Style.NONE;
+        }
+        return Horse.Style.NONE;
+    }
 }

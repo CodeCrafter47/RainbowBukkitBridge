@@ -20,11 +20,11 @@ import java.util.UUID;
 /**
  * Created by florian on 10.10.14.
  */
-public class FakeItem implements Item {
+public class FakedFakeItem implements Item {
 
     ItemStack is;
 
-    public FakeItem(ItemStack is) {
+    public FakedFakeItem(ItemStack is) {
         this.is = is;
     }
 

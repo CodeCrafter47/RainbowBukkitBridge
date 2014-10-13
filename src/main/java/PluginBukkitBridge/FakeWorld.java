@@ -281,7 +281,7 @@ public class FakeWorld implements World
 	public List<Entity> getEntities()
 	{
 		ArrayList<Entity> arr = new ArrayList<Entity>();
-		for(MC_Entity ent : world.getEntities()) arr.add(new FakeEntity(ent));
+		for(MC_Entity ent : world.getEntities()) arr.add(Util.wrapEntity(ent));
 		return arr;
 	}
 
@@ -387,8 +387,13 @@ public class FakeWorld implements World
 	@Override
 	public List<LivingEntity> getLivingEntities()
 	{
-		FakeDebug("getLivingEntities");
-		return null;
+        List<LivingEntity> l = new ArrayList<>();
+		for(Entity e: getEntities()){
+            if(e instanceof LivingEntity){
+                l.add((LivingEntity) e);
+            }
+        }
+		return l;
 	}
 
 	@Override

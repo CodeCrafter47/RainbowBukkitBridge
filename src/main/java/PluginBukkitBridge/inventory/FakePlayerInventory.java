@@ -1,5 +1,7 @@
-package PluginBukkitBridge;
+package PluginBukkitBridge.inventory;
 
+import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.Util;
 import PluginReference.MC_ItemStack;
 import PluginReference.MC_Player;
 import org.apache.commons.lang.Validate;
