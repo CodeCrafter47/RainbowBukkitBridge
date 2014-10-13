@@ -27,23 +27,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.StreamHandler;
+import java.util.logging.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MyPlugin extends PluginReference.PluginBase
-{
-	public static MC_Server server = null;
+public class MyPlugin extends PluginReference.PluginBase {
+    public static MC_Server server = null;
     public static Logger logger;
-	public final static FakeConsoleCommandSender consoleCommandSender = new FakeConsoleCommandSender();
-	public final static ServicesManager servicesManager = new SimpleServicesManager();
-	public final static StandardMessenger messenger = new StandardMessenger();
+    public final static FakeConsoleCommandSender consoleCommandSender = new FakeConsoleCommandSender();
+    public final static ServicesManager servicesManager = new SimpleServicesManager();
+    public final static StandardMessenger messenger = new StandardMessenger();
     public final static FakeScheduler scheduler = new FakeScheduler();
-	public final static FakeCraftServer fakeServer = new FakeCraftServer();
-	public final static SimpleCommandMap commandMap = new SimpleCommandMap(fakeServer);
+    public final static FakeCraftServer fakeServer = new FakeCraftServer();
+    public final static SimpleCommandMap commandMap = new MyCommandMap(fakeServer);
     public final static PluginManager pluginManager = new SimplePluginManager(fakeServer, commandMap);
     public static SimpleHelpMap helpMap;
 
@@ -58,83 +54,86 @@ public class MyPlugin extends PluginReference.PluginBase
         new UnsupportedOperationException("FIXME").printStackTrace();
     }
 
-    public static void fixme(String s){
+    public static void fixme(String s) {
         logger.info("FIXME: " + s + " at " + new UnsupportedOperationException().getStackTrace()[1].toString());
     }
 
     public MyPlugin() {
         super();
-        Handler handler = new StreamHandler(System.out, new MyLogFormatter());
-        logger = Logger.getLogger("Minecraft");
-        logger.addHandler(handler);
+        //SimpleFormatter formatter = new SimpleFormatter();
+        //Handler handler = new StreamHandler(System.out, new MyLogFormatter());
+        logger = new MyLogger("BukkitBridge", null);//Logger.getLogger("BukkitBridge");
+        //for(Handler h: logger.getHandlers())logger.removeHandler(h);
+        //logger.addHandler(handler);
         pluginDir.mkdirs();
         updateDir.mkdirs();
         helpMap = new SimpleHelpMap(fakeServer);
     }
 
-    public void onStartup(MC_Server argServer)
-	{
-		System.out.println("BukkitBridge v2.4 --- Starting up...");
-		server = argServer;
-		
-		// Initialize Bukkit server object...
-		fakeServer.server = server;
-		Bukkit.setServer(fakeServer);
-		
-		// Load plugin JARs...
+    public void onStartup(MC_Server argServer) {
+        System.out.println("BukkitBridge v2.4 --- Starting up...");
+        server = argServer;
+
+        // Initialize Bukkit server object...
+        fakeServer.server = server;
+        Bukkit.setServer(fakeServer);
+    }
+
+    @Override
+    public void onServerFullyLoaded() {
+        super.onServerFullyLoaded();
+        // load all plugins postworld
+
+        // Load plugin JARs...
         loadPlugins();
 
         // Call onEnable for plugins...
         enablePlugins(PluginLoadOrder.STARTUP);
         enablePlugins(PluginLoadOrder.POSTWORLD);
-		
-	}
-	public void onShutdown()
-	{
-		System.out.println("BukkitBridge v2.4 --- Shutting down...");
-        pluginManager.disablePlugins();
-	}
+    }
 
-	public PluginInfo getPluginInfo() 
-	{ 
-		PluginInfo info = new PluginInfo();
-		info.description = "Partial Bukkit support (rbow.org)";
-		info.eventSortOrder = 10000.0f; // call way later, lowest priority
-		return info;
-	}
-	
-	
-    public static void loadPlugins()
-    {
+    public void onShutdown() {
+        System.out.println("BukkitBridge v2.4 --- Shutting down...");
+        pluginManager.disablePlugins();
+    }
+
+    public PluginInfo getPluginInfo() {
+        PluginInfo info = new PluginInfo();
+        info.description = "Partial Bukkit support (rbow.org)";
+        info.eventSortOrder = 10000.0f; // call way later, lowest priority <-- Bukkit thinks that is highest priority
+        return info;
+    }
+
+
+    public static void loadPlugins() {
         pluginManager.registerInterface(JavaPluginLoader.class);
-        
+
         Plugin[] plugins = pluginManager.loadPlugins(pluginDir);
         for (Plugin plugin : plugins) {
             try {
                 String message = String.format("[BukkitBridge] Loading Bukkit plugin: %s", plugin.getDescription().getFullName());
-                System.out.println(message); 
+                System.out.println(message);
                 plugin.onLoad();
                 plugin.getLogger().setLevel(Level.OFF);
             } catch (Throwable ex) {
-            	ex.printStackTrace();
+                ex.printStackTrace();
             }
         }
-        
+
     }
-    
-    public static void enablePlugins(PluginLoadOrder type)
-    {
+
+    public static void enablePlugins(PluginLoadOrder type) {
         Plugin[] plugins = pluginManager.getPlugins();
 
         for (Plugin plugin : plugins) {
             if ((!plugin.isEnabled()) && (plugin.getDescription().getLoad() == type)) {
-            	
+
                 loadPlugin(plugin);
             }
         }
-    	
+
     }
-    
+
     private static void loadPlugin(Plugin plugin) {
         try {
             pluginManager.enablePlugin(plugin);
@@ -145,68 +144,60 @@ public class MyPlugin extends PluginReference.PluginBase
                 try {
                     pluginManager.addPermission(perm);
                 } catch (IllegalArgumentException ex) {
-                	ex.printStackTrace();
+                    ex.printStackTrace();
                 }
             }
         } catch (Throwable ex) {
-        	ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
-	
-	public void onTick(int tickNumber)
-	{
+
+    public void onTick(int tickNumber) {
         scheduler.mainThreadHeartbeat(tickNumber);
-		
-	}
-	
-	public void onPlayerLogin(String playerName, UUID uuid, String ip)
-	{
-		if(DebugMode) 
-		{
-			String logMsg = String.format("%s onPlayerLogin from IP %s. UUID=%s", playerName, ip, uuid.toString());
-			System.out.println("BukkitBridge -- " + logMsg);
-		}
+
+    }
+
+    public void onPlayerLogin(String playerName, UUID uuid, String ip) {
+        if (DebugMode) {
+            String logMsg = String.format("%s onPlayerLogin from IP %s. UUID=%s", playerName, ip, uuid.toString());
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
 
 
         AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(playerName, new InetSocketAddress(ip, 0).getAddress(), uuid);
         pluginManager.callEvent(event);
         // fixme result
-	}
-	
-	public void onPlayerLogout(String playerName, UUID uuid)
-	{
-		if(DebugMode)
-		{
-			String logMsg = String.format("%s onPlayerLogout. UUID=%s", playerName, uuid.toString());
-			System.out.println("BukkitBridge -- " + logMsg);
-		}
+    }
+
+    public void onPlayerLogout(String playerName, UUID uuid) {
+        if (DebugMode) {
+            String logMsg = String.format("%s onPlayerLogout. UUID=%s", playerName, uuid.toString());
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
 
         // fixme message
         pluginManager.callEvent(new PlayerQuitEvent(players.get(uuid), ""));
         players.remove(uuid);
-		
-	}
 
-	// PlayerCommandPreprocessEvent
-	public void onPlayerInput(MC_Player plr, String msg, MC_EventInfo ei)
-	{
-		if(msg == null) return;
+    }
+
+    // PlayerCommandPreprocessEvent
+    public void onPlayerInput(MC_Player plr, String msg, MC_EventInfo ei) {
+        if (msg == null) return;
         msg = msg.trim();
-        if(msg.length() <= 0) return;
-        
-        if(plr.isOp() && msg.equalsIgnoreCase("/bb debug"))
-        {
-        	DebugMode = !DebugMode;
-        	plr.sendMessage(ChatColor.GREEN + "BukkitBridge Debug Mode: " + ChatColor.AQUA + DebugMode);
-        	ei.isCancelled = true;
-        	return;
+        if (msg.length() <= 0) return;
+
+        if (plr.isOp() && msg.equalsIgnoreCase("/bb debug")) {
+            DebugMode = !DebugMode;
+            plr.sendMessage(ChatColor.GREEN + "BukkitBridge Debug Mode: " + ChatColor.AQUA + DebugMode);
+            ei.isCancelled = true;
+            return;
         }
-        
-		if(DebugMode)
-		{
-			String logMsg = String.format("%s onPlayerInput: %s", plr.getName(), msg);
-			System.out.println("BukkitBridge -- " + logMsg);
-		}
+
+        if (DebugMode) {
+            String logMsg = String.format("%s onPlayerInput: %s", plr.getName(), msg);
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
 
         super.onPlayerInput(plr, msg, ei);
         Matcher match = Pattern.compile(" */(.*)").matcher(msg);
@@ -217,41 +208,39 @@ public class MyPlugin extends PluginReference.PluginBase
             event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
             ei.isCancelled = event.isCancelled();
-            if(!event.isCancelled()) {
+            if (!event.isCancelled()) {
                 // fixme message might be changed
                 if (commandMap.dispatch(getPlayer(plr.getName()), match.group(1))) ei.isCancelled = true;
             }
         } else {
             // fixme call PlayerChatEvent ?
         }
-        
-	} // end of onPlayerInput
+
+    } // end of onPlayerInput
 
     public static Player getPlayer(String name) {
-        if (!players.containsKey(UUID.fromString(server.getPlayerUUIDFromName(name)))){
+        if (!players.containsKey(UUID.fromString(server.getPlayerUUIDFromName(name)))) {
             MC_Player player = server.getOnlinePlayerByName(name);
-            if(player == null)return null;
+            if (player == null) return null;
             players.put(player.getUUID(), new FakePlayer(player));
         }
         return players.get(UUID.fromString(server.getPlayerUUIDFromName(name)));
     }
 
 
-    public void onAttemptEntityDamage(MC_Entity ent, MC_DamageType dmgType, double amt, MC_EventInfo ei)
-	{
-		if(DebugMode)
-		{
-			String logMsg = String.format("onAttemptEntityDamage: %s %s for %.2f", ent.getName(), dmgType.toString(), amt);
-			System.out.println("BukkitBridge -- " + logMsg);
-		}
-		
-		Entity fakeEnt = Util.wrapEntity(ent);
-		EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
-		event.setCancelled(ei.isCancelled);
+    public void onAttemptEntityDamage(MC_Entity ent, MC_DamageType dmgType, double amt, MC_EventInfo ei) {
+        if (DebugMode) {
+            String logMsg = String.format("onAttemptEntityDamage: %s %s for %.2f", ent.getName(), dmgType.toString(), amt);
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
+
+        Entity fakeEnt = Util.wrapEntity(ent);
+        EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
+        event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
-		ei.isCancelled = event.isCancelled();
-		
-	}
+        ei.isCancelled = event.isCancelled();
+
+    }
 
     @Override
     public void onBlockBroke(MC_Player plr, MC_Location loc, int blockKey) {
@@ -303,8 +292,9 @@ public class MyPlugin extends PluginReference.PluginBase
     }
 
     boolean allowTeleport = false;
+
     public void onAttemptPlayerTeleport(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
-        if(allowTeleport)return;
+        if (allowTeleport) return;
         super.onAttemptPlayerTeleport(plr, loc, ei);
         PlayerTeleportEvent event = new PlayerTeleportEvent(getPlayer(plr.getName()), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
         event.setCancelled(ei.isCancelled);
@@ -318,7 +308,7 @@ public class MyPlugin extends PluginReference.PluginBase
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         Location to = event.getTo();
-        if(!event.isCancelled() && (to.getX() != locTo.x || to.getY() != locTo.y || to.getZ() != locTo.z)){
+        if (!event.isCancelled() && (to.getX() != locTo.x || to.getY() != locTo.y || to.getZ() != locTo.z)) {
             ei.isCancelled = true;
             allowTeleport = true;
             plr.teleport(Util.getLocation(to));
@@ -338,30 +328,29 @@ public class MyPlugin extends PluginReference.PluginBase
         pluginManager.callEvent(event);
     }
 
-	public void onItemPlaced(MC_Player plr, MC_Location loc, MC_ItemStack isHandItem, MC_Location locPlacedAgainst, MC_DirectionNESWUD dir)
-	{
-		if(DebugMode) System.out.println("BukkitBridge -- onItemPlaced to BlockPlaceEvent");
-		
-		Player who = new FakePlayer(plr);
-		MC_ItemStack isHand = plr.getItemInHand();
-		ItemStack isPlaced = new ItemStack(isHand.getId(), isHand.getCount());
+    public void onItemPlaced(MC_Player plr, MC_Location loc, MC_ItemStack isHandItem, MC_Location locPlacedAgainst, MC_DirectionNESWUD dir) {
+        if (DebugMode) System.out.println("BukkitBridge -- onItemPlaced to BlockPlaceEvent");
 
-		MC_World world = plr.getWorld();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		
-		int x2 = locPlacedAgainst.getBlockX();
-		int y2 = locPlacedAgainst.getBlockY();
-		int z2 = locPlacedAgainst.getBlockZ();
+        Player who = new FakePlayer(plr);
+        MC_ItemStack isHand = plr.getItemInHand();
+        ItemStack isPlaced = new ItemStack(isHand.getId(), isHand.getCount());
 
-		FakeBlock fakeBlockPlaced = new FakeBlock(x, y, z, world);
+        MC_World world = plr.getWorld();
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
 
-		FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
-				
-		BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced), fakeBlockAgainst, isPlaced, who, true);	
+        int x2 = locPlacedAgainst.getBlockX();
+        int y2 = locPlacedAgainst.getBlockY();
+        int z2 = locPlacedAgainst.getBlockZ();
+
+        FakeBlock fakeBlockPlaced = new FakeBlock(x, y, z, world);
+
+        FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
+
+        BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced), fakeBlockAgainst, isPlaced, who, true);
         pluginManager.callEvent(event);
-	}
+    }
 
     @Override
     public void onAttemptItemUse(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
