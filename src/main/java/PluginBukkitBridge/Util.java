@@ -185,7 +185,7 @@ public class Util {
                 case UNSPECIFIED:
                     return new FakeEntity(entity);
                 case PLAYER:
-                    return MyPlugin.getPlayer(entity.getName());
+                    return PlayerManager.getPlayer((MC_Player)entity);
                 case BAT:
                     return new FakeBat(entity);
                 case CHICKEN:

@@ -117,7 +117,7 @@ public class FakeCraftServer implements Server
 
     @Override
     public Player getPlayerExact(String name) {
-        return MyPlugin.getPlayer(name);
+        return PlayerManager.getPlayer(name);
     }
 
     @Override
@@ -131,8 +131,7 @@ public class FakeCraftServer implements Server
 
     @Override
     public Player getPlayer(UUID id) {
-        if(MyPlugin.players.containsKey(id))return MyPlugin.players.get(id);
-        return getPlayerExact(server.getLastKnownPlayerNameFromUUID(id.toString()));
+        return PlayerManager.getPlayer(id);
     }
 
     @Override

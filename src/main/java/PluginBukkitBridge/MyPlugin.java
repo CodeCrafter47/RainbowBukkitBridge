@@ -23,11 +23,10 @@ import org.bukkit.plugin.messaging.StandardMessenger;
 
 import java.io.File;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,8 +44,6 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public final static File pluginDir = new File("plugins");
     public final static File updateDir = new File(pluginDir, "update");
-
-    public static Map<UUID, FakePlayer> players = new HashMap<>();
 
     public static boolean DebugMode = false;
 
@@ -176,9 +173,8 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // fixme message
-        pluginManager.callEvent(new PlayerQuitEvent(players.get(uuid), ""));
-        players.remove(uuid);
-
+        pluginManager.callEvent(new PlayerQuitEvent(PlayerManager.getPlayer(uuid), ""));
+        PlayerManager.removePlayer(uuid);
     }
 
     // PlayerCommandPreprocessEvent
@@ -201,7 +197,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         super.onPlayerInput(plr, msg, ei);
         Matcher match = Pattern.compile(" */(.*)").matcher(msg);
-        Player player = getPlayer(plr.getName());
+        Player player = PlayerManager.getPlayer(plr);
         player.getLocation();
         if (match.matches()) {
             PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, msg);
@@ -210,22 +206,13 @@ public class MyPlugin extends PluginReference.PluginBase {
             ei.isCancelled = event.isCancelled();
             if (!event.isCancelled()) {
                 // fixme message might be changed
-                if (commandMap.dispatch(getPlayer(plr.getName()), match.group(1))) ei.isCancelled = true;
+                if (commandMap.dispatch(PlayerManager.getPlayer(plr), match.group(1))) ei.isCancelled = true;
             }
         } else {
             // fixme call PlayerChatEvent ?
         }
 
     } // end of onPlayerInput
-
-    public static Player getPlayer(String name) {
-        if (!players.containsKey(UUID.fromString(server.getPlayerUUIDFromName(name)))) {
-            MC_Player player = server.getOnlinePlayerByName(name);
-            if (player == null) return null;
-            players.put(player.getUUID(), new FakePlayer(player));
-        }
-        return players.get(UUID.fromString(server.getPlayerUUIDFromName(name)));
-    }
 
 
     public void onAttemptEntityDamage(MC_Entity ent, MC_DamageType dmgType, double amt, MC_EventInfo ei) {
@@ -246,7 +233,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onBlockBroke(MC_Player plr, MC_Location loc, int blockKey) {
         super.onBlockBroke(plr, loc, blockKey);
         BlockBreakEvent event = new BlockBreakEvent(new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
-                server.getWorld(loc.dimension)), getPlayer(plr.getName()));
+                server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
         pluginManager.callEvent(event);
         // fixme result, block break, replace?
     }
@@ -254,7 +241,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onPlayerDeath(MC_Player plrVictim, MC_Player plrKiller, MC_DamageType dmgType, String deathMsg) {
         super.onPlayerDeath(plrVictim, plrKiller, dmgType, deathMsg);
         // fixme set killer
-        PlayerDeathEvent event = new PlayerDeathEvent(getPlayer(plrVictim.getName()), null, 0, "");
+        PlayerDeathEvent event = new PlayerDeathEvent(PlayerManager.getPlayer(plrVictim), null, 0, "");
         // fixme use result
         pluginManager.callEvent(event);
     }
@@ -262,7 +249,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onPlayerRespawn(MC_Player plr) {
         super.onPlayerRespawn(plr);
         // fixme location, bed spawn
-        PlayerRespawnEvent event = new PlayerRespawnEvent(getPlayer(plr.getName()), Util.getLocation(plr.getLocation()), false);
+        PlayerRespawnEvent event = new PlayerRespawnEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), false);
         pluginManager.callEvent(event);
         // fixme result
     }
@@ -275,7 +262,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptBlockBreak(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
         super.onAttemptBlockBreak(plr, loc, ei);
         // fixme blockFace
-        PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.LEFT_CLICK_BLOCK,
+        PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), BlockFace.DOWN);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -284,7 +271,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) {
         super.onAttemptPlaceOrInteract(plr, loc, ei, dir);
-        PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.RIGHT_CLICK_BLOCK,
+        PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), Util.getFace(dir));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -296,7 +283,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptPlayerTeleport(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
         if (allowTeleport) return;
         super.onAttemptPlayerTeleport(plr, loc, ei);
-        PlayerTeleportEvent event = new PlayerTeleportEvent(getPlayer(plr.getName()), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
+        PlayerTeleportEvent event = new PlayerTeleportEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
@@ -304,7 +291,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public void onAttemptPlayerMove(MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
         super.onAttemptPlayerMove(plr, locFrom, locTo, ei);
-        PlayerMoveEvent event = new PlayerMoveEvent(getPlayer(plr.getName()), Util.getLocation(locFrom), Util.getLocation(locTo));
+        PlayerMoveEvent event = new PlayerMoveEvent(PlayerManager.getPlayer(plr), Util.getLocation(locFrom), Util.getLocation(locTo));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         Location to = event.getTo();
@@ -320,11 +307,13 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public void onPlayerJoin(MC_Player plr) {
         super.onPlayerJoin(plr);
-        PlayerLoginEvent event1 = new PlayerLoginEvent(getPlayer(plr.getName()), plr.getIPAddress(), new InetSocketAddress(plr.getIPAddress(), 0).getAddress());
+        PlayerManager.addPlayer(plr);
+
+        PlayerLoginEvent event1 = new PlayerLoginEvent(PlayerManager.getPlayer(plr), plr.getIPAddress(), new InetSocketAddress(plr.getIPAddress(), 0).getAddress());
         pluginManager.callEvent(event1);
 
         // fixme result
-        PlayerJoinEvent event = new PlayerJoinEvent(getPlayer(plr.getName()), "");
+        PlayerJoinEvent event = new PlayerJoinEvent(PlayerManager.getPlayer(plr), "");
         pluginManager.callEvent(event);
     }
 
@@ -354,7 +343,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptItemUse(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
-        PlayerInteractEvent event = new PlayerInteractEvent(getPlayer(plr.getName()), Action.RIGHT_CLICK_AIR,
+        PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_AIR,
                 Util.getItemStack(is), null, null);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -363,7 +352,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptItemDrop(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
-        PlayerDropItemEvent event = new PlayerDropItemEvent(getPlayer(plr.getName()), new FakedFakeItem(Util.getItemStack(is)));
+        PlayerDropItemEvent event = new PlayerDropItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is)));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
@@ -371,7 +360,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptItemPickup(MC_Player plr, MC_ItemStack is, boolean isXpOrb, MC_EventInfo ei) {
-        PlayerPickupItemEvent event = new PlayerPickupItemEvent(getPlayer(plr.getName()), new FakedFakeItem(Util.getItemStack(is)), 0);
+        PlayerPickupItemEvent event = new PlayerPickupItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is)), 0);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();

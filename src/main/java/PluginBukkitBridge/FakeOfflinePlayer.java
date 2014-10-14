@@ -71,7 +71,7 @@ public class FakeOfflinePlayer implements OfflinePlayer
 	@Override
 	public Player getPlayer()
 	{
-		return MyPlugin.getPlayer(getName());
+		return PlayerManager.getPlayer(getUniqueId());
 	}
 
 	@Override

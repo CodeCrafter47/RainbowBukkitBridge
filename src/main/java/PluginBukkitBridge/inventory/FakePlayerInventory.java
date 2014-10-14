@@ -1,6 +1,7 @@
 package PluginBukkitBridge.inventory;
 
 import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.PlayerManager;
 import PluginBukkitBridge.Util;
 import PluginReference.MC_ItemStack;
 import PluginReference.MC_Player;
@@ -211,7 +212,7 @@ public class FakePlayerInventory implements PlayerInventory {
 
     @Override
     public HumanEntity getHolder() {
-        return MyPlugin.getPlayer(player.getName());
+        return PlayerManager.getPlayer(player);
     }
 
     @Override

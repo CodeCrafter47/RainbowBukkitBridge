@@ -1,6 +1,7 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.ReflectionUtil;
 import PluginBukkitBridge.Util;
 import PluginReference.MC_Player;
 import org.bukkit.*;
@@ -24,8 +25,10 @@ import java.util.UUID;
 
 public class FakePlayer extends FakeHumanEntity implements Player
 {
-    MC_Player player;
+    public MC_Player player;
     private UUID uuid;
+
+    private String playerListName = null;
 
     public FakePlayer(MC_Player player) {
         super(player);
@@ -45,12 +48,15 @@ public class FakePlayer extends FakeHumanEntity implements Player
 
     @Override
     public String getPlayerListName() {
-        return player.getCustomName();
+        return playerListName == null?getName():playerListName;
     }
 
     @Override
     public void setPlayerListName(String name) {
-        player.setCustomName(name);
+        playerListName = name;
+        for(Player p: Bukkit.getOnlinePlayers()){
+            ReflectionUtil.sendPlayerListItemChangeDisplayName(((FakePlayer)p).player, player, name);
+        }
     }
 
     @Override

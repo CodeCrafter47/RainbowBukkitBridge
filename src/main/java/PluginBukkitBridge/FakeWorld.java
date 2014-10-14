@@ -70,7 +70,7 @@ public class FakeWorld implements World
     public List<Player> getPlayers() {
         List<Player> list = new ArrayList<>();
         for(MC_Player player: MyPlugin.server.getPlayers()){
-            if(player.getWorld().equals(world))list.add(MyPlugin.getPlayer(player.getName()));
+            if(player.getWorld().equals(world))list.add(PlayerManager.getPlayer(player));
         }
         return list;
     }
