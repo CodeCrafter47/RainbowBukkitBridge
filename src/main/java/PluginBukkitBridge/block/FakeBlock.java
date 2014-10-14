@@ -1,5 +1,8 @@
-package PluginBukkitBridge;
+package PluginBukkitBridge.block;
 
+import PluginBukkitBridge.FakeWorld;
+import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.Util;
 import PluginReference.BlockHelper;
 import PluginReference.MC_Block;
 import PluginReference.MC_World;
@@ -34,20 +37,17 @@ public class FakeBlock implements Block
 
     @Override
     public Block getRelative(int modX, int modY, int modZ) {
-        MyPlugin.fixme();
-        return null;
+        return getWorld().getBlockAt(getX() + modX, getY() + modY, getZ() + modZ);
     }
 
     @Override
     public Block getRelative(BlockFace face) {
-        MyPlugin.fixme();
-        return null;
+        return getRelative(face, 1);
     }
 
     @Override
     public Block getRelative(BlockFace face, int distance) {
-        MyPlugin.fixme();
-        return null;
+        return getRelative(face.getModX() * distance, face.getModY() * distance, face.getModZ() * distance);
     }
 
     @Override
@@ -62,19 +62,19 @@ public class FakeBlock implements Block
 
     @Override
     public byte getLightLevel() {
-        MyPlugin.fixme();
+        MyPlugin.fixme("stub method");
         return 0;
     }
 
     @Override
     public byte getLightFromSky() {
-        MyPlugin.fixme();
+        MyPlugin.fixme("stub method");
         return 0;
     }
 
     @Override
     public byte getLightFromBlocks() {
-        MyPlugin.fixme();
+        MyPlugin.fixme("stub method");
         return 0;
     }
 
@@ -114,8 +114,7 @@ public class FakeBlock implements Block
 
     @Override
     public Chunk getChunk() {
-        MyPlugin.fixme();
-        return null;
+        return getWorld().getChunkAt(this);
     }
 
     @Override
@@ -161,8 +160,7 @@ public class FakeBlock implements Block
 
     @Override
     public BlockState getState() {
-        MyPlugin.fixme();
-        return null;
+        return Util.wrapBlockState(this);
     }
 
     @Override
@@ -249,7 +247,7 @@ public class FakeBlock implements Block
 
     @Override
     public boolean breakNaturally(ItemStack tool) {
-        world.breakNaturallyAt(x,y,z,Util.getItemStack(tool));
+        world.breakNaturallyAt(x,y,z, Util.getItemStack(tool));
         return true;
     }
 

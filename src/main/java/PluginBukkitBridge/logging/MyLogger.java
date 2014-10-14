@@ -1,4 +1,4 @@
-package PluginBukkitBridge;
+package PluginBukkitBridge.logging;
 
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
@@ -13,7 +13,7 @@ public class MyLogger extends Logger {
 
     @Override
     public void log(LogRecord record) {
-        System.out.println("[BukkitBridge] " + record.getLevel().getName() + ": " + record.getMessage());
+        System.out.println("[" + record.getLevel().getName() + "][BukkitBridge] " + record.getMessage());
         if(record.getThrown() != null){
             record.getThrown().printStackTrace();
         }

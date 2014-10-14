@@ -1,9 +1,12 @@
 package PluginBukkitBridge;
 
+import PluginBukkitBridge.block.FakeBlock;
+import PluginBukkitBridge.block.FakeBlockState;
 import PluginBukkitBridge.entity.*;
 import PluginReference.*;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
@@ -373,5 +376,9 @@ public class Util {
                 return Horse.Style.NONE;
         }
         return Horse.Style.NONE;
+    }
+
+    public static BlockState wrapBlockState(FakeBlock fakeBlock) {
+        return new FakeBlockState(fakeBlock);
     }
 }

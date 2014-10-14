@@ -486,10 +486,7 @@ public class FakeCraftServer implements Server
 	@Override
 	public PluginCommand getPluginCommand(String arg)
 	{
-		FakeDebug("getPluginCommand: " + arg);
 		return (PluginCommand)MyPlugin.commandMap.getCommand(arg);
-		
-		//return null;
 	}
 
 	@Override
@@ -582,13 +579,13 @@ public class FakeCraftServer implements Server
 			worldMap.put("world", new FakeWorld(MyPlugin.server.getWorld(0)));
 			worldMap.put("world_nether", new FakeWorld(MyPlugin.server.getWorld(-1)));
 			worldMap.put("world_the_end", new FakeWorld(MyPlugin.server.getWorld(1)));
-			worldMap.put("PlotWorld", new FakeWorld(MyPlugin.server.getWorld(2)));
+		    //worldMap.put("PlotWorld", new FakeWorld(MyPlugin.server.getWorld(2)));
 		}
 		
 		if(worldName.equalsIgnoreCase("world")) return worldMap.get("world");
 		if(worldName.equalsIgnoreCase("world_nether")) return worldMap.get("world_nether");
 		if(worldName.equalsIgnoreCase("world_the_end")) return worldMap.get("world_the_end");
-		if(worldName.equalsIgnoreCase("PlotWorld")) return worldMap.get("PlotWorld");
+		//if(worldName.equalsIgnoreCase("PlotWorld")) return worldMap.get("PlotWorld");
 
 		return null;
     }
@@ -626,7 +623,7 @@ public class FakeCraftServer implements Server
             worldMap.put("world", new FakeWorld(MyPlugin.server.getWorld(0)));
             worldMap.put("world_nether", new FakeWorld(MyPlugin.server.getWorld(-1)));
             worldMap.put("world_the_end", new FakeWorld(MyPlugin.server.getWorld(1)));
-            worldMap.put("PlotWorld", new FakeWorld(MyPlugin.server.getWorld(2)));
+            //worldMap.put("PlotWorld", new FakeWorld(MyPlugin.server.getWorld(2)));
         }
 		
 		return new ArrayList<World>(worldMap.values());

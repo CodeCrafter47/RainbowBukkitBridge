@@ -140,14 +140,14 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
     @Override
     public boolean isPermissionSet(String arg0) {
-        MyPlugin.fixme("stub method");
-        return false;
+        // fixme that's not the same
+        return hasPermission(arg0);
     }
 
     @Override
     public boolean isPermissionSet(Permission arg0) {
-        MyPlugin.fixme("stub method");
-        return false;
+        // fixme that's not the same
+        return hasPermission(arg0);
     }
 
     @Override
@@ -157,8 +157,7 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
     @Override
     public boolean hasPermission(Permission arg0) {
-        MyPlugin.fixme("stub method");
-        return false;
+        return hasPermission(arg0.getName());
     }
 
     @Override
@@ -208,6 +207,7 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
     @Override
     public void setOp(boolean arg0) {
-        MyPlugin.fixme("stub method");
+        if(arg0)MyPlugin.server.executeCommand("op "+getName());
+        else MyPlugin.server.executeCommand("deop "+getName());
     }
 }

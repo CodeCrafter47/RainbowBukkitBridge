@@ -1,5 +1,6 @@
 package PluginBukkitBridge;
 
+import PluginBukkitBridge.block.FakeBlock;
 import PluginReference.MC_Entity;
 import PluginReference.MC_Player;
 import PluginReference.MC_World;

@@ -1,6 +1,9 @@
 package PluginBukkitBridge;
 
+import PluginBukkitBridge.block.FakeBlock;
+import PluginBukkitBridge.block.FakeBlockState;
 import PluginBukkitBridge.entity.FakePlayer;
+import PluginBukkitBridge.logging.*;
 import PluginReference.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,13 +21,16 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.*;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.StandardMessenger;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -59,9 +65,16 @@ public class MyPlugin extends PluginReference.PluginBase {
         super();
         //SimpleFormatter formatter = new SimpleFormatter();
         //Handler handler = new StreamHandler(System.out, new MyLogFormatter());
-        logger = new MyLogger("BukkitBridge", null);//Logger.getLogger("BukkitBridge");
-        //for(Handler h: logger.getHandlers())logger.removeHandler(h);
-        //logger.addHandler(handler);
+        logger = Logger.getLogger("");
+        for(Handler h: logger.getHandlers())logger.removeHandler(h);
+        logger.addHandler(new MyLogHandler());
+
+
+
+        logger = new MyLogger("", null);//Logger.getLogger("BukkitBridge");
+        logger.setLevel(Level.ALL);
+        // logger = Logger.getLogger("Minecraft");
+
         pluginDir.mkdirs();
         updateDir.mkdirs();
         helpMap = new SimpleHelpMap(fakeServer);
@@ -110,8 +123,14 @@ public class MyPlugin extends PluginReference.PluginBase {
             try {
                 String message = String.format("[BukkitBridge] Loading Bukkit plugin: %s", plugin.getDescription().getFullName());
                 System.out.println(message);
+                try {
+                    Field f = JavaPlugin.class.getDeclaredField("logger");
+                    f.setAccessible(true);
+                    f.set(plugin, new PluginBukkitBridge.logging.PluginLogger(plugin));
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
                 plugin.onLoad();
-                plugin.getLogger().setLevel(Level.OFF);
             } catch (Throwable ex) {
                 ex.printStackTrace();
             }
@@ -124,7 +143,6 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         for (Plugin plugin : plugins) {
             if ((!plugin.isEnabled()) && (plugin.getDescription().getLoad() == type)) {
-
                 loadPlugin(plugin);
             }
         }
