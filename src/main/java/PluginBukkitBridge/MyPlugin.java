@@ -1,12 +1,12 @@
 package PluginBukkitBridge;
 
 import PluginBukkitBridge.block.FakeBlock;
-import PluginBukkitBridge.block.FakeBlockState;
 import PluginBukkitBridge.entity.FakePlayer;
-import PluginBukkitBridge.logging.*;
+import PluginBukkitBridge.logging.MyLogHandler;
 import PluginReference.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.help.SimpleHelpMap;
@@ -16,6 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -28,10 +29,10 @@ import org.bukkit.plugin.messaging.StandardMessenger;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Handler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -54,7 +55,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public static boolean DebugMode = false;
 
     public static void fixme() {
-        new UnsupportedOperationException("FIXME").printStackTrace();
+        logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
     }
 
     public static void fixme(String s) {
@@ -71,8 +72,8 @@ public class MyPlugin extends PluginReference.PluginBase {
 
 
 
-        logger = new MyLogger("", null);//Logger.getLogger("BukkitBridge");
-        logger.setLevel(Level.ALL);
+        //logger = new MyLogger("", null);//Logger.getLogger("BukkitBridge");
+        //logger.setLevel(Level.ALL);
         // logger = Logger.getLogger("Minecraft");
 
         pluginDir.mkdirs();
@@ -249,7 +250,6 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onBlockBroke(MC_Player plr, MC_Location loc, int blockKey) {
-        super.onBlockBroke(plr, loc, blockKey);
         BlockBreakEvent event = new BlockBreakEvent(new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
                 server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
         pluginManager.callEvent(event);
@@ -257,7 +257,6 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onPlayerDeath(MC_Player plrVictim, MC_Player plrKiller, MC_DamageType dmgType, String deathMsg) {
-        super.onPlayerDeath(plrVictim, plrKiller, dmgType, deathMsg);
         // fixme set killer
         PlayerDeathEvent event = new PlayerDeathEvent(PlayerManager.getPlayer(plrVictim), null, 0, "");
         // fixme use result
@@ -265,7 +264,6 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onPlayerRespawn(MC_Player plr) {
-        super.onPlayerRespawn(plr);
         // fixme location, bed spawn
         PlayerRespawnEvent event = new PlayerRespawnEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), false);
         pluginManager.callEvent(event);
@@ -273,12 +271,10 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onConsoleInput(String cmd, MC_EventInfo ei) {
-        super.onConsoleInput(cmd, ei);
         if (commandMap.dispatch(consoleCommandSender, cmd)) ei.isCancelled = true;
     }
 
     public void onAttemptBlockBreak(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
-        super.onAttemptBlockBreak(plr, loc, ei);
         // fixme blockFace
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), BlockFace.DOWN);
@@ -288,7 +284,6 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) {
-        super.onAttemptPlaceOrInteract(plr, loc, ei, dir);
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), Util.getFace(dir));
         event.setCancelled(ei.isCancelled);
@@ -300,7 +295,6 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public void onAttemptPlayerTeleport(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
         if (allowTeleport) return;
-        super.onAttemptPlayerTeleport(plr, loc, ei);
         PlayerTeleportEvent event = new PlayerTeleportEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -308,7 +302,6 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onAttemptPlayerMove(MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
-        super.onAttemptPlayerMove(plr, locFrom, locTo, ei);
         PlayerMoveEvent event = new PlayerMoveEvent(PlayerManager.getPlayer(plr), Util.getLocation(locFrom), Util.getLocation(locTo));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -324,7 +317,6 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onPlayerJoin(MC_Player plr) {
-        super.onPlayerJoin(plr);
         PlayerManager.addPlayer(plr);
 
         PlayerLoginEvent event1 = new PlayerLoginEvent(PlayerManager.getPlayer(plr), plr.getIPAddress(), new InetSocketAddress(plr.getIPAddress(), 0).getAddress());
@@ -355,7 +347,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
 
-        BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced), fakeBlockAgainst, isPlaced, who, true);
+        BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, fakeBlockPlaced.getState(), fakeBlockAgainst, isPlaced, who, true);
         pluginManager.callEvent(event);
     }
 
@@ -382,5 +374,18 @@ public class MyPlugin extends PluginReference.PluginBase {
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
+    }
+
+    @Override
+    public boolean onAttemptExplodeSpecific(MC_Entity ent, List<MC_Location> locs) {
+        // fixme yield, cancel
+        List<Block> blocks = new ArrayList<>();
+        for(MC_Location loc: locs){
+            Location l = Util.getLocation(loc);
+            blocks.add(l.getWorld().getBlockAt(l));
+        }
+        EntityExplodeEvent event = new EntityExplodeEvent(Util.wrapEntity(ent),Util.getLocation(ent.getLocation()),blocks,1);
+        pluginManager.callEvent(event);
+        return false;
     }
 }

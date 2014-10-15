@@ -21,7 +21,7 @@ import java.util.List;
 public class FakeBlock implements Block
 {
     int x,y,z;
-    MC_World world;
+    public MC_World world;
 
     public FakeBlock(int x, int y, int z, MC_World world) {
         this.x = x;

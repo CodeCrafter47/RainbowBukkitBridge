@@ -2,6 +2,8 @@ package PluginBukkitBridge.logging;
 
 import org.bukkit.plugin.Plugin;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
@@ -10,6 +12,7 @@ import java.util.logging.LogRecord;
  */
 public class PluginLogger extends org.bukkit.plugin.PluginLogger {
     String pluginName;
+    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 
     public PluginLogger(Plugin context) {
         super(context);
@@ -21,7 +24,7 @@ public class PluginLogger extends org.bukkit.plugin.PluginLogger {
 
     @Override
     public void log(LogRecord record) {
-        System.out.println("[" + record.getLevel().getName() + "][BukkitBridge]" + pluginName + record.getMessage());
+        System.out.println("[" + format.format(Calendar.getInstance().getTime()) + "] [" + record.getLevel().getName() + "][BukkitBridge] " + pluginName + record.getMessage());
         if(record.getThrown() != null){
             record.getThrown().printStackTrace();
         }

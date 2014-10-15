@@ -192,7 +192,6 @@ public class FakePlayerInventory implements PlayerInventory {
         for(int i = 0; i < inv.size(); i++){
             inv.remove(i);
             MC_ItemStack is = Util.getItemStack(items[i]);
-            if(is==null)is=MyPlugin.server.createItemStack(0,0,0);
             inv.add(i, is);
         }
         player.setInventory(inv);

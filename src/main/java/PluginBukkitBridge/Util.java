@@ -1,10 +1,10 @@
 package PluginBukkitBridge;
 
-import PluginBukkitBridge.block.FakeBlock;
-import PluginBukkitBridge.block.FakeBlockState;
+import PluginBukkitBridge.block.*;
 import PluginBukkitBridge.entity.*;
 import PluginReference.*;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
@@ -379,6 +379,19 @@ public class Util {
     }
 
     public static BlockState wrapBlockState(FakeBlock fakeBlock) {
+        if(fakeBlock.getType() == Material.BEACON)return new FakeBeacon(fakeBlock);
+        if(fakeBlock.getType() == Material.BREWING_STAND)return new FakeBrewingStand(fakeBlock);
+        if(fakeBlock.getType() == Material.CHEST || fakeBlock.getType() == Material.TRAPPED_CHEST)return new FakeChest(fakeBlock);
+        if(fakeBlock.getType() == Material.COMMAND)return new FakeCommandBlock(fakeBlock);
+        if(fakeBlock.getType() == Material.MOB_SPAWNER)return new FakeCreatureSpawner(fakeBlock);
+        if(fakeBlock.getType() == Material.DISPENSER)return new FakeDispenser(fakeBlock);
+        if(fakeBlock.getType() == Material.DROPPER)return new FakeDropper(fakeBlock);
+        if(fakeBlock.getType() == Material.FURNACE || fakeBlock.getType() == Material.BURNING_FURNACE)return new FakeFurnace(fakeBlock);
+        if(fakeBlock.getType() == Material.HOPPER)return new FakeHopper(fakeBlock);
+        if(fakeBlock.getType() == Material.JUKEBOX)return new FakeJukebox(fakeBlock);
+        if(fakeBlock.getType() == Material.NOTE_BLOCK)return new FakeNoteBlock(fakeBlock);
+        if(fakeBlock.getType() == Material.SIGN_POST || fakeBlock.getType() == Material.SIGN || fakeBlock.getType() == Material.WALL_SIGN)return new FakeSign(fakeBlock);
+        if(fakeBlock.getType() == Material.SKULL)return new FakeSkull(fakeBlock);
         return new FakeBlockState(fakeBlock);
     }
 }

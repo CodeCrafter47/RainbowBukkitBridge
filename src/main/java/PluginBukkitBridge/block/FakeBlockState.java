@@ -12,172 +12,142 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
-public class FakeBlockState implements BlockState
-{
-	FakeBlock blk = null;
-	public FakeBlockState(FakeBlock arg)
-	{
-		blk = arg;
-	}
-	public static void FakeDebug(String msg)
-	{
-		System.out.println("FakeBlockState Proxy: " + msg);
-	}
-	
+public class FakeBlockState implements BlockState {
+    FakeBlock blk = null;
 
-	@Override
-	public List<MetadataValue> getMetadata(String arg0)
-	{
-		FakeDebug("getMetadata");
-		return null;
-	}
+    public FakeBlockState(FakeBlock arg) {
+        blk = arg;
+    }
 
-	@Override
-	public boolean hasMetadata(String arg0)
-	{
-		FakeDebug("hasMetadata");
-		return false;
-	}
+    public static void FakeDebug(String msg) {
+        System.out.println("FakeBlockState Proxy: " + msg);
+    }
 
-	@Override
-	public void removeMetadata(String arg0, Plugin arg1)
-	{
-		FakeDebug("removeMetadata");
-	}
 
-	@Override
-	public void setMetadata(String arg0, MetadataValue arg1)
-	{
-		FakeDebug("setMetadata");
-	}
+    @Override
+    public List<MetadataValue> getMetadata(String arg0) {
+        FakeDebug("getMetadata");
+        return null;
+    }
 
-	@Override
-	public Block getBlock()
-	{
-		return blk;
-	}
+    @Override
+    public boolean hasMetadata(String arg0) {
+        FakeDebug("hasMetadata");
+        return false;
+    }
 
-	@Override
-	public Chunk getChunk()
-	{
-		FakeDebug("getChunk");
-		return null;
-	}
+    @Override
+    public void removeMetadata(String arg0, Plugin arg1) {
+        FakeDebug("removeMetadata");
+    }
 
-	@Override
-	public MaterialData getData()
-	{
-		FakeDebug("getData");
-		return null;
-	}
+    @Override
+    public void setMetadata(String arg0, MetadataValue arg1) {
+        FakeDebug("setMetadata");
+    }
 
-	@Override
-	public byte getLightLevel()
-	{
-		FakeDebug("getLightLevel");
-		return 0;
-	}
+    @Override
+    public Block getBlock() {
+        return blk;
+    }
 
-	@Override
-	public Location getLocation()
-	{
-		return blk.getLocation();
-	}
+    @Override
+    public Chunk getChunk() {
+        return blk.getChunk();
+    }
 
-	@Override
-	public Location getLocation(Location arg0)
-	{
-		return blk.getLocation(arg0);
-	}
+    @Override
+    public MaterialData getData() {
+        return getType().getNewData(blk.getData());
+    }
 
-	@Override
-	public byte getRawData()
-	{
-		FakeDebug("getRawData");
-		return 0;
-	}
+    @Override
+    public byte getLightLevel() {
+        FakeDebug("getLightLevel");
+        return 0;
+    }
 
-	@Override
-	public Material getType()
-	{
-		return blk.getType();
-	}
+    @Override
+    public Location getLocation() {
+        return blk.getLocation();
+    }
 
-	@Override
-	public int getTypeId()
-	{
-		return blk.getTypeId();
-	}
+    @Override
+    public Location getLocation(Location arg0) {
+        return blk.getLocation(arg0);
+    }
 
-	@Override
-	public World getWorld()
-	{
-		return blk.getWorld();
-	}
+    @Override
+    public byte getRawData() {
+        return blk.getData();
+    }
 
-	@Override
-	public int getX()
-	{
-		return blk.getX();
-	}
+    @Override
+    public Material getType() {
+        return blk.getType();
+    }
 
-	@Override
-	public int getY()
-	{
-		return blk.getY();
-	}
+    @Override
+    public int getTypeId() {
+        return blk.getTypeId();
+    }
 
-	@Override
-	public int getZ()
-	{
-		return blk.getZ();
-	}
+    @Override
+    public World getWorld() {
+        return blk.getWorld();
+    }
 
-	@Override
-	public void setData(MaterialData arg0)
-	{
-		FakeDebug("setData");
-		
-	}
+    @Override
+    public int getX() {
+        return blk.getX();
+    }
 
-	@Override
-	public void setRawData(byte arg0)
-	{
-		FakeDebug("setRawData");
-		
-	}
+    @Override
+    public int getY() {
+        return blk.getY();
+    }
 
-	@Override
-	public void setType(Material arg0)
-	{
-		blk.setType(arg0);
-	}
+    @Override
+    public int getZ() {
+        return blk.getZ();
+    }
 
-	@Override
-	public boolean setTypeId(int arg0)
-	{
-		return blk.setTypeId(arg0);
-	}
+    @Override
+    public void setData(MaterialData arg0) {
+        setRawData(arg0.getData());
+    }
 
-	@Override
-	public boolean update()
-	{
-		FakeDebug("update1");
-		return false;
-	}
+    @Override
+    public void setRawData(byte arg0) {
+        blk.setData(arg0);
+    }
 
-	@Override
-	public boolean update(boolean arg0)
-	{
-		FakeDebug("update2=" + arg0);
-		return false;
-	}
+    @Override
+    public void setType(Material arg0) {
+        blk.setType(arg0);
+    }
 
-	@Override
-	public boolean update(boolean arg0, boolean arg1)
-	{
-		FakeDebug("update3: arg0=" + arg0 + ", arg1=" + arg1);
-		return false;
-	}
+    @Override
+    public boolean setTypeId(int arg0) {
+        return blk.setTypeId(arg0);
+    }
+
+    @Override
+    public boolean update() {
+        FakeDebug("update1");
+        return false;
+    }
+
+    @Override
+    public boolean update(boolean arg0) {
+        FakeDebug("update2=" + arg0);
+        return false;
+    }
+
+    @Override
+    public boolean update(boolean arg0, boolean arg1) {
+        FakeDebug("update3: arg0=" + arg0 + ", arg1=" + arg1);
+        return false;
+    }
 
 }
