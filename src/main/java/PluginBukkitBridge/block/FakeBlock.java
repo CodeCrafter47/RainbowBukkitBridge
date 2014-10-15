@@ -1,8 +1,8 @@
 package PluginBukkitBridge.block;
 
-import PluginBukkitBridge.FakeWorld;
 import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.Util;
+import PluginBukkitBridge.WorldManager;
 import PluginReference.BlockHelper;
 import PluginReference.MC_Block;
 import PluginReference.MC_World;
@@ -80,7 +80,7 @@ public class FakeBlock implements Block
 
     @Override
     public World getWorld() {
-        return new FakeWorld(world);
+        return WorldManager.getWorld(world.getName());
     }
 
     @Override

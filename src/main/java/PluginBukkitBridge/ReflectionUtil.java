@@ -4,7 +4,6 @@ import PluginReference.MC_Entity;
 import PluginReference.MC_Player;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
@@ -17,14 +16,9 @@ public class ReflectionUtil {
 
     public static float getEntityHeight(MC_Entity entity) {
         try {
-            Field f_mcEntity = entity.getClass().getDeclaredField("ent");
-            f_mcEntity.setAccessible(true);
-            Object mcEntity = f_mcEntity.get(entity);
-            Field f_height = mcEntity.getClass().getDeclaredField("height");
-            f_height.setAccessible(true);
-            Object height = f_height.get(mcEntity);
-            return (float) height;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Object mcEntity = getMember(Class.forName("WrapperObjects.EntityWrapper"), entity, "ent");
+            return (float) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "height");
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityHeight", e);
         }
         return 0;
@@ -32,14 +26,9 @@ public class ReflectionUtil {
 
     public static int getEntityID(MC_Entity entity) {
         try {
-            Field f_mcEntity = entity.getClass().getDeclaredField("ent");
-            f_mcEntity.setAccessible(true);
-            Object mcEntity = f_mcEntity.get(entity);
-            Field f_height = mcEntity.getClass().getDeclaredField("entityID");
-            f_height.setAccessible(true);
-            Object height = f_height.get(mcEntity);
-            return (int) height;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Object mcEntity = getMember(Class.forName("WrapperObjects.EntityWrapper"), entity, "ent");
+            return (int) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "entityID");
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityID", e);
         }
         return 0;
@@ -47,14 +36,12 @@ public class ReflectionUtil {
 
     public static UUID getEntityUUID(MC_Entity entity) {
         try {
-            Field f_mcEntity = entity.getClass().getDeclaredField("ent");
-            f_mcEntity.setAccessible(true);
-            Object mcEntity = f_mcEntity.get(entity);
-            Method f_height = mcEntity.getClass().getDeclaredMethod("getUUID", null);
+            Object mcEntity = getMember(Class.forName("WrapperObjects.EntityWrapper"), entity, "ent");
+            Method f_height = Class.forName("joebkt.EntityGeneric").getDeclaredMethod("getUUID", null);
             f_height.setAccessible(true);
             Object height = f_height.invoke(mcEntity, null);
             return (UUID) height;
-        } catch (NoSuchFieldException | IllegalAccessException | NoSuchMethodException | InvocationTargetException | NullPointerException e) {
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", e);
         }
         return null;
@@ -76,7 +63,7 @@ public class ReflectionUtil {
                 }
             }
             return null;
-        } catch (NoSuchFieldException | IllegalAccessException | ClassNotFoundException | InvocationTargetException | NullPointerException e) {
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", e);
         }
         return null;
@@ -91,7 +78,7 @@ public class ReflectionUtil {
             Field f_target = mcEntity.getClass().getDeclaredField("c");
             f_target.setAccessible(true);
             f_target.set(mcEntity, mcTarget);
-        } catch (NoSuchFieldException | IllegalAccessException | NullPointerException e) {
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTarget", e);
         }
     }
@@ -115,7 +102,7 @@ public class ReflectionUtil {
             Method m = packetHandler.getClass().getDeclaredMethod("a", new Class[]{cPacketBase});
             m.setAccessible(true);
             m.invoke(packetHandler, playerListItem);
-        } catch (IllegalAccessException | NoSuchFieldException | ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPlayerListItemChangeDisplayName", e);
         }
     }

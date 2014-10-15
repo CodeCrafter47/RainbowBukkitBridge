@@ -312,20 +312,6 @@ public class FakePlayer extends FakeHumanEntity implements Player
 	}
 
 	@Override
-	public double getEyeHeight()
-	{
-		FakeDebug("getEyeHeight");
-		return 0;
-	}
-
-	@Override
-	public double getEyeHeight(boolean arg0)
-	{
-		FakeDebug("getEyeHeight");
-		return 0;
-	}
-
-	@Override
 	public void abandonConversation(Conversation arg0)
 	{
 		FakeDebug("abandonConversation");

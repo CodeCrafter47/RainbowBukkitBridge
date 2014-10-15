@@ -226,13 +226,13 @@ public class FakeEntity implements Entity {
         loc.setZ(m_ent.getLocation().z);
         loc.setPitch(m_ent.getLocation().pitch);
         loc.setYaw(m_ent.getLocation().yaw);
-        loc.setWorld(new FakeWorld(m_ent.getWorld()));
+        loc.setWorld(WorldManager.getWorld(m_ent.getWorld().getName()));
         return getLocation();
     }
 
     @Override
     public World getWorld() {
-        return new FakeWorld(m_ent.getWorld());
+        return WorldManager.getWorld(m_ent.getWorld().getName());
     }
 
     @Override

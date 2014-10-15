@@ -19,7 +19,7 @@ public class Util {
         return new MC_Location(loc.getX(), loc.getY(), loc.getZ(), loc.getWorld().getEnvironment().getId(), loc.getYaw(), loc.getPitch());
     }
     public static Location getLocation(MC_Location loc){
-        return new Location(new FakeWorld(MyPlugin.server.getWorld(loc.dimension)), loc.x, loc.y, loc.z, loc.yaw, loc.pitch);
+        return new Location(WorldManager.getWorld(MyPlugin.server.getWorld(loc.dimension).getName()), loc.x, loc.y, loc.z, loc.yaw, loc.pitch);
     }
     public static Vector getDirection(MC_MotionData md){
         return new Vector(md.xMotion, md.yMotion, md.zMotion);
@@ -299,6 +299,7 @@ public class Util {
                     return new FakeEnderCrystal(entity);
             }
         } catch (Exception ignored) {
+            if(MyPlugin.DebugMode)ignored.printStackTrace();
         }
         MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
         return new FakeEntity(entity);

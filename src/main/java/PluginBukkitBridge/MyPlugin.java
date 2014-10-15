@@ -93,6 +93,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     @Override
     public void onServerFullyLoaded() {
         super.onServerFullyLoaded();
+        WorldManager.refresh();
         // load all plugins postworld
 
         // Load plugin JARs...

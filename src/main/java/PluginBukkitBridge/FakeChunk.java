@@ -2,10 +2,14 @@ package PluginBukkitBridge;
 
 import org.bukkit.Chunk;
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by florian on 10.10.14.
@@ -55,8 +59,16 @@ public class FakeChunk implements Chunk {
 
     @Override
     public Entity[] getEntities() {
-        MyPlugin.fixme();
-        return new Entity[0];
+        List<Entity> list = new ArrayList<>();
+        for(Entity ent: world.getEntities()){
+            Location l = ent.getLocation();
+            if(l.getBlockX() >= x*16 && l.getBlockX() < (x+1)*16 && l.getBlockZ() >= y*16 && l.getBlockZ() < (y+1)*16)list.add(ent);
+        }
+        Entity[] res = new Entity[list.size()];
+        for(int i = 0; i<res.length; i++){
+            res[i] = list.get(i);
+        }
+        return res;
     }
 
     @Override

@@ -346,29 +346,28 @@ public class FakeWorld implements World
 	@Override
 	public Block getHighestBlockAt(Location arg0)
 	{
-		FakeDebug("getHighestBlockAt");
-		return null;
+		return getHighestBlockAt(arg0.getBlockX(), arg0.getBlockZ());
 	}
 
 	@Override
-	public Block getHighestBlockAt(int arg0, int arg1)
+	public Block getHighestBlockAt(int x, int z)
 	{
-		FakeDebug("getHighestBlockAt");
-		return null;
+		return getBlockAt(x, getHighestBlockYAt(x,z), z);
 	}
 
 	@Override
 	public int getHighestBlockYAt(Location arg0)
 	{
-		FakeDebug("getHighestBlockYAt");
-		return 0;
+		return getHighestBlockYAt(arg0.getBlockX(), arg0.getBlockZ());
 	}
 
 	@Override
-	public int getHighestBlockYAt(int arg0, int arg1)
+	public int getHighestBlockYAt(int x, int z)
 	{
-		FakeDebug("getHighestBlockYAt");
-		return 0;
+		for(int i = 255; i>=0; i--){
+            if(world.getBlockAt(x,i,z) != null && world.getBlockAt(x,i,z).getId() != 0)return i;
+        }
+        return 0;
 	}
 
 	@Override

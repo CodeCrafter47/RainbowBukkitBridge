@@ -26,7 +26,6 @@ import org.bukkit.util.CachedServerIcon;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 
@@ -569,25 +568,10 @@ public class FakeCraftServer implements Server
 		return null;
 	}
 
-	public ConcurrentHashMap<String, FakeWorld> worldMap = null; 
 	@Override
 	public World getWorld(String worldName)
 	{
-		if(worldMap == null)
-		{
-			worldMap = new ConcurrentHashMap<String, FakeWorld>();
-			worldMap.put("world", new FakeWorld(MyPlugin.server.getWorld(0)));
-			worldMap.put("world_nether", new FakeWorld(MyPlugin.server.getWorld(-1)));
-			worldMap.put("world_the_end", new FakeWorld(MyPlugin.server.getWorld(1)));
-		    //worldMap.put("PlotWorld", new FakeWorld(MyPlugin.server.getWorld(2)));
-		}
-		
-		if(worldName.equalsIgnoreCase("world")) return worldMap.get("world");
-		if(worldName.equalsIgnoreCase("world_nether")) return worldMap.get("world_nether");
-		if(worldName.equalsIgnoreCase("world_the_end")) return worldMap.get("world_the_end");
-		//if(worldName.equalsIgnoreCase("PlotWorld")) return worldMap.get("PlotWorld");
-
-		return null;
+		return WorldManager.getWorld(worldName);
     }
 
 	@Override
@@ -617,16 +601,7 @@ public class FakeCraftServer implements Server
 	@Override
 	public List<World> getWorlds()
 	{
-        if(worldMap == null)
-        {
-            worldMap = new ConcurrentHashMap<String, FakeWorld>();
-            worldMap.put("world", new FakeWorld(MyPlugin.server.getWorld(0)));
-            worldMap.put("world_nether", new FakeWorld(MyPlugin.server.getWorld(-1)));
-            worldMap.put("world_the_end", new FakeWorld(MyPlugin.server.getWorld(1)));
-            //worldMap.put("PlotWorld", new FakeWorld(MyPlugin.server.getWorld(2)));
-        }
-		
-		return new ArrayList<World>(worldMap.values());
+        return WorldManager.getWorlds();
 	}
 
 	@Override

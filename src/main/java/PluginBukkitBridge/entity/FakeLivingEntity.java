@@ -10,11 +10,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class FakeLivingEntity extends FakeEntity implements LivingEntity{
     public FakeLivingEntity(MC_Entity argEnt) {
@@ -40,25 +39,49 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity{
         return l;
     }
 
-    @Override
-    public List<Block> getLineOfSight(HashSet<Byte> arg0, int arg1)
-    {
-        MyPlugin.fixme("stub method");
-        return null;
+    private List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance, int maxLength) {
+        if (maxDistance > 120) {
+            maxDistance = 120;
+        }
+        ArrayList<Block> blocks = new ArrayList<Block>();
+        Iterator<Block> itr = new BlockIterator(this, maxDistance);
+        while (itr.hasNext()) {
+            Block block = itr.next();
+            blocks.add(block);
+            if (maxLength != 0 && blocks.size() > maxLength) {
+                blocks.remove(0);
+            }
+            int id = block.getTypeId();
+            if (transparent == null) {
+                if (id != 0) {
+                    break;
+                }
+            } else {
+                if (!transparent.contains((byte) id)) {
+                    break;
+                }
+            }
+        }
+        return blocks;
     }
 
     @Override
-    public Block getTargetBlock(HashSet<Byte> arg0, int arg1)
+    public List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance)
     {
-        MyPlugin.fixme("stub method");
-        return null;
+        return getLineOfSight(transparent, maxDistance, 0);
     }
 
     @Override
-    public List<Block> getLastTwoTargetBlocks(HashSet<Byte> arg0, int arg1)
+    public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance)
     {
-        MyPlugin.fixme("stub method");
-        return null;
+        List<Block> blocks = getLineOfSight(transparent, maxDistance, 1);
+        return blocks.get(0);
+    }
+
+    @Override
+    public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance)
+    {
+        return getLineOfSight(transparent, maxDistance, 2);
     }
 
     @Override
