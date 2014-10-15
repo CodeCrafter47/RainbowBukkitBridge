@@ -56,7 +56,23 @@ public class Util {
     }
 
     public static BlockFace getFace(MC_DirectionNESWUD dir){
-        return BlockFace.valueOf(dir.name());
+        switch (dir) {
+            case UNSPECIFIED:
+                return BlockFace.SELF;
+            case DOWN:
+                return BlockFace.DOWN;
+            case UP:
+                return BlockFace.UP;
+            case NORTH:
+                return BlockFace.NORTH;
+            case SOUTH:
+                return BlockFace.SOUTH;
+            case WEST:
+                return BlockFace.WEST;
+            case EAST:
+                return BlockFace.EAST;
+        }
+        return BlockFace.SELF;
     }
 
     public static MC_Enchantment wrapEnchantment(Enchantment enchantment, int level){
@@ -183,6 +199,7 @@ public class Util {
 
     public static Entity wrapEntity(MC_Entity entity)
     {
+        if(entity == null)return null;
         try {
             switch (entity.getType()){
                 case UNSPECIFIED:

@@ -45,7 +45,7 @@ public class FakeCraftServer implements Server
 
     @Override
     public String getVersion() {
-        return "v" + server.getRainbowVersion();
+        return "RB" + server.getRainbowVersion()+":1.8";
     }
 
     @Override

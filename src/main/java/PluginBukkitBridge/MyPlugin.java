@@ -6,6 +6,7 @@ import PluginBukkitBridge.logging.MyLogHandler;
 import PluginReference.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.SimpleCommandMap;
@@ -53,6 +54,8 @@ public class MyPlugin extends PluginReference.PluginBase {
     public final static File updateDir = new File(pluginDir, "update");
 
     public static boolean DebugMode = false;
+
+    List<Runnable> invokeLater = new ArrayList<>();
 
     public static void fixme() {
         logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
@@ -170,8 +173,15 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onTick(int tickNumber) {
+        for(Runnable r: invokeLater){
+            try {
+                r.run();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        invokeLater.clear();
         scheduler.mainThreadHeartbeat(tickNumber);
-
     }
 
     public void onPlayerLogin(String playerName, UUID uuid, String ip) {
@@ -249,14 +259,6 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     }
 
-    @Override
-    public void onBlockBroke(MC_Player plr, MC_Location loc, int blockKey) {
-        BlockBreakEvent event = new BlockBreakEvent(new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
-                server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
-        pluginManager.callEvent(event);
-        // fixme result, block break, replace?
-    }
-
     public void onPlayerDeath(MC_Player plrVictim, MC_Player plrKiller, MC_DamageType dmgType, String deathMsg) {
         // fixme set killer
         PlayerDeathEvent event = new PlayerDeathEvent(PlayerManager.getPlayer(plrVictim), null, 0, "");
@@ -276,12 +278,31 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onAttemptBlockBreak(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
+        // Interact Event
         // fixme blockFace
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), BlockFace.DOWN);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
+/*
+        // BlockDamageEvent
+        if(!ei.isCancelled){
+            BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr),new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
+                    server.getWorld(loc.dimension)),Util.getItemStack(plr.getItemInHand()),false);
+            event2.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event2);
+            ei.isCancelled = event2.isCancelled();
+        }*/
+
+        // BlockBreakEvent
+        if(!ei.isCancelled) {
+            BlockBreakEvent event2 = new BlockBreakEvent(new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
+                    server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
+            event2.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event2);
+            ei.isCancelled = event2.isCancelled();
+        }
     }
 
     public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) {
@@ -302,17 +323,20 @@ public class MyPlugin extends PluginReference.PluginBase {
         ei.isCancelled = event.isCancelled();
     }
 
-    public void onAttemptPlayerMove(MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
+    public void onAttemptPlayerMove(final MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
         PlayerMoveEvent event = new PlayerMoveEvent(PlayerManager.getPlayer(plr), Util.getLocation(locFrom), Util.getLocation(locTo));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
-        Location to = event.getTo();
+        final Location to = event.getTo();
         if (!event.isCancelled() && (to.getX() != locTo.x || to.getY() != locTo.y || to.getZ() != locTo.z)) {
-            ei.isCancelled = true;
-            allowTeleport = true;
-            plr.teleport(Util.getLocation(to));
-            allowTeleport = false;
-            return;
+            invokeLater.add(new Runnable() {
+                @Override
+                public void run() {
+                    allowTeleport = true;
+                    plr.teleport(Util.getLocation(to));
+                    allowTeleport = false;
+                }
+            });
         }
         ei.isCancelled = event.isCancelled();
     }
@@ -346,10 +370,16 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         FakeBlock fakeBlockPlaced = new FakeBlock(x, y, z, world);
 
+        if(fakeBlockPlaced.getType() == Material.AIR)return;
+
         FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
 
         BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, fakeBlockPlaced.getState(), fakeBlockAgainst, isPlaced, who, true);
         pluginManager.callEvent(event);
+        if(event.isCancelled()){
+            PlayerManager.getPlayer(plr).getInventory().addItem(new ItemStack(fakeBlockPlaced.getType()));
+            fakeBlockPlaced.setType(Material.AIR);
+        }
     }
 
     @Override
