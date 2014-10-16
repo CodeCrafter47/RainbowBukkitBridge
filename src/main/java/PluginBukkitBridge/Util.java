@@ -10,6 +10,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -264,7 +265,7 @@ public class Util {
                 case SILVERFISH:
                     return new FakeSilverfish(entity);
                 case SKELETON:
-                    return new FakeSkeleton(entity);
+                    return new FakeSkeleton((MC_Skeleton) entity);
                 case SLIME:
                     return new FakeSlime(entity);
                 case SPIDER:
@@ -411,5 +412,27 @@ public class Util {
         if(fakeBlock.getType() == Material.SIGN_POST || fakeBlock.getType() == Material.SIGN || fakeBlock.getType() == Material.WALL_SIGN)return new FakeSign(fakeBlock);
         if(fakeBlock.getType() == Material.SKULL)return new FakeSkull(fakeBlock);
         return new FakeBlockState(fakeBlock);
+    }
+
+    public static Skeleton.SkeletonType getSkeletonType(MC_SkeletonType type){
+        switch (type) {
+            case UNSPECIFIED:
+                return Skeleton.SkeletonType.NORMAL;
+            case SKELETON:
+                return Skeleton.SkeletonType.NORMAL;
+            case WITHER_SKELETON:
+                return Skeleton.SkeletonType.WITHER;
+        }
+        return Skeleton.SkeletonType.NORMAL;
+    }
+
+    public static MC_SkeletonType getSkeletonType(Skeleton.SkeletonType type){
+        switch (type) {
+            case NORMAL:
+                return MC_SkeletonType.SKELETON;
+            case WITHER:
+                return MC_SkeletonType.WITHER_SKELETON;
+        }
+        return MC_SkeletonType.UNSPECIFIED;
     }
 }
