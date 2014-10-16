@@ -15,6 +15,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -285,7 +286,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
-/*
+
         // BlockDamageEvent
         if(!ei.isCancelled){
             BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr),new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
@@ -293,7 +294,7 @@ public class MyPlugin extends PluginReference.PluginBase {
             event2.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event2);
             ei.isCancelled = event2.isCancelled();
-        }*/
+        }
 
         // BlockBreakEvent
         if(!ei.isCancelled) {
