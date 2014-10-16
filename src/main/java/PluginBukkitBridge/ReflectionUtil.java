@@ -19,7 +19,7 @@ public class ReflectionUtil {
             Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
             return (float) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "height");
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityHeight", e);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityHeight", MyPlugin.DebugMode?e:null);
         }
         return 0;
     }
@@ -29,7 +29,7 @@ public class ReflectionUtil {
             Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
             return (int) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "entityID");
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityID", e);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityID", MyPlugin.DebugMode?e:null);
         }
         return 0;
     }
@@ -42,7 +42,7 @@ public class ReflectionUtil {
             Object height = f_height.invoke(mcEntity, null);
             return (UUID) height;
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", e);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", MyPlugin.DebugMode?e:null);
         }
         return null;
     }
@@ -64,7 +64,7 @@ public class ReflectionUtil {
             }
             return null;
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", e);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", MyPlugin.DebugMode?e:null);
         }
         return null;
     }
@@ -79,7 +79,7 @@ public class ReflectionUtil {
             f_target.setAccessible(true);
             f_target.set(mcEntity, mcTarget);
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTarget", e);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTarget", MyPlugin.DebugMode?e:null);
         }
     }
 
@@ -103,7 +103,7 @@ public class ReflectionUtil {
             m.setAccessible(true);
             m.invoke(packetHandler, playerListItem);
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPlayerListItemChangeDisplayName", e);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPlayerListItemChangeDisplayName", MyPlugin.DebugMode?e:null);
         }
     }
 

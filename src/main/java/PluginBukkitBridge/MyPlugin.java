@@ -215,13 +215,6 @@ public class MyPlugin extends PluginReference.PluginBase {
         msg = msg.trim();
         if (msg.length() <= 0) return;
 
-        if (plr.isOp() && msg.equalsIgnoreCase("/bb debug")) {
-            DebugMode = !DebugMode;
-            plr.sendMessage(ChatColor.GREEN + "BukkitBridge Debug Mode: " + ChatColor.AQUA + DebugMode);
-            ei.isCancelled = true;
-            return;
-        }
-
         if (DebugMode) {
             String logMsg = String.format("%s onPlayerInput: %s", plr.getName(), msg);
             System.out.println("BukkitBridge -- " + logMsg);
