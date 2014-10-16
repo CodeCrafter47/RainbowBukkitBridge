@@ -1,7 +1,6 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.Util;
-import PluginReference.MC_Sign;
 import org.bukkit.block.Sign;
 
 import java.util.List;
@@ -10,12 +9,12 @@ import java.util.List;
  * Created by florian on 14.10.14.
  */
 public class FakeSign extends FakeBlockState implements Sign{
-    public FakeSign(FakeBlock arg) {
-        super(arg);
-    }
 
-    private MC_Sign getSign(){
-        return blk.world.getSignAt(Util.getLocation(blk.getLocation()));
+    List<String> lines;
+
+    public FakeSign(FakeBlock blk) {
+        super(blk);
+        lines = blk.world.getSignAt(Util.getLocation(blk.getLocation())).getLines();
     }
 
     @Override
@@ -25,14 +24,21 @@ public class FakeSign extends FakeBlockState implements Sign{
 
     @Override
     public String getLine(int i) throws IndexOutOfBoundsException {
-        return getSign().getLines().get(i);
+        return lines.get(i);
     }
 
     @Override
     public void setLine(int i, String s) throws IndexOutOfBoundsException {
-        List<String> lines = getSign().getLines();
         lines.remove(i);
         lines.add(i, s);
-        getSign().setLines(lines);
+    }
+
+    @Override
+    public boolean update(boolean force, boolean applyPhysics) {
+        if (super.update(force, applyPhysics)){
+            ((FakeBlock)getBlock()).world.getSignAt(Util.getLocation(getLocation())).setLines(lines);
+            return true;
+        }
+        return false;
     }
 }

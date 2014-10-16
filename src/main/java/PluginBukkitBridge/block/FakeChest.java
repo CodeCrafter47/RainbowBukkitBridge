@@ -14,11 +14,11 @@ public class FakeChest extends FakeBlockState implements Chest{
 
     @Override
     public Inventory getBlockInventory() {
-        return new FakeChestInventory(blk);
+        return new FakeChestInventory((FakeBlock) getBlock());
     }
 
     @Override
     public Inventory getInventory() {
-        return new FakeChestInventory(blk);
+        return new FakeChestInventory((FakeBlock) getBlock());
     }
 }

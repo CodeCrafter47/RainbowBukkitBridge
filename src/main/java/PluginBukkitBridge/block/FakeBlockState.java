@@ -1,5 +1,6 @@
 package PluginBukkitBridge.block;
 
+import PluginBukkitBridge.MyPlugin;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,103 +14,106 @@ import org.bukkit.plugin.Plugin;
 import java.util.List;
 
 public class FakeBlockState implements BlockState {
-    FakeBlock blk = null;
+    Location location;
+    int type;
+    byte meta;
 
     public FakeBlockState(FakeBlock arg) {
-        blk = arg;
+        location = arg.getLocation();
+        type = arg.getTypeId();
+        meta = arg.getData();
     }
-
-    public static void FakeDebug(String msg) {
-        System.out.println("FakeBlockState Proxy: " + msg);
-    }
-
 
     @Override
     public List<MetadataValue> getMetadata(String arg0) {
-        FakeDebug("getMetadata");
+        MyPlugin.fixme();
         return null;
     }
 
     @Override
     public boolean hasMetadata(String arg0) {
-        FakeDebug("hasMetadata");
+        MyPlugin.fixme();
         return false;
     }
 
     @Override
     public void removeMetadata(String arg0, Plugin arg1) {
-        FakeDebug("removeMetadata");
+        MyPlugin.fixme();
     }
 
     @Override
     public void setMetadata(String arg0, MetadataValue arg1) {
-        FakeDebug("setMetadata");
+        MyPlugin.fixme();
     }
 
     @Override
     public Block getBlock() {
-        return blk;
+        return location.getBlock();
     }
 
     @Override
     public Chunk getChunk() {
-        return blk.getChunk();
+        return getBlock().getChunk();
     }
 
     @Override
     public MaterialData getData() {
-        return getType().getNewData(blk.getData());
+        return getType().getNewData(meta);
     }
 
     @Override
     public byte getLightLevel() {
-        FakeDebug("getLightLevel");
+        MyPlugin.fixme();
         return 0;
     }
 
     @Override
     public Location getLocation() {
-        return blk.getLocation();
+        return location.clone();
     }
 
     @Override
     public Location getLocation(Location arg0) {
-        return blk.getLocation(arg0);
+        arg0.setX(location.getX());
+        arg0.setY(location.getY());
+        arg0.setZ(location.getZ());
+        arg0.setWorld(location.getWorld());
+        return arg0;
     }
 
     @Override
     public byte getRawData() {
-        return blk.getData();
+        return meta;
     }
 
     @Override
     public Material getType() {
-        return blk.getType();
+        return Material.getMaterial(type);
     }
 
     @Override
     public int getTypeId() {
-        return blk.getTypeId();
+        return type;
     }
 
     @Override
     public World getWorld() {
-        return blk.getWorld();
+        return location.getWorld();
     }
 
     @Override
     public int getX() {
-        return blk.getX();
+        return location.getBlockX();
     }
 
     @Override
     public int getY() {
-        return blk.getY();
+        return location.getBlockY();
     }
 
     @Override
     public int getZ() {
-        return blk.getZ();
+        return location.getBlockZ();
     }
 
     @Override
@@ -119,35 +123,37 @@ public class FakeBlockState implements BlockState {
 
     @Override
     public void setRawData(byte arg0) {
-        blk.setData(arg0);
+        meta = arg0;
     }
 
     @Override
     public void setType(Material arg0) {
-        blk.setType(arg0);
+        type = arg0.getId();
     }
 
     @Override
     public boolean setTypeId(int arg0) {
-        return blk.setTypeId(arg0);
+        type = arg0;
+        return true;
     }
 
     @Override
     public boolean update() {
-        FakeDebug("update1");
-        return false;
+        return update(false, true);
     }
 
     @Override
     public boolean update(boolean arg0) {
-        FakeDebug("update2=" + arg0);
-        return false;
+        return update(arg0, true);
     }
 
     @Override
-    public boolean update(boolean arg0, boolean arg1) {
-        FakeDebug("update3: arg0=" + arg0 + ", arg1=" + arg1);
-        return false;
+    public boolean update(boolean force, boolean applyPhysics) {
+        if (!force && getWorld().getBlockAt(getLocation()).getType() != getType())return false;
+        if (!applyPhysics)MyPlugin.fixme("ignore parameter applyPhysics");
+        getBlock().setTypeId(type);
+        getBlock().setData(meta);
+        return true;
     }
 
 }
