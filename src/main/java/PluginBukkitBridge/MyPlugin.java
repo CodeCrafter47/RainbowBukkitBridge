@@ -1,6 +1,7 @@
 package PluginBukkitBridge;
 
 import PluginBukkitBridge.block.FakeBlock;
+import PluginBukkitBridge.commands.MyCommandMap;
 import PluginBukkitBridge.entity.FakePlayer;
 import PluginBukkitBridge.logging.MyLogHandler;
 import PluginReference.*;

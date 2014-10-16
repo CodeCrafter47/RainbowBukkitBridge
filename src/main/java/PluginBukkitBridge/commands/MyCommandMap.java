@@ -1,4 +1,4 @@
-package PluginBukkitBridge;
+package PluginBukkitBridge.commands;
 
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -21,5 +21,10 @@ public class MyCommandMap extends SimpleCommandMap{
             entry.getValue().unregister(this);
         }
         knownCommands.clear();
+        setDefaultCommands();
+    }
+
+    private void setDefaultCommands() {
+        register("bukkit", new PluginsCommand("plugins"));
     }
 }
