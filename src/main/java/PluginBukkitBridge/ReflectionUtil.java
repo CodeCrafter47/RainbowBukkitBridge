@@ -16,7 +16,7 @@ public class ReflectionUtil {
 
     public static float getEntityHeight(MC_Entity entity) {
         try {
-            Object mcEntity = getMember(Class.forName("WrapperObjects.EntityWrapper"), entity, "ent");
+            Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
             return (float) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "height");
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityHeight", e);
@@ -26,7 +26,7 @@ public class ReflectionUtil {
 
     public static int getEntityID(MC_Entity entity) {
         try {
-            Object mcEntity = getMember(Class.forName("WrapperObjects.EntityWrapper"), entity, "ent");
+            Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
             return (int) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "entityID");
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityID", e);
@@ -36,7 +36,7 @@ public class ReflectionUtil {
 
     public static UUID getEntityUUID(MC_Entity entity) {
         try {
-            Object mcEntity = getMember(Class.forName("WrapperObjects.EntityWrapper"), entity, "ent");
+            Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
             Method f_height = Class.forName("joebkt.EntityGeneric").getDeclaredMethod("getUUID", null);
             f_height.setAccessible(true);
             Object height = f_height.invoke(mcEntity, null);
@@ -55,7 +55,7 @@ public class ReflectionUtil {
             Field f_target = mcEntity.getClass().getDeclaredField("c");
             f_target.setAccessible(true);
             Object target = f_target.get(mcEntity);
-            Class cHelper = Class.forName("WrapperObjects.EntityHelper");
+            Class cHelper = Class.forName("WrapperObjects.Entities.EntityHelper");
             for (Method m : cHelper.getDeclaredMethods()) {
                 if (m.getName().contains("CreateEntityWrapper")) {
                     m.setAccessible(true);
