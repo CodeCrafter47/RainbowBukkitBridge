@@ -424,4 +424,17 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
         messenger.dispatchIncomingMessage(PlayerManager.getPlayer(player), tag, data);
     }
+
+    @Override
+    public Boolean onRequestPermission(String playerKey, String permission) {
+        MC_Player p0;
+        if(playerKey.length() <= 16)p0 = server.getOnlinePlayerByName(playerKey);
+        else p0 = server.getOnlinePlayerByName(server.getLastKnownPlayerNameFromUUID(playerKey));
+
+        FakePlayer player = (FakePlayer) PlayerManager.getPlayer(p0);
+
+        if(!player.permissions.isPermissionSet(permission))return null;
+
+        return player.permissions.hasPermission(permission);
+    }
 }

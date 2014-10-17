@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -21,11 +22,14 @@ import java.util.Set;
 
 public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
-    MC_Player player;
+    protected MC_Player player;
+
+    public PermissibleBase permissions;
 
     public FakeHumanEntity(MC_Player argEnt) {
         super(argEnt);
         player = argEnt;
+        permissions = new PermissibleBase(this);
     }
 
     @Override
@@ -162,42 +166,38 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0) {
-        MyPlugin.fixme("stub method");
-        return null;
+        return permissions.addAttachment(arg0);
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0, int arg1) {
-        MyPlugin.fixme("stub method");
-        return null;
+        return permissions.addAttachment(arg0, arg1);
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0, String arg1, boolean arg2) {
-        MyPlugin.fixme("stub method");
-        return null;
+        return permissions.addAttachment(arg0, arg1, arg2);
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0, String arg1, boolean arg2, int arg3) {
-        MyPlugin.fixme("stub method");
-        return null;
+        return permissions.addAttachment(arg0, arg1, arg2, arg3);
     }
 
     @Override
     public void recalculatePermissions() {
-        MyPlugin.fixme("stub method");
+        permissions.recalculatePermissions();
     }
 
     @Override
     public void removeAttachment(PermissionAttachment arg0) {
-        MyPlugin.fixme("stub method");
+        permissions.removeAttachment(arg0);
     }
 
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        MyPlugin.fixme("stub method");
-        return null;
+        // fixme also include rainbow permissions?
+        return permissions.getEffectivePermissions();
     }
 
     @Override

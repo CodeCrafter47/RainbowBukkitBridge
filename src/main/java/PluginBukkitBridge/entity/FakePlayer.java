@@ -25,7 +25,6 @@ import java.util.UUID;
 
 public class FakePlayer extends FakeHumanEntity implements Player
 {
-    public MC_Player player;
     private UUID uuid;
 
     private String playerListName = null;
@@ -153,12 +152,12 @@ public class FakePlayer extends FakeHumanEntity implements Player
 
     @Override
     public void playEffect(Location location, Effect effect, int i) {
-
+        MyPlugin.fixme();
     }
 
     @Override
     public <T> void playEffect(Location location, Effect effect, T t) {
-
+        MyPlugin.fixme();
     }
 
     @Override
@@ -423,7 +422,7 @@ public class FakePlayer extends FakeHumanEntity implements Player
 	public boolean canSee(Player arg0)
 	{
 				FakeDebug("canSee");
-		return false;
+		return true;
 	}
 
 	@Override
@@ -609,12 +608,13 @@ public class FakePlayer extends FakeHumanEntity implements Player
 
     @Override
     public void showParticle(Location location, Particle particle, float v, float v2, float v3, float v4, int i) {
+        MyPlugin.fixme();
 
     }
 
     @Override
     public void showParticle(Location location, Particle particle, MaterialData materialData, float v, float v2, float v3, float v4, int i) {
-
+        MyPlugin.fixme();
     }
 
     @Override
