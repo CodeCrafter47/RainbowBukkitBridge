@@ -401,14 +401,15 @@ public class FakePlayer extends FakeHumanEntity implements Player
 	@Override
 	public Set<String> getListeningPluginChannels()
 	{
-		FakeDebug("getListeningPluginChannels");
-		return null;
+		return MyPlugin.messenger.getIncomingChannels();
 	}
 
 	@Override
 	public void sendPluginMessage(Plugin arg0, String arg1, byte[] arg2)
 	{
-		FakeDebug("sendPluginMessage");
+        // fixme shall we check whether a plugin has registered for a channel?
+        // it seems kind of useless
+        ReflectionUtil.sendPluginMessage(player, arg1, arg2);
 	}
 
 	@Override

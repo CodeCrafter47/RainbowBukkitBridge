@@ -59,6 +59,8 @@ public class MyPlugin extends PluginReference.PluginBase {
     public static boolean DebugMode = false;
 
     List<Runnable> invokeLater = new ArrayList<>();
+    
+    public static MyPlugin instance;
 
     public static void fixme() {
         logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
@@ -70,6 +72,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public MyPlugin() {
         super();
+        instance = this;
         //SimpleFormatter formatter = new SimpleFormatter();
         //Handler handler = new StreamHandler(System.out, new MyLogFormatter());
         logger = Logger.getLogger("");
@@ -90,6 +93,8 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onStartup(MC_Server argServer) {
         System.out.println("BukkitBridge v2.4 --- Starting up...");
         server = argServer;
+
+        server.registerPlayerPacketListener(new PacketListener());
 
         // Initialize Bukkit server object...
         fakeServer.server = server;
@@ -414,5 +419,9 @@ public class MyPlugin extends PluginReference.PluginBase {
         EntityExplodeEvent event = new EntityExplodeEvent(Util.wrapEntity(ent),Util.getLocation(ent.getLocation()),blocks,1);
         pluginManager.callEvent(event);
         return false;
+    }
+
+    public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
+        messenger.dispatchIncomingMessage(PlayerManager.getPlayer(player), tag, data);
     }
 }

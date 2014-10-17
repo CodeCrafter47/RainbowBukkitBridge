@@ -4,6 +4,7 @@ import PluginReference.MC_Entity;
 import PluginReference.MC_Player;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
@@ -83,6 +84,16 @@ public class ReflectionUtil {
         }
     }
 
+    public static void sendPluginMessage(MC_Player player, String tag, byte[] data){
+        try {
+            Object byteBuf = Class.forName("io.netty.buffer.Unpooled").getDeclaredMethod("wrappedBuffer", byte[].class).invoke(null, data);
+            Object packet = Class.forName("joebkt.Packet_PluginMessage").getDeclaredConstructor(String.class, Class.forName("io.netty.buffer.ByteBuf")).newInstance(tag, data);
+            sendPacket(player, packet);
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPluginMessage", MyPlugin.DebugMode?e:null);
+        }
+    }
+
     public static void sendPlayerListItemChangeDisplayName(MC_Player receiver, MC_Player uuid, String name) {
 
         try {
@@ -96,15 +107,19 @@ public class ReflectionUtil {
             Class cItem = Class.forName("joebkt.kk");
             Object item = cItem.getDeclaredConstructors()[0].newInstance(playerListItem, getMember(Class.forName("joebkt.EntityHuman"), getMember(uuid, "plr"), "gameProf"), 0, null, text);
             setMember(playerListItem, "b", Arrays.asList(new Object[]{item}));
-            Class cPacketBase = Class.forName("joebkt.PacketBase");
-            Object playerConnection = getMember(getMember(receiver, "plr"), "plrConnection");
-            Object packetHandler = getMember(playerConnection, "a");
-            Method m = packetHandler.getClass().getDeclaredMethod("a", new Class[]{cPacketBase});
-            m.setAccessible(true);
-            m.invoke(packetHandler, playerListItem);
+            sendPacket(receiver, playerListItem);
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPlayerListItemChangeDisplayName", MyPlugin.DebugMode?e:null);
         }
+    }
+
+    private static void sendPacket(MC_Player receiver, Object packet) throws ClassNotFoundException, IllegalAccessException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException {
+        Class cPacketBase = Class.forName("joebkt.PacketBase");
+        Object playerConnection = getMember(getMember(receiver, "plr"), "plrConnection");
+        Object packetHandler = getMember(playerConnection, "a");
+        Method m = packetHandler.getClass().getDeclaredMethod("a", new Class[]{cPacketBase});
+        m.setAccessible(true);
+        m.invoke(packetHandler, packet);
     }
 
     private static void setMember(Object o, String name, Object o2) throws IllegalAccessException, NoSuchFieldException {
