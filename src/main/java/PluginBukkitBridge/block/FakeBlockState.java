@@ -24,6 +24,12 @@ public class FakeBlockState implements BlockState {
         meta = arg.getData();
     }
 
+    public FakeBlockState(Location location, int type, byte meta) {
+        this.location = location;
+        this.type = type;
+        this.meta = meta;
+    }
+
     @Override
     public List<MetadataValue> getMetadata(String arg0) {
         MyPlugin.fixme();

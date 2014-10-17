@@ -32,11 +32,16 @@ public class PermissionHelper
             // check parents
             for(Permission p: getParents(perm)){
                 if(MyPlugin.server.hasPermission(plr.getName(), p.getName()))return true;
+                if(p.getDefault().getValue(plr.isOp()))return true;
             }
+
             // check regex
             while ((name = getSuper(name)) != null){
                 if (MyPlugin.server.hasPermission(plr.getName(), name + ".*"))return true;
             }
+
+            // check defaults
+            if(perm.getDefault().getValue(plr.isOp()))return true;
         }
 
         return false;

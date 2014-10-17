@@ -4,6 +4,7 @@ import PluginBukkitBridge.block.FakeBlock;
 import PluginReference.MC_Entity;
 import PluginReference.MC_Player;
 import PluginReference.MC_World;
+import com.google.common.base.Charsets;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -400,7 +401,7 @@ public class FakeWorld implements World
 	public Chunk[] getLoadedChunks()
 	{
 		FakeDebug("getLoadedChunks");
-		return null;
+		return new Chunk[0];
 	}
 
 	@Override
@@ -482,8 +483,7 @@ public class FakeWorld implements World
 	@Override
 	public UUID getUID()
 	{
-		FakeDebug("getUID");
-		return null;
+		return UUID.nameUUIDFromBytes(("FakeWorld:" + getName()).getBytes(Charsets.UTF_8));
 	}
 
 	@Override

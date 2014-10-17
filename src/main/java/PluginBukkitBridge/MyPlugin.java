@@ -1,6 +1,7 @@
 package PluginBukkitBridge;
 
 import PluginBukkitBridge.block.FakeBlock;
+import PluginBukkitBridge.block.FakeBlockState;
 import PluginBukkitBridge.commands.MyCommandMap;
 import PluginBukkitBridge.entity.FakePlayer;
 import PluginBukkitBridge.logging.MyLogHandler;
@@ -369,7 +370,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
 
-        BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, fakeBlockPlaced.getState(), fakeBlockAgainst, isPlaced, who, true);
+        BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced.getLocation(), 0, (byte) 0), fakeBlockAgainst, isPlaced, who, true);
         pluginManager.callEvent(event);
         if(event.isCancelled()){
             PlayerManager.getPlayer(plr).getInventory().addItem(new ItemStack(fakeBlockPlaced.getType()));

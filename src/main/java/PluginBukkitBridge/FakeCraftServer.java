@@ -448,7 +448,12 @@ public class FakeCraftServer implements Server
     @Override
 	public OfflinePlayer getOfflinePlayer(String arg0)
 	{
-		return getOfflinePlayer(UUID.fromString(server.getPlayerUUIDFromName(arg0)));
+        if(arg0.length() > 16)return getOfflinePlayer(UUID.fromString(arg0));
+        try {
+            return getOfflinePlayer(UUID.fromString(server.getPlayerUUIDFromName(arg0)));
+        } catch (Exception e){
+            return getPlayer(arg0);
+        }
 	}
 
 	@Override

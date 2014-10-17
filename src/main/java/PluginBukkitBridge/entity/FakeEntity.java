@@ -92,9 +92,13 @@ public class FakeEntity implements Entity {
     }
 
     @Override
-    public List<Entity> getNearbyEntities(double arg0, double arg1, double arg2) {
-        MyPlugin.fixme("stub method");
-        return null;
+    public List<Entity> getNearbyEntities(double x, double y, double z) {
+        List<Entity> list = new ArrayList<>();
+        for(Entity ent: getWorld().getEntities()){
+            Location l = ent.getLocation();
+            if(l.getX() >= x && l.getX() < x && l.getY() >= y && l.getY() < y && l.getZ() >= z && l.getZ() < z)list.add(ent);
+        }
+        return list;
     }
 
     @Override
