@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
-    protected MC_Player player;
+    public MC_Player player;
 
     public PermissibleBase permissions;
 

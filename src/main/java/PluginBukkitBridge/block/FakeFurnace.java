@@ -1,6 +1,7 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.inventory.FakeFurnaceInventory;
 import org.bukkit.block.Furnace;
 import org.bukkit.inventory.FurnaceInventory;
 
@@ -36,7 +37,6 @@ public class FakeFurnace extends FakeBlockState implements Furnace {
 
     @Override
     public FurnaceInventory getInventory() {
-        MyPlugin.fixme();
-        return null;
+        return new FakeFurnaceInventory();
     }
 }

@@ -50,7 +50,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public final static FakeScheduler scheduler = new FakeScheduler();
     public final static FakeCraftServer fakeServer = new FakeCraftServer();
     public final static SimpleCommandMap commandMap = new MyCommandMap(fakeServer);
-    public final static PluginManager pluginManager = new SimplePluginManager(fakeServer, commandMap);
+    public final static PluginManager pluginManager = new MyPluginManager(fakeServer, commandMap);
     public static SimpleHelpMap helpMap;
 
     public final static File pluginDir = new File("plugins");
@@ -282,14 +282,14 @@ public class MyPlugin extends PluginReference.PluginBase {
         // Interact Event
         // fixme blockFace
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
-                Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), BlockFace.DOWN);
+                Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), BlockFace.DOWN);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
 
         // BlockDamageEvent
         if(!ei.isCancelled){
-            BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr),new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
+            BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr),new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
                     server.getWorld(loc.dimension)),Util.getItemStack(plr.getItemInHand()),false);
             event2.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event2);
@@ -298,7 +298,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         // BlockBreakEvent
         if(!ei.isCancelled) {
-            BlockBreakEvent event2 = new BlockBreakEvent(new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(),
+            BlockBreakEvent event2 = new BlockBreakEvent(new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
                     server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
             event2.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event2);
@@ -308,7 +308,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) {
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_BLOCK,
-                Util.getItemStack(plr.getItemInHand()), new FakeBlock(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), plr.getWorld()), Util.getFace(dir));
+                Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), Util.getFace(dir));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
@@ -361,13 +361,13 @@ public class MyPlugin extends PluginReference.PluginBase {
         ItemStack isPlaced = new ItemStack(isHand.getId(), isHand.getCount());
 
         MC_World world = plr.getWorld();
-        int x = loc.getBlockX();
-        int y = loc.getBlockY();
-        int z = loc.getBlockZ();
+        int x = Location.locToBlock(loc.x);
+        int y = Location.locToBlock(loc.y);
+        int z = Location.locToBlock(loc.z);
 
-        int x2 = locPlacedAgainst.getBlockX();
-        int y2 = locPlacedAgainst.getBlockY();
-        int z2 = locPlacedAgainst.getBlockZ();
+        int x2 = Location.locToBlock(locPlacedAgainst.x);
+        int y2 = Location.locToBlock(locPlacedAgainst.y);
+        int z2 = Location.locToBlock(locPlacedAgainst.z);
 
         FakeBlock fakeBlockPlaced = new FakeBlock(x, y, z, world);
 
@@ -422,13 +422,18 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
-        messenger.dispatchIncomingMessage(PlayerManager.getPlayer(player), tag, data);
+        Player sender = PlayerManager.getPlayer(player);
+        if(sender != null)messenger.dispatchIncomingMessage(sender, tag, data);
     }
 
     @Override
     public Boolean onRequestPermission(String playerKey, String permission) {
+        /*
+
+        // fixme how am I supposed to get the player corresponding to the given playerKey
+
         MC_Player p0;
-        if(playerKey.length() <= 16)p0 = server.getOnlinePlayerByName(playerKey);
+        if(playerKey.length() <= 16)p0 = server.getOnlinePlayerByName(server.getPlayerExactName(playerKey));
         else p0 = server.getOnlinePlayerByName(server.getLastKnownPlayerNameFromUUID(playerKey));
 
         FakePlayer player = (FakePlayer) PlayerManager.getPlayer(p0);
@@ -436,5 +441,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         if(!player.permissions.isPermissionSet(permission))return null;
 
         return player.permissions.hasPermission(permission);
+        */
+        return null;
     }
 }
