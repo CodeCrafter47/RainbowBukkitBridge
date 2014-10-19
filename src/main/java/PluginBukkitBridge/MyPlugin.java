@@ -28,12 +28,10 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.*;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.StandardMessenger;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,11 +66,11 @@ public class MyPlugin extends PluginReference.PluginBase {
     public static PlayerMetadataStore playerMetadataStore = new PlayerMetadataStore();
 
     public static void fixme() {
-        logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
+        logger.info("[BukkitBridge] FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
     }
 
     public static void fixme(String s) {
-        logger.info("FIXME: " + s + " at " + new UnsupportedOperationException().getStackTrace()[1].toString());
+        logger.info("[BukkitBridge] FIXME: " + s + " at " + new UnsupportedOperationException().getStackTrace()[1].toString());
     }
 
     public MyPlugin() {
@@ -83,7 +81,6 @@ public class MyPlugin extends PluginReference.PluginBase {
         logger = Logger.getLogger("");
         for(Handler h: logger.getHandlers())logger.removeHandler(h);
         logger.addHandler(new MyLogHandler());
-
 
 
         //logger = new MyLogger("", null);//Logger.getLogger("BukkitBridge");
@@ -141,6 +138,7 @@ public class MyPlugin extends PluginReference.PluginBase {
             try {
                 String message = String.format("[BukkitBridge] Loading Bukkit plugin: %s", plugin.getDescription().getFullName());
                 System.out.println(message);
+                /*
                 try {
                     Field f = JavaPlugin.class.getDeclaredField("logger");
                     f.setAccessible(true);
@@ -148,6 +146,7 @@ public class MyPlugin extends PluginReference.PluginBase {
                 } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
+                */
                 plugin.onLoad();
             } catch (Throwable ex) {
                 ex.printStackTrace();
@@ -471,10 +470,13 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
+        // fixme this is not incoming plugin message :-(
+        /*
         if(DebugMode)System.out.println("handlePluginMessage " + player.getName() + ": " + tag);
         Player sender = PlayerManager.getPlayer(player);
         if(DebugMode && sender == null)System.out.println("Player is null :-(");
         if(sender != null)messenger.dispatchIncomingMessage(sender, tag, data);
+        */
     }
 
     @Override

@@ -1,6 +1,6 @@
 package PluginBukkitBridge;
 
-import org.bukkit.ChatColor;
+import org.apache.logging.log4j.LogManager;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.Conversation;
@@ -26,7 +26,7 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender {
 
     @Override
     public void sendMessage(String arg0) {
-        System.out.println("[BukkitBridge] " + ChatColor.stripColor(arg0));
+        LogManager.getLogger("BukkitBridge").info(arg0);
     }
 
     @Override
