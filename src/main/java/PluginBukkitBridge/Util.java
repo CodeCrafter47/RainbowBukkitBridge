@@ -9,9 +9,11 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 public class Util {
@@ -434,5 +436,236 @@ public class Util {
                 return MC_SkeletonType.WITHER_SKELETON;
         }
         return MC_SkeletonType.UNSPECIFIED;
+    }
+
+    public static MC_GameRuleType getGameRule(String arg0) {
+        return MC_GameRuleType.valueOf(arg0);
+    }
+
+    public static MC_EntityType getEntityType(EntityType arg1) {
+        switch (arg1) {
+            case DROPPED_ITEM:
+                return MC_EntityType.ITEM;
+            case EXPERIENCE_ORB:
+                return MC_EntityType.XP_ORB;
+            case LEASH_HITCH:
+                //fixme
+                return MC_EntityType.HANGING;
+            case PAINTING:
+                //fixme
+                return MC_EntityType.HANGING;
+            case ARROW:
+                return MC_EntityType.ARROW;
+            case SNOWBALL:
+                return MC_EntityType.SNOWBALL;
+            case FIREBALL:
+                return MC_EntityType.FIREBALL;
+            case SMALL_FIREBALL:
+                return MC_EntityType.SMALL_FIREBALL;
+            case ENDER_PEARL:
+                return MC_EntityType.THROWN_ENDERPEARL;
+            case ENDER_SIGNAL:
+                return MC_EntityType.EYE_OF_ENDER_SIGNAL;
+            case THROWN_EXP_BOTTLE:
+                return MC_EntityType.THROWN_EXP_BOTTLE;
+            case ITEM_FRAME:
+                // fixme
+                return MC_EntityType.HANGING;
+            case WITHER_SKULL:
+                // fixme
+                return MC_EntityType.UNSPECIFIED;
+            case PRIMED_TNT:
+                return MC_EntityType.PRIMED_TNT;
+            case FALLING_BLOCK:
+                return MC_EntityType.FALLING_SAND;
+            case FIREWORK:
+                return MC_EntityType.FIREWORK;
+            case MINECART_COMMAND:
+                // fixme
+                return MC_EntityType.MINECART;
+            case BOAT:
+                return MC_EntityType.BOAT;
+            case MINECART:
+                return MC_EntityType.MINECART;
+            case MINECART_CHEST:
+                // fixme
+                return MC_EntityType.MINECART;
+            case MINECART_FURNACE:
+                // fixme
+                return MC_EntityType.MINECART;
+            case MINECART_TNT:
+                // fixme
+                return MC_EntityType.MINECART;
+            case MINECART_HOPPER:
+                // fixme
+                return MC_EntityType.MINECART;
+            case MINECART_MOB_SPAWNER:
+                // fixme
+                return MC_EntityType.MINECART;
+            case CREEPER:
+                return MC_EntityType.CREEPER;
+            case SKELETON:
+                return MC_EntityType.SKELETON;
+            case SPIDER:
+                return MC_EntityType.SPIDER;
+            case GIANT:
+                return MC_EntityType.GIANT;
+            case ZOMBIE:
+                return MC_EntityType.ZOMBIE;
+            case SLIME:
+                return MC_EntityType.SLIME;
+            case GHAST:
+                return MC_EntityType.GHAST;
+            case PIG_ZOMBIE:
+                return MC_EntityType.PIG_ZOMBIE;
+            case ENDERMAN:
+                return MC_EntityType.ENDERMAN;
+            case CAVE_SPIDER:
+                return MC_EntityType.CAVE_SPIDER;
+            case SILVERFISH:
+                return MC_EntityType.SILVERFISH;
+            case BLAZE:
+                return MC_EntityType.BLAZE;
+            case MAGMA_CUBE:
+                return MC_EntityType.LAVA_SLIME;
+            case ENDER_DRAGON:
+                return MC_EntityType.ENDERDRAGON;
+            case WITHER:
+                return MC_EntityType.WITHERBOSS;
+            case BAT:
+                return MC_EntityType.BAT;
+            case WITCH:
+                return MC_EntityType.WITCH;
+            case PIG:
+                return MC_EntityType.PIG;
+            case SHEEP:
+                return MC_EntityType.SHEEP;
+            case COW:
+                return MC_EntityType.COW;
+            case CHICKEN:
+                return MC_EntityType.CHICKEN;
+            case SQUID:
+                return MC_EntityType.SQUID;
+            case WOLF:
+                return MC_EntityType.WOLF;
+            case MUSHROOM_COW:
+                return MC_EntityType.MUSHROOM_COW;
+            case SNOWMAN:
+                return MC_EntityType.SNOWMAN;
+            case OCELOT:
+                return MC_EntityType.OCELOT;
+            case IRON_GOLEM:
+                return MC_EntityType.VILLAGER_GOLEM;
+            case HORSE:
+                return MC_EntityType.HORSE;
+            case VILLAGER:
+                return MC_EntityType.VILLAGER;
+            case ENDER_CRYSTAL:
+                return MC_EntityType.ENDER_CRYSTAL;
+            case SPLASH_POTION:
+                return MC_EntityType.THROWN_POTION;
+            case EGG:
+                return MC_EntityType.THROWN_EGG;
+            case FISHING_HOOK:
+                return MC_EntityType.FISHING_HOOK;
+            case LIGHTNING:
+                // fixme
+                return MC_EntityType.UNSPECIFIED;
+            case WEATHER:
+                // fixme
+                return MC_EntityType.UNSPECIFIED;
+            case PLAYER:
+                return MC_EntityType.PLAYER;
+            case COMPLEX_PART:
+                // fixme
+                return MC_EntityType.UNSPECIFIED;
+            case UNKNOWN:
+            default:
+                return MC_EntityType.UNSPECIFIED;
+        }
+    }
+
+    public static PotionEffectType getPotionEffectType(MC_PotionEffectType type) {
+        switch (type) {
+            default:
+            case UNSPECIFIED:
+                MyPlugin.fixme("potion effect type is "+type.name());
+                return null;
+            case INSTANT_HEALTH:
+                return PotionEffectType.HEAL;
+            case INSTANT_DAMAGE:
+                return PotionEffectType.HARM;
+            case SPEED:
+                return PotionEffectType.SPEED;
+            case SLOWNESS:
+                return PotionEffectType.SLOW;
+            case HASTE:
+                return PotionEffectType.FAST_DIGGING;
+            case MINING_FATIGUE:
+                return PotionEffectType.SLOW_DIGGING;
+            case STRENGTH:
+                return PotionEffectType.INCREASE_DAMAGE;
+            case JUMP_BOOST:
+                return PotionEffectType.JUMP;
+            case NAUSEA:
+                return PotionEffectType.CONFUSION;
+            case REGENERATION:
+                return PotionEffectType.REGENERATION;
+            case RESISTANCE:
+                return PotionEffectType.DAMAGE_RESISTANCE;
+            case FIRE_RESISTANCE:
+                return PotionEffectType.FIRE_RESISTANCE;
+            case WATER_BREATHING:
+                return PotionEffectType.WATER_BREATHING;
+            case INVISIBILITY:
+                return PotionEffectType.INVISIBILITY;
+            case BLINDNESS:
+                return PotionEffectType.BLINDNESS;
+            case NIGHT_VISION:
+                return PotionEffectType.NIGHT_VISION;
+            case HUNGER:
+                return PotionEffectType.HUNGER;
+            case WEAKNESS:
+                return PotionEffectType.WEAKNESS;
+            case POISON:
+                return PotionEffectType.POISON;
+            case WITHER:
+                return PotionEffectType.WITHER;
+            case HEALTH_BOOST:
+                return PotionEffectType.HEALTH_BOOST;
+            case ABSORPTION:
+                return PotionEffectType.ABSORPTION;
+            case SATURATION:
+                return PotionEffectType.SATURATION;
+        }
+    }
+
+    public static MC_PotionEffectType getPotionEffectType(PotionEffectType type){
+        if(type == PotionEffectType.ABSORPTION)return MC_PotionEffectType.ABSORPTION;
+        if(type == PotionEffectType.BLINDNESS)return MC_PotionEffectType.BLINDNESS;
+        if(type == PotionEffectType.CONFUSION)return MC_PotionEffectType.NAUSEA;
+        if(type == PotionEffectType.DAMAGE_RESISTANCE)return MC_PotionEffectType.RESISTANCE;
+        if(type == PotionEffectType.FAST_DIGGING)return MC_PotionEffectType.HASTE;
+        if(type == PotionEffectType.FIRE_RESISTANCE)return MC_PotionEffectType.FIRE_RESISTANCE;
+        if(type == PotionEffectType.HARM)return MC_PotionEffectType.INSTANT_DAMAGE;
+        if(type == PotionEffectType.HEAL)return MC_PotionEffectType.INSTANT_HEALTH;
+        if(type == PotionEffectType.HEALTH_BOOST)return MC_PotionEffectType.HEALTH_BOOST;
+        if(type == PotionEffectType.HUNGER)return MC_PotionEffectType.HUNGER;
+        if(type == PotionEffectType.INCREASE_DAMAGE)return MC_PotionEffectType.STRENGTH;
+        if(type == PotionEffectType.DAMAGE_RESISTANCE)return MC_PotionEffectType.RESISTANCE;
+        if(type == PotionEffectType.INVISIBILITY)return MC_PotionEffectType.INVISIBILITY;
+        if(type == PotionEffectType.JUMP)return MC_PotionEffectType.JUMP_BOOST;
+        if(type == PotionEffectType.NIGHT_VISION)return MC_PotionEffectType.NIGHT_VISION;
+        if(type == PotionEffectType.POISON)return MC_PotionEffectType.POISON;
+        if(type == PotionEffectType.REGENERATION)return MC_PotionEffectType.REGENERATION;
+        if(type == PotionEffectType.SATURATION)return MC_PotionEffectType.SATURATION;
+        if(type == PotionEffectType.SLOW)return MC_PotionEffectType.SLOWNESS;
+        if(type == PotionEffectType.SLOW_DIGGING)return MC_PotionEffectType.MINING_FATIGUE;
+        if(type == PotionEffectType.SPEED)return MC_PotionEffectType.SPEED;
+        if(type == PotionEffectType.WATER_BREATHING)return MC_PotionEffectType.WATER_BREATHING;
+        if(type == PotionEffectType.WEAKNESS)return MC_PotionEffectType.WEAKNESS;
+        if(type == PotionEffectType.WITHER)return MC_PotionEffectType.WITHER;
+        MyPlugin.fixme("unable to unwrap potionEffect "+type.getName());
+        return null;
     }
 }

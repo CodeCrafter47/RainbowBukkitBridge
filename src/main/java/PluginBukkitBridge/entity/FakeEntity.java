@@ -23,12 +23,6 @@ public class FakeEntity implements Entity {
         m_ent = argEnt;
     }
 
-    public static void FakeDebug(String msg) {
-        System.out.println("FakeEntity Proxy: " + msg);
-    }
-
-    public EntityDamageEvent lastDamageCause = null;
-
     @Override
     public List<MetadataValue> getMetadata(String arg0) {
         MyPlugin.fixme("stub method");
@@ -77,7 +71,8 @@ public class FakeEntity implements Entity {
 
     @Override
     public EntityDamageEvent getLastDamageCause() {
-        return lastDamageCause;
+        MyPlugin.fixme();
+        return null;
     }
 
     @Override
@@ -208,8 +203,7 @@ public class FakeEntity implements Entity {
 
     @Override
     public void setLastDamageCause(EntityDamageEvent arg0) {
-        lastDamageCause = arg0;
-
+        MyPlugin.fixme();
     }
 
     @Override

@@ -13,6 +13,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.metadata.PlayerMetadataStore;
+import org.bukkit.craftbukkit.metadata.WorldMetadataStore;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -61,6 +63,9 @@ public class MyPlugin extends PluginReference.PluginBase {
     List<Runnable> invokeLater = new ArrayList<>();
     
     public static MyPlugin instance;
+
+    public static WorldMetadataStore worldMetadataStorage = new WorldMetadataStore();
+    public static PlayerMetadataStore playerMetadataStore = new PlayerMetadataStore();
 
     public static void fixme() {
         logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
@@ -261,13 +266,21 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onPlayerDeath(MC_Player plrVictim, MC_Player plrKiller, MC_DamageType dmgType, String deathMsg) {
+        if (DebugMode) {
+            String logMsg = String.format("onPlayerDeath. player=%s, killer=%s, damage=%s, deathMsg=%s", plrVictim.getName(), plrKiller.getName(), dmgType.toString(), deathMsg);
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
         // fixme set killer
-        PlayerDeathEvent event = new PlayerDeathEvent(PlayerManager.getPlayer(plrVictim), null, 0, "");
+        PlayerDeathEvent event = new PlayerDeathEvent(PlayerManager.getPlayer(plrVictim), new ArrayList<ItemStack>(), 0, deathMsg);
         // fixme use result
         pluginManager.callEvent(event);
     }
 
     public void onPlayerRespawn(MC_Player plr) {
+        if (DebugMode) {
+            String logMsg = String.format("onPlayerRespawn. player=%s", plr.getName());
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
         // fixme location, bed spawn
         PlayerRespawnEvent event = new PlayerRespawnEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), false);
         pluginManager.callEvent(event);
@@ -279,6 +292,10 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onAttemptBlockBreak(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
+        if (DebugMode) {
+            String logMsg = String.format("PlayerInteractEvent. player=%s, action=LEFT_CLICK_BLOCK, loc=%s", plr.getName(), loc.toString());
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
         // Interact Event
         // fixme blockFace
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
@@ -289,6 +306,10 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         // BlockDamageEvent
         if(!ei.isCancelled){
+            if (DebugMode) {
+                String logMsg = String.format("BlockDamageEvent. player=%s, loc=%s", plr.getName(), loc.toString());
+                System.out.println("BukkitBridge -- " + logMsg);
+            }
             BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr),new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
                     server.getWorld(loc.dimension)),Util.getItemStack(plr.getItemInHand()),false);
             event2.setCancelled(ei.isCancelled);
@@ -298,6 +319,10 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         // BlockBreakEvent
         if(!ei.isCancelled) {
+            if (DebugMode) {
+                String logMsg = String.format("BlockBreakEvent. player=%s, loc=%s", plr.getName(), loc.toString());
+                System.out.println("BukkitBridge -- " + logMsg);
+            }
             BlockBreakEvent event2 = new BlockBreakEvent(new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
                     server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
             event2.setCancelled(ei.isCancelled);
@@ -306,7 +331,13 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
     }
 
+    boolean skipItemUse = false;
     public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) {
+        skipItemUse = true;
+        if (DebugMode) {
+            String logMsg = String.format("PlayerInteractEvent. player=%s, action=RIGHT_CLICK_BLOCK, loc=%s", plr.getName(), loc.toString());
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), Util.getFace(dir));
         event.setCancelled(ei.isCancelled);
@@ -375,6 +406,11 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
 
+        if (DebugMode) {
+            String logMsg = String.format("BlockPlaceEvent. player=%s, loc=%s", plr.getName(), loc.toString());
+            System.out.println("BukkitBridge -- " + logMsg);
+        }
+
         BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced.getLocation(), 0, (byte) 0), fakeBlockAgainst, isPlaced, who, true);
         pluginManager.callEvent(event);
         if(event.isCancelled()){
@@ -385,7 +421,20 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptItemUse(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
-        PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_AIR,
+        if (DebugMode) {
+            String logMsg = String.format("onAttemptItemUse: PlayerInteractEvent. player=%s, action=RIGHT_CLICK_AIR", plr.getName());
+            System.out.println("BukkitBridge -- " + logMsg);
+            if(skipItemUse)System.out.println("BukkitBridge -- onAttemptItemUse: skipped");
+        }
+
+        if(skipItemUse){
+            skipItemUse = false;
+            return;
+        }
+
+        Player player = PlayerManager.getPlayer(plr);
+
+        PlayerInteractEvent event = new PlayerInteractEvent(player, Action.RIGHT_CLICK_AIR,
                 Util.getItemStack(is), null, null);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -422,15 +471,18 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
+        if(DebugMode)System.out.println("handlePluginMessage " + player.getName() + ": " + tag);
         Player sender = PlayerManager.getPlayer(player);
+        if(DebugMode && sender == null)System.out.println("Player is null :-(");
         if(sender != null)messenger.dispatchIncomingMessage(sender, tag, data);
     }
 
     @Override
     public Boolean onRequestPermission(String playerKey, String permission) {
-        /*
 
-        // fixme how am I supposed to get the player corresponding to the given playerKey
+        if(DebugMode)System.out.print("onRequestPermission(" + playerKey + ", " + permission + ")");
+
+        if(playerKey.equals("*"))return null;
 
         MC_Player p0;
         if(playerKey.length() <= 16)p0 = server.getOnlinePlayerByName(server.getPlayerExactName(playerKey));
@@ -441,7 +493,5 @@ public class MyPlugin extends PluginReference.PluginBase {
         if(!player.permissions.isPermissionSet(permission))return null;
 
         return player.permissions.hasPermission(permission);
-        */
-        return null;
     }
 }

@@ -2,7 +2,10 @@ package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.ReflectionUtil;
+import PluginBukkitBridge.Util;
+import PluginBukkitBridge.inventory.FakeEntityEquipment;
 import PluginReference.MC_Entity;
+import PluginReference.MC_PotionEffect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
@@ -15,7 +18,7 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
-public class FakeLivingEntity extends FakeEntity implements LivingEntity{
+public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     public FakeLivingEntity(MC_Entity argEnt) {
         super(argEnt);
     }
@@ -32,8 +35,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity{
     }
 
     @Override
-    public Location getEyeLocation()
-    {
+    public Location getEyeLocation() {
         Location l = getLocation();
         l = l.add(0, getEyeHeight(), 0);
         return l;
@@ -66,95 +68,79 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity{
     }
 
     @Override
-    public List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance)
-    {
+    public List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance) {
         return getLineOfSight(transparent, maxDistance, 0);
     }
 
     @Override
-    public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance)
-    {
+    public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance) {
         List<Block> blocks = getLineOfSight(transparent, maxDistance, 1);
         return blocks.get(0);
     }
 
     @Override
-    public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance)
-    {
+    public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance) {
         return getLineOfSight(transparent, maxDistance, 2);
     }
 
     @Override
-    public Egg throwEgg()
-    {
-        MyPlugin.fixme("stub method");
-        return null;
+    public Egg throwEgg() {
+        return launchProjectile(Egg.class);
     }
 
     @Override
-    public Arrow shootArrow()
-    {
-        MyPlugin.fixme("stub method");
-        return null;
+    public Arrow shootArrow() {
+        return launchProjectile(Arrow.class);
     }
 
     @Override
-    public Snowball throwSnowball()
-    {
-        MyPlugin.fixme("stub method");
-        return null;
+    public Snowball throwSnowball() {
+        return launchProjectile(Snowball.class);
     }
 
     @Override
-    public int getRemainingAir()
-    {
+    public int getRemainingAir() {
         MyPlugin.fixme("stub method");
         return 0;
     }
 
     @Override
-    public void setRemainingAir(int arg0)
-    {
+    public void setRemainingAir(int arg0) {
         MyPlugin.fixme("stub method");
     }
 
     @Override
-    public int getMaximumAir()
-    {
+    public int getMaximumAir() {
         MyPlugin.fixme("stub method");
         return 0;
     }
 
     @Override
-    public void setMaximumAir(int arg0)
-    {
+    public void setMaximumAir(int arg0) {
         MyPlugin.fixme("stub method");
     }
 
     @Override
-    public int getMaximumNoDamageTicks()
-    {
+    public int getMaximumNoDamageTicks() {
         MyPlugin.fixme("stub method");
         return 0;
     }
 
     @Override
-    public void setMaximumNoDamageTicks(int arg0)
-    {
+    public void setMaximumNoDamageTicks(int arg0) {
         MyPlugin.fixme("stub method");
     }
 
     @Override
-    public double getLastDamage()
-    {
+    public double getLastDamage() {
         EntityDamageEvent event = getLastDamageCause();
-        if(event == null)return 0;
+        if (event == null) return 0;
         return event.getFinalDamage();
     }
 
     @Override
     public int _INVALID_getLastDamage() {
-        return ((int)getLastDamage());
+        return ((int) getLastDamage());
     }
 
     @Override
@@ -168,103 +154,105 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity{
     }
 
     @Override
-    public int getNoDamageTicks()
-    {
+    public int getNoDamageTicks() {
         MyPlugin.fixme("stub method");
         return 0;
     }
 
     @Override
-    public void setNoDamageTicks(int arg0)
-    {
+    public void setNoDamageTicks(int arg0) {
         MyPlugin.fixme("stub method");
     }
 
     @Override
-    public Player getKiller()
-    {
+    public Player getKiller() {
         MyPlugin.fixme("stub method");
         return null;
     }
 
     @Override
-    public boolean addPotionEffect(PotionEffect arg0)
-    {
+    public boolean addPotionEffect(PotionEffect arg0) {
+        return addPotionEffect(arg0, false);
+    }
+
+    @Override
+    public boolean addPotionEffect(PotionEffect arg0, boolean force) {
+        if(!force && hasPotionEffect(arg0.getType()))return false;
+        // remove old effect
+        removePotionEffect(arg0.getType());
+        // add new one
+        List<MC_PotionEffect> potionEffects = new ArrayList<>(m_ent.getPotionEffects());
+        MC_PotionEffect effect = new MC_PotionEffect(Util.getPotionEffectType(arg0.getType()), arg0.getDuration(), arg0.getAmplifier());
+        effect.ambient = arg0.isAmbient();
+        effect.showsParticles = true;
+        potionEffects.add(effect);
+        m_ent.setPotionEffects(potionEffects);
+        return true;
+    }
+
+    @Override
+    public boolean addPotionEffects(Collection<PotionEffect> effects) {
+        boolean success = true;
+        for (PotionEffect effect : effects) {
+            success &= addPotionEffect(effect);
+        }
+        return success;
+    }
+
+    @Override
+    public Collection<PotionEffect> getActivePotionEffects() {
+        List<PotionEffect> result = new ArrayList<>();
+        for(MC_PotionEffect eff: m_ent.getPotionEffects()){
+            result.add(new PotionEffect(Util.getPotionEffectType(eff.type), eff.duration, eff.amplifier, eff.ambient));
+        }
+        return result;
+    }
+
+    @Override
+    public boolean hasPotionEffect(PotionEffectType arg0) {
+        for(PotionEffect p: getActivePotionEffects())if(p.getType() == arg0)return true;
+        return false;
+    }
+
+    @Override
+    public void removePotionEffect(PotionEffectType arg0) {
+        List<MC_PotionEffect> potionEffects = new ArrayList<>();
+        for(MC_PotionEffect effect: m_ent.getPotionEffects()){
+            if(effect.type != Util.getPotionEffectType(arg0))potionEffects.add(effect);
+        }
+        m_ent.setPotionEffects(potionEffects);
+    }
+
+    @Override
+    public boolean hasLineOfSight(Entity arg0) {
         MyPlugin.fixme("stub method");
         return false;
     }
 
     @Override
-    public boolean addPotionEffect(PotionEffect arg0, boolean arg1)
-    {
+    public boolean getRemoveWhenFarAway() {
         MyPlugin.fixme("stub method");
         return false;
     }
 
     @Override
-    public boolean addPotionEffects(Collection<PotionEffect> arg0)
-    {
-        MyPlugin.fixme("stub method");
-        return false;
-    }
-
-    @Override
-    public Collection<PotionEffect> getActivePotionEffects()
-    {
-        MyPlugin.fixme("stub method");
-        return null;
-    }
-
-    @Override
-    public boolean hasPotionEffect(PotionEffectType arg0)
-    {
-        MyPlugin.fixme("stub method");
-        return false;
-    }
-
-    @Override
-    public void removePotionEffect(PotionEffectType arg0)
-    {
+    public void setRemoveWhenFarAway(boolean arg0) {
         MyPlugin.fixme("stub method");
     }
 
     @Override
-    public boolean hasLineOfSight(Entity arg0)
-    {
-        MyPlugin.fixme("stub method");
-        return false;
+    public EntityEquipment getEquipment() {
+        return new FakeEntityEquipment(m_ent);
     }
 
     @Override
-    public boolean getRemoveWhenFarAway()
-    {
-        MyPlugin.fixme("stub method");
-        return false;
+    public void setCanPickupItems(boolean arg0) {
+        MyPlugin.fixme();
     }
 
     @Override
-    public void setRemoveWhenFarAway(boolean arg0)
-    {
-        MyPlugin.fixme("stub method");
-    }
-
-    @Override
-    public EntityEquipment getEquipment()
-    {
-        FakeDebug("getEquipment");
-        return null;
-    }
-
-    @Override
-    public void setCanPickupItems(boolean arg0)
-    {
-        FakeDebug("setCanPickupItems");
-    }
-
-    @Override
-    public boolean getCanPickupItems()
-    {
-        FakeDebug("getCanPickupItems");
+    public boolean getCanPickupItems() {
+        MyPlugin.fixme();
         return false;
     }
 
@@ -279,61 +267,52 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity{
     }
 
     @Override
-    public void setCustomNameVisible(boolean arg0)
-    {
-        FakeDebug("setCustomNameVisible");
+    public void setCustomNameVisible(boolean arg0) {
+        MyPlugin.fixme();
     }
 
     @Override
-    public boolean isCustomNameVisible()
-    {
-        FakeDebug("isCustomNameVisible");
+    public boolean isCustomNameVisible() {
+        MyPlugin.fixme();
         return false;
     }
 
     @Override
-    public boolean isLeashed()
-    {
-        FakeDebug("isLeashed");
+    public boolean isLeashed() {
+        MyPlugin.fixme();
         return false;
     }
 
     @Override
-    public Entity getLeashHolder() throws IllegalStateException
-    {
-        FakeDebug("getLeashHolder");
+    public Entity getLeashHolder() throws IllegalStateException {
+        MyPlugin.fixme();
         return null;
     }
 
     @Override
-    public boolean setLeashHolder(Entity arg0)
-    {
-        FakeDebug("setLeashHolder");
+    public boolean setLeashHolder(Entity arg0) {
+        MyPlugin.fixme();
         return false;
     }
 
     @Override
-    public void _INVALID_damage(int arg0)
-    {
-        FakeDebug("_INVALID_damage");
+    public void _INVALID_damage(int arg0) {
+        damage(arg0);
     }
 
     @Override
-    public void _INVALID_damage(int arg0, Entity arg1)
-    {
-        FakeDebug("_INVALID_damage");
+    public void _INVALID_damage(int arg0, Entity arg1) {
+        damage(arg0,arg1);
     }
 
     @Override
-    public void damage(double arg0)
-    {
-        FakeDebug("damage");
+    public void damage(double arg0) {
+        setHealth(getHealth()-arg0);
     }
 
     @Override
-    public void damage(double arg0, Entity arg1)
-    {
-        FakeDebug("damage");
+    public void damage(double arg0, Entity arg1) {
+        setHealth(getHealth()-arg0);
     }
 
     @Override
@@ -357,46 +336,38 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity{
     }
 
     @Override
-    public double getMaxHealth()
-    {
+    public double getMaxHealth() {
         return m_ent.getMaxHealth();
     }
 
     @Override
-    public int _INVALID_getMaxHealth()
-    {
+    public int _INVALID_getMaxHealth() {
         return (int) m_ent.getMaxHealth();
     }
 
     @Override
-    public void setMaxHealth(double arg0)
-    {
+    public void setMaxHealth(double arg0) {
         m_ent.setMaxHealth((float) arg0);
     }
 
     @Override
-    public void _INVALID_setMaxHealth(int arg0)
-    {
+    public void _INVALID_setMaxHealth(int arg0) {
         m_ent.setMaxHealth(arg0);
     }
 
     @Override
-    public void resetMaxHealth()
-    {
-        FakeDebug("resetMaxHealth");
+    public void resetMaxHealth() {
+        MyPlugin.fixme();
     }
 
     @Override
-    public <T extends Projectile> T launchProjectile(Class<? extends T> arg0)
-    {
-        FakeDebug("launchProjectile");
-        return null;
+    public <T extends Projectile> T launchProjectile(Class<? extends T> projectile) {
+        return launchProjectile(projectile, null);
     }
 
     @Override
-    public <T extends Projectile> T launchProjectile(Class<? extends T> arg0, Vector arg1)
-    {
-        FakeDebug("launchProjectile");
+    public <T extends Projectile> T launchProjectile(Class<? extends T> projectile, Vector arg1) {
+        MyPlugin.fixme();
         return null;
     }
 }

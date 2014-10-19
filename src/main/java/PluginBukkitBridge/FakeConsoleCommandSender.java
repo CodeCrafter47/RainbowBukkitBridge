@@ -13,10 +13,6 @@ import org.bukkit.plugin.Plugin;
 import java.util.Set;
 
 public class FakeConsoleCommandSender implements ConsoleCommandSender {
-    public static void FakeDebug(String msg) {
-        System.out.println("FakeConsoleCommandSender Proxy: " + msg);
-    }
-
     @Override
     public String getName() {
 
@@ -40,36 +36,31 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender {
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0) {
-        FakeDebug("addAttachment");
-
+        MyPlugin.fixme();
         return null;
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0, int arg1) {
-        FakeDebug("addAttachment");
-
+        MyPlugin.fixme();
         return null;
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0, String arg1, boolean arg2) {
-        FakeDebug("addAttachment");
-
+        MyPlugin.fixme();
         return null;
     }
 
     @Override
     public PermissionAttachment addAttachment(Plugin arg0, String arg1, boolean arg2, int arg3) {
-        FakeDebug("addAttachment");
-
+        MyPlugin.fixme();
         return null;
     }
 
     @Override
     public Set<PermissionAttachmentInfo> getEffectivePermissions() {
-        FakeDebug("getEffectivePermissions");
-
+        MyPlugin.fixme();
         return null;
     }
 
@@ -95,16 +86,12 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender {
 
     @Override
     public void recalculatePermissions() {
-        FakeDebug("recalculatePermissions");
-
-
+        MyPlugin.fixme();
     }
 
     @Override
     public void removeAttachment(PermissionAttachment arg0) {
-        FakeDebug("removeAttachment");
-
-
+        MyPlugin.fixme();
     }
 
     @Override
@@ -114,39 +101,39 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender {
 
     @Override
     public void setOp(boolean arg0) {
-        FakeDebug("setOp");
+        MyPlugin.fixme();
     }
 
     @Override
     public void abandonConversation(Conversation arg0) {
-        FakeDebug("abandonConversation");
+        MyPlugin.fixme();
     }
 
     @Override
     public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1) {
-        FakeDebug("abandonConversation");
+        MyPlugin.fixme();
     }
 
     @Override
     public void acceptConversationInput(String arg0) {
-        FakeDebug("acceptConversationInput");
+        MyPlugin.fixme();
     }
 
     @Override
     public boolean beginConversation(Conversation arg0) {
-        FakeDebug("beginConversation");
+        MyPlugin.fixme();
         return false;
     }
 
     @Override
     public boolean isConversing() {
-        FakeDebug("isConversing");
+        MyPlugin.fixme();
         return false;
     }
 
     @Override
     public void sendRawMessage(String arg0) {
-        FakeDebug("sendRawMessage");
+        MyPlugin.fixme();
     }
 
 }

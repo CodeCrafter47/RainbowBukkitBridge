@@ -15,6 +15,7 @@ public class PacketListener implements MC_PlayerPacketListener {
     @Override
     public byte[] handleRawPacket(MC_Player player, int i, byte[] bytes, String s, MC_EventInfo mc_eventInfo) {
         if(i == 0x3F) {
+            if(MyPlugin.DebugMode)System.out.println("Packet received");
             ByteBuffer buf = ByteBuffer.wrap(bytes);
             String tag = readString(buf);
             byte[] data = new byte[buf.remaining()];

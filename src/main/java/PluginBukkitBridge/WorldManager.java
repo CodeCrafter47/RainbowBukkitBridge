@@ -5,6 +5,7 @@ import org.bukkit.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by florian on 15.10.14.
@@ -38,6 +39,13 @@ public class WorldManager {
     public static World getWorld(String name){
         for(World w: worlds){
             if(w.getName().equals(name))return w;
+        }
+        return null;
+    }
+
+    public static World getWorld(UUID arg0) {
+        for(World w: getWorlds()){
+            if(w.getUID().equals(arg0))return w;
         }
         return null;
     }
