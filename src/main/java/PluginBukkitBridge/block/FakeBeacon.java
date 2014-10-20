@@ -1,6 +1,6 @@
 package PluginBukkitBridge.block;
 
-import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.inventory.FakeBeaconInventory;
 import org.bukkit.block.Beacon;
 import org.bukkit.inventory.Inventory;
 
@@ -14,7 +14,6 @@ public class FakeBeacon extends FakeBlockState implements Beacon {
 
     @Override
     public Inventory getInventory() {
-        MyPlugin.fixme();
-        return null;
+        return new FakeBeaconInventory();
     }
 }

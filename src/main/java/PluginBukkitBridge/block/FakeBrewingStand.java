@@ -1,6 +1,7 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.inventory.FakeBrewerInventory;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.inventory.BrewerInventory;
 
@@ -26,7 +27,6 @@ public class FakeBrewingStand extends FakeBlockState implements BrewingStand {
 
     @Override
     public BrewerInventory getInventory() {
-        MyPlugin.fixme();
-        return null;
+        return new FakeBrewerInventory();
     }
 }

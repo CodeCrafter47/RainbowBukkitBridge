@@ -1,6 +1,6 @@
 package PluginBukkitBridge.block;
 
-import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.inventory.UndefinedFakeInventory;
 import org.bukkit.block.Hopper;
 import org.bukkit.inventory.Inventory;
 
@@ -14,7 +14,6 @@ public class FakeHopper extends FakeBlockState implements Hopper {
 
     @Override
     public Inventory getInventory() {
-        MyPlugin.fixme();
-        return null;
+        return new UndefinedFakeInventory();
     }
 }

@@ -16,13 +16,13 @@ public class FakeCreatureSpawner extends FakeBlockState implements CreatureSpawn
     @Override
     public CreatureType getCreatureType() {
         MyPlugin.fixme();
-        return null;
+        return CreatureType.PIG;
     }
 
     @Override
     public EntityType getSpawnedType() {
         MyPlugin.fixme();
-        return null;
+        return EntityType.BAT;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class FakeCreatureSpawner extends FakeBlockState implements CreatureSpawn
     @Override
     public String getCreatureTypeId() {
         MyPlugin.fixme();
-        return null;
+        return "";
     }
 
     @Override
@@ -49,7 +49,7 @@ public class FakeCreatureSpawner extends FakeBlockState implements CreatureSpawn
     @Override
     public String getCreatureTypeName() {
         MyPlugin.fixme();
-        return null;
+        return "";
     }
 
     @Override

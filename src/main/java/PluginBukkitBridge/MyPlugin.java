@@ -492,6 +492,8 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         FakePlayer player = (FakePlayer) PlayerManager.getPlayer(p0);
 
+        if(player == null)return null;
+
         if(!player.permissions.isPermissionSet(permission))return null;
 
         return player.permissions.hasPermission(permission);

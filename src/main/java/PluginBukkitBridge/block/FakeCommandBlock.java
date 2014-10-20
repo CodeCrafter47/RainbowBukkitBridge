@@ -14,7 +14,7 @@ public class FakeCommandBlock extends FakeBlockState implements CommandBlock{
     @Override
     public String getCommand() {
         MyPlugin.fixme();
-        return null;
+        return "";
     }
 
     @Override

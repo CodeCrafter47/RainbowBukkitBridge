@@ -1,6 +1,7 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.inventory.UndefinedFakeInventory;
 import org.bukkit.block.Dropper;
 import org.bukkit.inventory.Inventory;
 
@@ -19,7 +20,6 @@ public class FakeDropper extends FakeBlockState implements Dropper {
 
     @Override
     public Inventory getInventory() {
-        MyPlugin.fixme();
-        return null;
+        return new UndefinedFakeInventory();
     }
 }
