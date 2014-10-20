@@ -107,6 +107,22 @@ public class FakeItemMeta implements ItemMeta {
         return checkConflictingEnchants(getEnchants(), enchantment);
     }
 
+    @Override
+    public Spigot spigot() {
+        return new Spigot(){
+            @Override
+            public void setUnbreakable(boolean unbreakable) {
+                MyPlugin.fixme();
+            }
+
+            @Override
+            public boolean isUnbreakable() {
+                MyPlugin.fixme();
+                return false;
+            }
+        };
+    }
+
     static boolean checkConflictingEnchants(Map<Enchantment, Integer> enchantments, Enchantment ench) {
         if (enchantments == null || enchantments.isEmpty()) {
             return false;

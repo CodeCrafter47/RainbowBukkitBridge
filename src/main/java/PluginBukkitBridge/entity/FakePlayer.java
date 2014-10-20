@@ -18,6 +18,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.net.InetSocketAddress;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -821,4 +822,53 @@ public class FakePlayer extends FakeHumanEntity implements Player
         return teleport(destination, PlayerTeleportEvent.TeleportCause.PLUGIN);
     }
 
+    @Override
+    public Player.Spigot spigot() {
+        return new Player.Spigot(){
+            @Override
+            public InetSocketAddress getRawAddress() {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public void playEffect(Location location, Effect effect, int id, int data, float offsetX, float offsetY, float offsetZ, float speed, int particleCount, int radius) {
+                MyPlugin.fixme();
+            }
+
+            @Override
+            public boolean getCollidesWithEntities() {
+                MyPlugin.fixme();
+                return false;
+            }
+
+            @Override
+            public void setCollidesWithEntities(boolean collides) {
+                MyPlugin.fixme();
+            }
+
+            @Override
+            public void respawn() {
+                MyPlugin.fixme();
+            }
+
+            @Override
+            public String getLocale() {
+                MyPlugin.fixme();
+                return "en";
+            }
+
+            @Override
+            public Set<Player> getHiddenPlayers() {
+                MyPlugin.fixme();
+                return new HashSet<>();
+            }
+
+            @Override
+            public boolean isInvulnerable() {
+                MyPlugin.fixme();
+                return false;
+            }
+        };
+    }
 }

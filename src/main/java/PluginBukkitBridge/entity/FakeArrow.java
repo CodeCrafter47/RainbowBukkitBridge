@@ -33,4 +33,26 @@ public class FakeArrow extends FakeProjectile implements Arrow {
     public void setCritical(boolean b) {
         MyPlugin.fixme("stub method");
     }
+
+    @Override
+    public Arrow.Spigot spigot() {
+        return new Arrow.Spigot(){
+            @Override
+            public double getDamage() {
+                MyPlugin.fixme();
+                return 0;
+            }
+
+            @Override
+            public void setDamage(double damage) {
+                MyPlugin.fixme();
+            }
+
+            @Override
+            public boolean isInvulnerable() {
+                MyPlugin.fixme();
+                return false;
+            }
+        };
+    }
 }

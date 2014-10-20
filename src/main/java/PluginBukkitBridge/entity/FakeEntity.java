@@ -140,6 +140,17 @@ public class FakeEntity implements Entity {
     }
 
     @Override
+    public Spigot spigot() {
+        return new Spigot(){
+            @Override
+            public boolean isInvulnerable() {
+                MyPlugin.fixme();
+                return false;
+            }
+        };
+    }
+
+    @Override
     public void setVelocity(Vector velocity) {
         m_ent.setMotionData(Util.getMotionData(velocity, m_ent.getMotionData()));
     }

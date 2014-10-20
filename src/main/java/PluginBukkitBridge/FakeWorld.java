@@ -489,6 +489,33 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public Spigot spigot() {
+        return new Spigot(){
+            @Override
+            public void playEffect(Location location, Effect effect) {
+                MyPlugin.fixme();
+            }
+
+            @Override
+            public void playEffect(Location location, Effect effect, int id, int data, float offsetX, float offsetY, float offsetZ, float speed, int particleCount, int radius) {
+                MyPlugin.fixme();
+            }
+
+            @Override
+            public LightningStrike strikeLightning(Location loc, boolean isSilent) {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public LightningStrike strikeLightningEffect(Location loc, boolean isSilent) {
+                MyPlugin.fixme();
+                return null;
+            }
+        };
+    }
+
+    @Override
     public void showParticle(Location location, Particle particle, float v, float v2, float v3, float v4, int i) {
         for(Player player: getPlayers())player.showParticle(location, particle, v, v2, v3, v4, i);
     }

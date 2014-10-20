@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.BanList.Type;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.command.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.help.HelpMap;
@@ -457,6 +458,17 @@ public class FakeCraftServer implements Server {
     public UnsafeValues getUnsafe() {
         MyPlugin.fixme();
         return null;
+    }
+
+    @Override
+    public Spigot spigot() {
+        return new Spigot(){
+            @Override
+            public YamlConfiguration getConfig() {
+                MyPlugin.fixme();
+                return null;
+            }
+        };
     }
 
     @Override

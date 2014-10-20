@@ -316,6 +316,16 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     }
 
     @Override
+    public void damage(double v, EntityDamageEvent.DamageCause damageCause) {
+        damage(v);
+    }
+
+    @Override
+    public void damage(double v, Entity entity, EntityDamageEvent.DamageCause damageCause) {
+        damage(v, entity);
+    }
+
+    @Override
     public double getHealth() {
         return m_ent.getHealth();
     }

@@ -249,6 +249,17 @@ public class FakedFakeItem implements Item {
     }
 
     @Override
+    public Spigot spigot() {
+        return new Spigot(){
+            @Override
+            public boolean isInvulnerable() {
+                MyPlugin.fixme();
+                return false;
+            }
+        };
+    }
+
+    @Override
     public void setMetadata(String s, MetadataValue metadataValue) {
         MyPlugin.fixme();
     }
