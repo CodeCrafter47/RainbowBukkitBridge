@@ -96,7 +96,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         System.out.println("BukkitBridge v2.4 --- Starting up...");
         server = argServer;
 
-        server.registerPlayerPacketListener(new PacketListener());
+        server.registerServerPacketListener(new PacketListener());
 
         // Initialize Bukkit server object...
         fakeServer.server = server;
@@ -470,13 +470,10 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
-        // fixme this is not incoming plugin message :-(
-        /*
         if(DebugMode)System.out.println("handlePluginMessage " + player.getName() + ": " + tag);
         Player sender = PlayerManager.getPlayer(player);
         if(DebugMode && sender == null)System.out.println("Player is null :-(");
         if(sender != null)messenger.dispatchIncomingMessage(sender, tag, data);
-        */
     }
 
     @Override
