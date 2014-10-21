@@ -202,6 +202,8 @@ public class MyPlugin extends PluginReference.PluginBase {
             System.out.println("BukkitBridge -- " + logMsg);
         }
 
+        // don't call events if no one listens
+        if(AsyncPlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length == 0)return;
 
         AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(playerName, new InetSocketAddress(ip, 0).getAddress(), uuid);
         pluginManager.callEvent(event);
@@ -213,6 +215,9 @@ public class MyPlugin extends PluginReference.PluginBase {
             String logMsg = String.format("%s onPlayerLogout. UUID=%s", playerName, uuid.toString());
             System.out.println("BukkitBridge -- " + logMsg);
         }
+
+        // don't call events if no one listens
+        if(PlayerQuitEvent.getHandlerList().getRegisteredListeners().length == 0)return;
 
         // fixme message
         pluginManager.callEvent(new PlayerQuitEvent(PlayerManager.getPlayer(uuid), ""));
@@ -235,11 +240,15 @@ public class MyPlugin extends PluginReference.PluginBase {
         Player player = PlayerManager.getPlayer(plr);
         player.getLocation();
         if (match.matches()) {
-            PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, msg);
-            event.setCancelled(ei.isCancelled);
-            pluginManager.callEvent(event);
-            ei.isCancelled = event.isCancelled();
-            if (!event.isCancelled()) {
+
+            // don't call events if no one listens
+            if(PlayerCommandPreprocessEvent.getHandlerList().getRegisteredListeners().length != 0) {
+                PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, msg);
+                event.setCancelled(ei.isCancelled);
+                pluginManager.callEvent(event);
+                ei.isCancelled = event.isCancelled();
+            }
+            if (!ei.isCancelled) {
                 // fixme message might be changed
                 if (commandMap.dispatch(PlayerManager.getPlayer(plr), match.group(1))) ei.isCancelled = true;
             }
@@ -256,6 +265,9 @@ public class MyPlugin extends PluginReference.PluginBase {
             System.out.println("BukkitBridge -- " + logMsg);
         }
 
+        // don't call events if no one listens
+        if(EntityDamageEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         Entity fakeEnt = Util.wrapEntity(ent);
         EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
         event.setCancelled(ei.isCancelled);
@@ -269,6 +281,10 @@ public class MyPlugin extends PluginReference.PluginBase {
             String logMsg = String.format("onPlayerDeath. player=%s, killer=%s, damage=%s, deathMsg=%s", plrVictim.getName(), plrKiller.getName(), dmgType.toString(), deathMsg);
             System.out.println("BukkitBridge -- " + logMsg);
         }
+
+        // don't call events if no one listens
+        if(PlayerDeathEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         // fixme set killer
         PlayerDeathEvent event = new PlayerDeathEvent(PlayerManager.getPlayer(plrVictim), new ArrayList<ItemStack>(), 0, deathMsg);
         // fixme use result
@@ -280,6 +296,10 @@ public class MyPlugin extends PluginReference.PluginBase {
             String logMsg = String.format("onPlayerRespawn. player=%s", plr.getName());
             System.out.println("BukkitBridge -- " + logMsg);
         }
+
+        // don't call events if no one listens
+        if(PlayerRespawnEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         // fixme location, bed spawn
         PlayerRespawnEvent event = new PlayerRespawnEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), false);
         pluginManager.callEvent(event);
@@ -297,11 +317,15 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
         // Interact Event
         // fixme blockFace
-        PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
-                Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), BlockFace.DOWN);
-        event.setCancelled(ei.isCancelled);
-        pluginManager.callEvent(event);
-        ei.isCancelled = event.isCancelled();
+
+        // don't call events if no one listens
+        if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length != 0) {
+            PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
+                    Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), BlockFace.DOWN);
+            event.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event);
+            ei.isCancelled = event.isCancelled();
+        }
 
         // BlockDamageEvent
         if(!ei.isCancelled){
@@ -309,11 +333,15 @@ public class MyPlugin extends PluginReference.PluginBase {
                 String logMsg = String.format("BlockDamageEvent. player=%s, loc=%s", plr.getName(), loc.toString());
                 System.out.println("BukkitBridge -- " + logMsg);
             }
-            BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr),new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
-                    server.getWorld(loc.dimension)),Util.getItemStack(plr.getItemInHand()),false);
-            event2.setCancelled(ei.isCancelled);
-            pluginManager.callEvent(event2);
-            ei.isCancelled = event2.isCancelled();
+
+            // don't call events if no one listens
+            if(BlockDamageEvent.getHandlerList().getRegisteredListeners().length != 0) {
+                BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
+                        server.getWorld(loc.dimension)), Util.getItemStack(plr.getItemInHand()), false);
+                event2.setCancelled(ei.isCancelled);
+                pluginManager.callEvent(event2);
+                ei.isCancelled = event2.isCancelled();
+            }
         }
 
         // BlockBreakEvent
@@ -322,11 +350,15 @@ public class MyPlugin extends PluginReference.PluginBase {
                 String logMsg = String.format("BlockBreakEvent. player=%s, loc=%s", plr.getName(), loc.toString());
                 System.out.println("BukkitBridge -- " + logMsg);
             }
-            BlockBreakEvent event2 = new BlockBreakEvent(new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
-                    server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
-            event2.setCancelled(ei.isCancelled);
-            pluginManager.callEvent(event2);
-            ei.isCancelled = event2.isCancelled();
+
+            // don't call events if no one listens
+            if(BlockBreakEvent.getHandlerList().getRegisteredListeners().length != 0) {
+                BlockBreakEvent event2 = new BlockBreakEvent(new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
+                        server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
+                event2.setCancelled(ei.isCancelled);
+                pluginManager.callEvent(event2);
+                ei.isCancelled = event2.isCancelled();
+            }
         }
     }
 
@@ -337,6 +369,9 @@ public class MyPlugin extends PluginReference.PluginBase {
             String logMsg = String.format("PlayerInteractEvent. player=%s, action=RIGHT_CLICK_BLOCK, loc=%s", plr.getName(), loc.toString());
             System.out.println("BukkitBridge -- " + logMsg);
         }
+
+        // don't call events if no one listens
+        if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length == 0)return;
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_BLOCK,
                 Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), Util.getFace(dir));
         event.setCancelled(ei.isCancelled);
@@ -348,6 +383,10 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public void onAttemptPlayerTeleport(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
         if (allowTeleport) return;
+
+        // don't call events if no one listens
+        if(PlayerTeleportEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         PlayerTeleportEvent event = new PlayerTeleportEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -355,6 +394,10 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onAttemptPlayerMove(final MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
+
+        // don't call events if no one listens
+        if(PlayerMoveEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         PlayerMoveEvent event = new PlayerMoveEvent(PlayerManager.getPlayer(plr), Util.getLocation(locFrom), Util.getLocation(locTo));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -385,6 +428,9 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public void onItemPlaced(MC_Player plr, MC_Location loc, MC_ItemStack isHandItem, MC_Location locPlacedAgainst, MC_DirectionNESWUD dir) {
         if (DebugMode) System.out.println("BukkitBridge -- onItemPlaced to BlockPlaceEvent");
+
+        // don't call events if no one listens
+        if(BlockPlaceEvent.getHandlerList().getRegisteredListeners().length == 0)return;
 
         Player who = new FakePlayer(plr);
         MC_ItemStack isHand = plr.getItemInHand();
@@ -431,6 +477,9 @@ public class MyPlugin extends PluginReference.PluginBase {
             return;
         }
 
+        // don't call events if no one listens
+        if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         Player player = PlayerManager.getPlayer(plr);
 
         PlayerInteractEvent event = new PlayerInteractEvent(player, Action.RIGHT_CLICK_AIR,
@@ -442,6 +491,10 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptItemDrop(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
+
+        // don't call events if no one listens
+        if(PlayerDropItemEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         PlayerDropItemEvent event = new PlayerDropItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is)));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -450,6 +503,10 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptItemPickup(MC_Player plr, MC_ItemStack is, boolean isXpOrb, MC_EventInfo ei) {
+
+        // don't call events if no one listens
+        if(PlayerPickupItemEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+
         PlayerPickupItemEvent event = new PlayerPickupItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is)), 0);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
@@ -458,6 +515,10 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public boolean onAttemptExplodeSpecific(MC_Entity ent, List<MC_Location> locs) {
+
+        // don't call events if no one listens
+        if(EntityExplodeEvent.getHandlerList().getRegisteredListeners().length == 0)return false;
+
         // fixme yield, cancel
         List<Block> blocks = new ArrayList<>();
         for(MC_Location loc: locs){
