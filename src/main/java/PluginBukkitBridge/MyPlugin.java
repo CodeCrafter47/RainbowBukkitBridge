@@ -548,6 +548,8 @@ public class MyPlugin extends PluginReference.PluginBase {
         if(playerKey.length() <= 16)p0 = server.getOnlinePlayerByName(server.getPlayerExactName(playerKey));
         else p0 = server.getOnlinePlayerByName(server.getLastKnownPlayerNameFromUUID(playerKey));
 
+        if(p0 == null)return null;
+
         FakePlayer player = (FakePlayer) PlayerManager.getPlayer(p0);
 
         if(player == null)return null;
