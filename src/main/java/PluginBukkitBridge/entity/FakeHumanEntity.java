@@ -7,6 +7,7 @@ import PluginReference.MC_GameMode;
 import PluginReference.MC_Player;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
@@ -89,7 +90,9 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
     @Override
     public ItemStack getItemInHand() {
-        return Util.getItemStack(player.getItemInHand());
+        ItemStack is = Util.getItemStack(player.getItemInHand());
+        if(is == null)return new ItemStack(Material.AIR);
+        return is;
     }
 
     @Override

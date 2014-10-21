@@ -48,7 +48,7 @@ public class PacketListener implements MC_ServerPacketListener {
 
     @Override
     public byte[] handleRawPacket(SocketAddress socketAddress, int i, byte[] bytes, String s, MC_EventInfo mc_eventInfo) {
-        if(i == 0x3F) {
+        if(i == 0x17) {
             if(MyPlugin.DebugMode)System.out.println("Packet received");
             ByteBuffer buf = ByteBuffer.wrap(bytes);
             String tag = readString(buf);

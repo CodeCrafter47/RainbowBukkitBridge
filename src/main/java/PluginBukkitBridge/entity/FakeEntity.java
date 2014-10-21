@@ -56,12 +56,7 @@ public class FakeEntity implements Entity {
 
     @Override
     public int getEntityId() {
-        try {
-            return ReflectionUtil.getEntityID(m_ent);
-        } catch (Exception e) {
-            MyPlugin.fixme("execution failed");
-        }
-        return 0;
+        return m_ent.getEntityId();
     }
 
     @Override

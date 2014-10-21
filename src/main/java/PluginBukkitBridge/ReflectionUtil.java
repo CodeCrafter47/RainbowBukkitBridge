@@ -25,16 +25,6 @@ public class ReflectionUtil {
         return 0;
     }
 
-    public static int getEntityID(MC_Entity entity) {
-        try {
-            Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
-            return (int) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "entityID");
-        } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityID", MyPlugin.DebugMode?e:null);
-        }
-        return 0;
-    }
-
     public static UUID getEntityUUID(MC_Entity entity) {
         try {
             Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
@@ -118,7 +108,8 @@ public class ReflectionUtil {
         Class cPacketBase = Class.forName("joebkt.PacketBase");
         Object playerConnection = getMember(getMember(receiver, "plr"), "plrConnection");
         Object packetHandler = getMember(playerConnection, "a");
-        Method m = packetHandler.getClass().getDeclaredMethod("a", new Class[]{cPacketBase});
+        // joe called this handleIncomingPacket but in fact it sends a packet :D
+        Method m = packetHandler.getClass().getDeclaredMethod("handleIncomingPacket", new Class[]{cPacketBase});
         m.setAccessible(true);
         m.invoke(packetHandler, packet);
     }

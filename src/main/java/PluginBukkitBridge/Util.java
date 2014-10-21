@@ -34,14 +34,13 @@ public class Util {
         return md;
     }
     public static ItemStack getItemStack(MC_ItemStack i){
-        if(i == null)return null;
-        if(i.getId() == 0 || i.getCount() == 0)return null;
+        if(i == null || i.getId() == 0 || i.getCount() == 0)return null;
         ItemStack is = new ItemStack(i.getId(), i.getCount(), (short)i.getDamage());
         is.setItemMeta(new FakeItemMeta(i));
         return is;
     }
     public static MC_ItemStack getItemStack(final ItemStack is){
-        if(is == null){
+        if(is == null || is.getType() == Material.AIR){
             MC_ItemStack is2 = MyPlugin.server.createItemStack(1, 1, 1);
             try {
                 is2.getClass().getDeclaredField("is").set(is2, null);
