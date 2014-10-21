@@ -307,12 +307,17 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public void damage(double arg0) {
-        setHealth(getHealth()-arg0);
+        double newHealth = getHealth()-arg0;
+        if(newHealth <= 0){
+            m_ent.kill();
+            return;
+        }
+        setHealth(newHealth);
     }
 
     @Override
     public void damage(double arg0, Entity arg1) {
-        setHealth(getHealth()-arg0);
+        damage(arg0);
     }
 
     @Override

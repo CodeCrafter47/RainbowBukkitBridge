@@ -154,7 +154,17 @@ public class FakeBlock implements Block
 
     @Override
     public BlockFace getFace(Block block) {
-        MyPlugin.fixme();
+        BlockFace[] values = BlockFace.values();
+
+        for (BlockFace face : values) {
+            if ((this.getX() + face.getModX() == block.getX()) &&
+                    (this.getY() + face.getModY() == block.getY()) &&
+                    (this.getZ() + face.getModZ() == block.getZ())
+                    ) {
+                return face;
+            }
+        }
+
         return null;
     }
 
