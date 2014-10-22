@@ -1,5 +1,6 @@
 package PluginBukkitBridge.block;
 
+import PluginBukkitBridge.FakeWorld;
 import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.Util;
 import PluginBukkitBridge.WorldManager;
@@ -275,24 +276,22 @@ public class FakeBlock implements Block
 
     @Override
     public void setMetadata(String metadataKey, MetadataValue newMetadataValue) {
-        MyPlugin.fixme();
+        ((FakeWorld)getWorld()).blockMetadataStore.setMetadata(this, metadataKey, newMetadataValue);
     }
 
     @Override
     public List<MetadataValue> getMetadata(String metadataKey) {
-        MyPlugin.fixme();
-        return null;
+        return ((FakeWorld)getWorld()).blockMetadataStore.getMetadata(this, metadataKey);
     }
 
     @Override
     public boolean hasMetadata(String metadataKey) {
-        MyPlugin.fixme();
-        return false;
+        return ((FakeWorld)getWorld()).blockMetadataStore.hasMetadata(this, metadataKey);
     }
 
     @Override
     public void removeMetadata(String metadataKey, Plugin owningPlugin) {
-        MyPlugin.fixme();
+        ((FakeWorld)getWorld()).blockMetadataStore.removeMetadata(this, metadataKey, owningPlugin);
     }
 
     private MC_Block getBlock(int id){

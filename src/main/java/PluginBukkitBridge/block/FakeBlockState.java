@@ -32,24 +32,22 @@ public class FakeBlockState implements BlockState {
 
     @Override
     public List<MetadataValue> getMetadata(String arg0) {
-        MyPlugin.fixme();
-        return null;
+        return getBlock().getMetadata(arg0);
     }
 
     @Override
     public boolean hasMetadata(String arg0) {
-        MyPlugin.fixme();
-        return false;
+        return getBlock().hasMetadata(arg0);
     }
 
     @Override
     public void removeMetadata(String arg0, Plugin arg1) {
-        MyPlugin.fixme();
+        getBlock().removeMetadata(arg0, arg1);
     }
 
     @Override
     public void setMetadata(String arg0, MetadataValue arg1) {
-        MyPlugin.fixme();
+        getBlock().setMetadata(arg0, arg1);
     }
 
     @Override

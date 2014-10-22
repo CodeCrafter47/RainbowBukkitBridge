@@ -25,26 +25,22 @@ public class FakeEntity implements Entity {
 
     @Override
     public List<MetadataValue> getMetadata(String arg0) {
-        MyPlugin.fixme("stub method");
-        return new ArrayList<>();
+        return MyPlugin.entityMetadataStore.getMetadata(this, arg0);
     }
 
     @Override
     public boolean hasMetadata(String arg0) {
-        MyPlugin.fixme("stub method");
-        return false;
+        return MyPlugin.entityMetadataStore.hasMetadata(this, arg0);
     }
 
     @Override
     public void removeMetadata(String arg0, Plugin arg1) {
-        MyPlugin.fixme("stub method");
-
+        MyPlugin.entityMetadataStore.removeMetadata(this, arg0, arg1);
     }
 
     @Override
     public void setMetadata(String arg0, MetadataValue arg1) {
-        MyPlugin.fixme("stub method");
-
+        MyPlugin.entityMetadataStore.setMetadata(this, arg0, arg1);
     }
 
     @Override

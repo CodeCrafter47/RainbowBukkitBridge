@@ -8,6 +8,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.metadata.BlockMetadataStore;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.entity.minecart.HopperMinecart;
@@ -26,9 +27,11 @@ import java.util.*;
 
 public class FakeWorld implements World {
     public MC_World world = null;
+    public BlockMetadataStore blockMetadataStore;
 
     public FakeWorld(MC_World world) {
         this.world = world;
+        blockMetadataStore = new BlockMetadataStore(this);
     }
 
     @Override

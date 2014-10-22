@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.craftbukkit.help.SimpleHelpMap;
+import org.bukkit.craftbukkit.metadata.EntityMetadataStore;
 import org.bukkit.craftbukkit.metadata.PlayerMetadataStore;
 import org.bukkit.craftbukkit.metadata.WorldMetadataStore;
 import org.bukkit.entity.Entity;
@@ -65,6 +66,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     public static WorldMetadataStore worldMetadataStorage = new WorldMetadataStore();
     public static PlayerMetadataStore playerMetadataStore = new PlayerMetadataStore();
+    public static EntityMetadataStore entityMetadataStore = new EntityMetadataStore();
 
     public static void fixme() {
         if(DebugMode){
