@@ -27,5 +27,6 @@ public class MyCommandMap extends SimpleCommandMap{
     private void setDefaultCommands() {
         register("bukkit", new PluginsCommand("plugins"));
         register("bukkit", new DebugCommand("bbdebug"));
+        register("bbhelp", new HelpCommand());
     }
 }
