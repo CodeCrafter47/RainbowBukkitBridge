@@ -253,8 +253,13 @@ public class FakeCraftServer implements Server {
 
     @Override
     public World createWorld(WorldCreator arg0) {
-        MyPlugin.fixme();
-        return null;
+        // I can create a world
+        World world = getWorld(arg0.name());
+        if(world == null) {
+            // no I can't
+            MyPlugin.fixme();
+        }
+        return world;
     }
 
     @Override
