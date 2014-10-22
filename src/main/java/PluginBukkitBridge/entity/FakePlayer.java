@@ -14,14 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.map.MapView;
 import org.bukkit.material.MaterialData;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.net.InetSocketAddress;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 
 public class FakePlayer extends FakeHumanEntity implements Player {
@@ -778,5 +776,25 @@ public class FakePlayer extends FakeHumanEntity implements Player {
                 return false;
             }
         };
+    }
+
+    @Override
+    public List<MetadataValue> getMetadata(String arg0) {
+        return MyPlugin.playerMetadataStore.getMetadata(this, arg0);
+    }
+
+    @Override
+    public boolean hasMetadata(String arg0) {
+        return MyPlugin.playerMetadataStore.hasMetadata(this, arg0);
+    }
+
+    @Override
+    public void removeMetadata(String arg0, Plugin arg1) {
+        MyPlugin.playerMetadataStore.removeMetadata(this, arg0, arg1);
+    }
+
+    @Override
+    public void setMetadata(String arg0, MetadataValue arg1) {
+        MyPlugin.playerMetadataStore.setMetadata(this, arg0, arg1);
     }
 }
