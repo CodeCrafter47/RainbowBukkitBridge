@@ -24,8 +24,7 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class FakePlayer extends FakeHumanEntity implements Player
-{
+public class FakePlayer extends FakeHumanEntity implements Player {
     private UUID uuid;
 
     private String playerListName = null;
@@ -48,14 +47,14 @@ public class FakePlayer extends FakeHumanEntity implements Player
 
     @Override
     public String getPlayerListName() {
-        return playerListName == null?getName():playerListName;
+        return playerListName == null ? getName() : playerListName;
     }
 
     @Override
     public void setPlayerListName(String name) {
         playerListName = name;
-        for(Player p: Bukkit.getOnlinePlayers()){
-            ReflectionUtil.sendPlayerListItemChangeDisplayName(((FakePlayer)p).player, player, name);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            ReflectionUtil.sendPlayerListItemChangeDisplayName(((FakePlayer) p).player, player, name);
         }
     }
 
@@ -73,6 +72,7 @@ public class FakePlayer extends FakeHumanEntity implements Player
     public InetSocketAddress getAddress() {
         return new InetSocketAddress(player.getIPAddress(), 0);
     }
+
     @Override
     public void sendRawMessage(String message) {
         // fixme
@@ -114,7 +114,7 @@ public class FakePlayer extends FakeHumanEntity implements Player
                 instrumentName = "bassattack";
                 break;
         }
-        playSound(loc, "note."+instrumentName, 3.0f, note);
+        playSound(loc, "note." + instrumentName, 3.0f, note);
     }
 
     @Override
@@ -193,6 +193,7 @@ public class FakePlayer extends FakeHumanEntity implements Player
     public float getExp() {
         return player.getExp();
     }
+
     @Override
     public int getLevel() {
         return player.getLevel();
@@ -287,7 +288,7 @@ public class FakePlayer extends FakeHumanEntity implements Player
 
     @Override
     public void sendMessage(String[] messages) {
-        for(String msg: messages){
+        for (String msg : messages) {
             sendMessage(msg);
         }
     }
@@ -303,314 +304,251 @@ public class FakePlayer extends FakeHumanEntity implements Player
     }
 
     @Override
-    public boolean equals(Object o){
+    public boolean equals(Object o) {
         return o instanceof Player && ((Player) o).getUniqueId().equals(getUniqueId());
     }
-	public static void FakeDebug(String msg)
-	{
-		System.out.println("FakePlayer Proxy: " + msg);
-	}
 
-	@Override
-	public void abandonConversation(Conversation arg0)
-	{
-		FakeDebug("abandonConversation");
-	}
+    @Override
+    public void abandonConversation(Conversation arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1)
-	{
-		FakeDebug("abandonConversation");
-	}
+    @Override
+    public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void acceptConversationInput(String arg0)
-	{
-		FakeDebug("acceptConversationInput");
-	}
+    @Override
+    public void acceptConversationInput(String arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public boolean beginConversation(Conversation arg0)
-	{
-		FakeDebug("beginConversation");
-		return false;
-	}
+    @Override
+    public boolean beginConversation(Conversation arg0) {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public boolean isConversing()
-	{
-		FakeDebug("isConversing");
-		return false;
-	}
+    @Override
+    public boolean isConversing() {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public long getFirstPlayed()
-	{
-		FakeDebug("getFirstPlayed");
-		return 0;
-	}
+    @Override
+    public long getFirstPlayed() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public long getLastPlayed()
-	{
-		FakeDebug("getLastPlayed");
-		return 0;
-	}
-	@Override
-	public boolean hasPlayedBefore()
-	{
-		FakeDebug("hasPlayedBefore");
+    @Override
+    public long getLastPlayed() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public boolean hasPlayedBefore() {
+        MyPlugin.fixme();
         // return true as work around for AuthMe
-		return true;
-	}
+        return true;
+    }
 
-	@Override
-	public boolean isBanned()
-	{
-		FakeDebug("isBanned");
-		return false;
-	}
+    @Override
+    public boolean isBanned() {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public boolean isWhitelisted()
-	{
-		FakeDebug("isWhitelisted");
-		return false;
-	}
+    @Override
+    public boolean isWhitelisted() {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public void setBanned(boolean arg0)
-	{
-		FakeDebug("setBanned");
-		
-	}
+    @Override
+    public void setBanned(boolean arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setWhitelisted(boolean arg0)
-	{
-		FakeDebug("setWhitelisted");
-	}
+    @Override
+    public void setWhitelisted(boolean arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public Map<String, Object> serialize()
-	{
-				FakeDebug("serialize");
-		return null;
-	}
+    @Override
+    public Map<String, Object> serialize() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public Set<String> getListeningPluginChannels()
-	{
-		return MyPlugin.messenger.getIncomingChannels();
-	}
+    @Override
+    public Set<String> getListeningPluginChannels() {
+        return MyPlugin.messenger.getIncomingChannels();
+    }
 
-	@Override
-	public void sendPluginMessage(Plugin arg0, String arg1, byte[] arg2)
-	{
+    @Override
+    public void sendPluginMessage(Plugin arg0, String arg1, byte[] arg2) {
         // fixme shall we check whether a plugin has registered for a channel?
         // it seems kind of useless
         ReflectionUtil.sendPluginMessage(player, arg1, arg2);
-	}
+    }
 
-	@Override
-	public void awardAchievement(Achievement arg0)
-	{
-				FakeDebug("awardAchievement");
-		
-	}
+    @Override
+    public void awardAchievement(Achievement arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public boolean canSee(Player arg0)
-	{
-				FakeDebug("canSee");
-		return true;
-	}
+    @Override
+    public boolean canSee(Player arg0) {
+        MyPlugin.fixme();
+        return true;
+    }
 
-	@Override
-	public void chat(String arg0)
-	{
-				FakeDebug("chat");
-		
-	}
+    @Override
+    public void chat(String arg0) {
+        MyPlugin.fixme();
 
-	@Override
-	public void decrementStatistic(Statistic arg0) throws IllegalArgumentException
-	{
-				FakeDebug("decrementStatistic");
-		
-	}
+    }
 
-	@Override
-	public void decrementStatistic(Statistic arg0, int arg1) throws IllegalArgumentException
-	{
-				FakeDebug("decrementStatistic");
-		
-	}
+    @Override
+    public void decrementStatistic(Statistic arg0) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void decrementStatistic(Statistic arg0, Material arg1) throws IllegalArgumentException
-	{
-				FakeDebug("decrementStatistic");
-		
-	}
+    @Override
+    public void decrementStatistic(Statistic arg0, int arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void decrementStatistic(Statistic arg0, EntityType arg1) throws IllegalArgumentException
-	{
-				FakeDebug("decrementStatistic");
-		
-	}
+    @Override
+    public void decrementStatistic(Statistic arg0, Material arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void decrementStatistic(Statistic arg0, Material arg1, int arg2) throws IllegalArgumentException
-	{
-				FakeDebug("decrementStatistic");
-		
-	}
+    @Override
+    public void decrementStatistic(Statistic arg0, EntityType arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void decrementStatistic(Statistic arg0, EntityType arg1, int arg2)
-	{
-				FakeDebug("decrementStatistic");
-		
-	}
+    @Override
+    public void decrementStatistic(Statistic arg0, Material arg1, int arg2) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public Location getBedSpawnLocation()
-	{
-				FakeDebug("getBedSpawnLocation");
-		return null;
-	}
+    @Override
+    public void decrementStatistic(Statistic arg0, EntityType arg1, int arg2) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public float getExhaustion()
-	{
-		FakeDebug("getExhaustion");
-		return 0;
-	}
+    @Override
+    public Location getBedSpawnLocation() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public WeatherType getPlayerWeather()
-	{
-				FakeDebug("getPlayerWeather");
-		return null;
-	}
+    @Override
+    public float getExhaustion() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public float getSaturation()
-	{
-				FakeDebug("getSaturation");
-		return 0;
-	}
+    @Override
+    public WeatherType getPlayerWeather() {
+        MyPlugin.fixme();
+        return null;
+    }
 
-	@Override
-	public int getStatistic(Statistic arg0) throws IllegalArgumentException
-	{
-				FakeDebug("getStatistic");
-		return 0;
-	}
+    @Override
+    public float getSaturation() {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public int getStatistic(Statistic arg0, Material arg1) throws IllegalArgumentException
-	{
-				FakeDebug("getStatistic");
-		return 0;
-	}
+    @Override
+    public int getStatistic(Statistic arg0) throws IllegalArgumentException {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public int getStatistic(Statistic arg0, EntityType arg1) throws IllegalArgumentException
-	{
-				FakeDebug("getStatistic");
-		return 0;
-	}
+    @Override
+    public int getStatistic(Statistic arg0, Material arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public boolean hasAchievement(Achievement arg0)
-	{
-				FakeDebug("hasAchievement");
-		return false;
-	}
+    @Override
+    public int getStatistic(Statistic arg0, EntityType arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+        return 0;
+    }
 
-	@Override
-	public void hidePlayer(Player arg0)
-	{
-				FakeDebug("hidePlayer");
-		
-	}
+    @Override
+    public boolean hasAchievement(Achievement arg0) {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public void incrementStatistic(Statistic arg0) throws IllegalArgumentException
-	{
-				FakeDebug("incrementStatistic");
-		
-	}
+    @Override
+    public void hidePlayer(Player arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void incrementStatistic(Statistic arg0, int arg1) throws IllegalArgumentException
-	{
-				FakeDebug("incrementStatistic");
-		
-	}
+    @Override
+    public void incrementStatistic(Statistic arg0) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void incrementStatistic(Statistic arg0, Material arg1) throws IllegalArgumentException
-	{
-				FakeDebug("incrementStatistic");
-		
-	}
+    @Override
+    public void incrementStatistic(Statistic arg0, int arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void incrementStatistic(Statistic arg0, EntityType arg1) throws IllegalArgumentException
-	{
-				FakeDebug("incrementStatistic");
-		
-	}
+    @Override
+    public void incrementStatistic(Statistic arg0, Material arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void incrementStatistic(Statistic arg0, Material arg1, int arg2) throws IllegalArgumentException
-	{
-				FakeDebug("incrementStatistic");
-		
-	}
+    @Override
+    public void incrementStatistic(Statistic arg0, EntityType arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void incrementStatistic(Statistic arg0, EntityType arg1, int arg2) throws IllegalArgumentException
-	{
-				FakeDebug("incrementStatistic");
-		
-	}
+    @Override
+    public void incrementStatistic(Statistic arg0, Material arg1, int arg2) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public boolean isHealthScaled()
-	{
-				FakeDebug("isHealthScaled");
-		return false;
-	}
+    @Override
+    public void incrementStatistic(Statistic arg0, EntityType arg1, int arg2) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public boolean isSleepingIgnored()
-	{
-				FakeDebug("isSleepingIgnored");
-		return false;
-	}
+    @Override
+    public boolean isHealthScaled() {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public void kickPlayer(String arg0)
-	{
-		MyPlugin.server.executeCommand("kick " + player.getName() + " " + arg0);
-	}
+    @Override
+    public boolean isSleepingIgnored() {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public void loadData()
-	{
-				FakeDebug("loadData");
-		
-	}
+    @Override
+    public void kickPlayer(String arg0) {
+        MyPlugin.server.executeCommand("kick " + player.getName() + " " + arg0);
+    }
+
+    @Override
+    public void loadData() {
+        MyPlugin.fixme();
+    }
 
     @Override
     public void showParticle(Location location, Particle particle, float v, float v2, float v3, float v4, int i) {
         MyPlugin.fixme();
-
     }
 
     @Override
@@ -619,185 +557,155 @@ public class FakePlayer extends FakeHumanEntity implements Player
     }
 
     @Override
-	public void removeAchievement(Achievement arg0)
-	{
-		FakeDebug("removeAchievement");
-	}
+    public void removeAchievement(Achievement arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void resetPlayerTime()
-	{
-		FakeDebug("resetPlayerTime");
-	}
+    @Override
+    public void resetPlayerTime() {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void resetPlayerWeather()
-	{
-		FakeDebug("resetPlayerWeather");
-	}
+    @Override
+    public void resetPlayerWeather() {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void saveData()
-	{
-		FakeDebug("saveData");
-	}
+    @Override
+    public void saveData() {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void sendBlockChange(Location arg0, Material arg1, byte arg2)
-	{
-		FakeDebug("sendBlockChange");
-	}
+    @Override
+    public void sendBlockChange(Location arg0, Material arg1, byte arg2) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void sendBlockChange(Location arg0, int arg1, byte arg2)
-	{
-		FakeDebug("sendBlockChange");
-	}
+    @Override
+    public void sendBlockChange(Location arg0, int arg1, byte arg2) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public boolean sendChunkChange(Location arg0, int arg1, int arg2, int arg3, byte[] arg4)
-	{
-		FakeDebug("sendChunkChange");
-		return false;
-	}
+    @Override
+    public boolean sendChunkChange(Location arg0, int arg1, int arg2, int arg3, byte[] arg4) {
+        MyPlugin.fixme();
+        return false;
+    }
 
-	@Override
-	public void sendMap(MapView arg0)
-	{
-		FakeDebug("sendMap");
-	}
+    @Override
+    public void sendMap(MapView arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException
-	{
-		FakeDebug("sendSignChange");
-	}
+    @Override
+    public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setAllowFlight(boolean arg0)
-	{
-		player.setAllowFlight(arg0);
-	}
+    @Override
+    public void setAllowFlight(boolean arg0) {
+        player.setAllowFlight(arg0);
+    }
 
-	@Override
-	public void setBedSpawnLocation(Location arg0)
-	{
-		FakeDebug("setBedSpawnLocation");
-	}
+    @Override
+    public void setBedSpawnLocation(Location arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setBedSpawnLocation(Location arg0, boolean arg1)
-	{
-		FakeDebug("setBedSpawnLocation");
-	}
+    @Override
+    public void setBedSpawnLocation(Location arg0, boolean arg1) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setExhaustion(float arg0)
-	{
-		FakeDebug("setExhaustion");
-	}
+    @Override
+    public void setExhaustion(float arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setExp(float arg0)
-	{
-		player.setExp(arg0);
-	}
+    @Override
+    public void setExp(float arg0) {
+        player.setExp(arg0);
+    }
 
-	@Override
-	public void setFlySpeed(float arg0) throws IllegalArgumentException
-	{
-		player.setFlySpeed(arg0);
-	}
+    @Override
+    public void setFlySpeed(float arg0) throws IllegalArgumentException {
+        player.setFlySpeed(arg0);
+    }
 
-	@Override
-	public void setFlying(boolean arg0)
-	{
-		player.setFlying(arg0);
-	}
+    @Override
+    public void setFlying(boolean arg0) {
+        player.setFlying(arg0);
+    }
 
-	@Override
-	public void setLevel(int arg0)
-	{
-		player.setLevel(arg0);
-	}
+    @Override
+    public void setLevel(int arg0) {
+        player.setLevel(arg0);
+    }
 
-	@Override
-	public void setPlayerTime(long arg0, boolean arg1)
-	{
-		FakeDebug("setPlayerTime");
-	}
+    @Override
+    public void setPlayerTime(long arg0, boolean arg1) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setPlayerWeather(WeatherType arg0)
-	{
-		FakeDebug("setPlayerWeather");
-	}
+    @Override
+    public void setPlayerWeather(WeatherType arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setSaturation(float arg0)
-	{
-		FakeDebug("setSaturation");
-	}
+    @Override
+    public void setSaturation(float arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setSleepingIgnored(boolean arg0)
-	{
-		FakeDebug("setSleepingIgnored");
-	}
+    @Override
+    public void setSleepingIgnored(boolean arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setSneaking(boolean arg0)
-	{
-		FakeDebug("setSneaking");
-	}
+    @Override
+    public void setSneaking(boolean arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setSprinting(boolean arg0)
-	{
-		FakeDebug("setSprinting");
-	}
+    @Override
+    public void setSprinting(boolean arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setStatistic(Statistic arg0, int arg1) throws IllegalArgumentException
-	{
-		FakeDebug("setStatistic");
-	}
+    @Override
+    public void setStatistic(Statistic arg0, int arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setStatistic(Statistic arg0, Material arg1, int arg2) throws IllegalArgumentException
-	{
-		FakeDebug("setStatistic");
-	}
+    @Override
+    public void setStatistic(Statistic arg0, Material arg1, int arg2) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setStatistic(Statistic arg0, EntityType arg1, int arg2)
-	{
-		FakeDebug("setStatistic");
-	}
+    @Override
+    public void setStatistic(Statistic arg0, EntityType arg1, int arg2) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void setTotalExperience(int arg0)
-	{
-		player.setTotalExperience(arg0);
-	}
+    @Override
+    public void setTotalExperience(int arg0) {
+        player.setTotalExperience(arg0);
+    }
 
-	@Override
-	public void setWalkSpeed(float arg0) throws IllegalArgumentException
-	{
-		player.setWalkSpeed(arg0);
-	}
+    @Override
+    public void setWalkSpeed(float arg0) throws IllegalArgumentException {
+        player.setWalkSpeed(arg0);
+    }
 
-	@Override
-	public void showPlayer(Player arg0)
-	{
-		FakeDebug("showPlayer");
-	}
+    @Override
+    public void showPlayer(Player arg0) {
+        MyPlugin.fixme();
+    }
 
-	@Override
-	public void updateInventory()
-	{
-		player.updateInventory();
-	}
+    @Override
+    public void updateInventory() {
+        player.updateInventory();
+    }
 
     @Override
     public boolean teleport(Entity destination, PlayerTeleportEvent.TeleportCause cause) {
@@ -808,9 +716,9 @@ public class FakePlayer extends FakeHumanEntity implements Player
     public boolean teleport(Location location, PlayerTeleportEvent.TeleportCause cause) {
         PlayerTeleportEvent event = new PlayerTeleportEvent(this, getLocation(), location, cause);
         MyPlugin.pluginManager.callEvent(event);
-        if(event.isCancelled())return false;
+        if (event.isCancelled()) return false;
         Location to = event.getTo();
-        if(to == null){
+        if (to == null) {
             to = location;
         }
         player.teleport(Util.getLocation(to));
@@ -824,7 +732,7 @@ public class FakePlayer extends FakeHumanEntity implements Player
 
     @Override
     public Player.Spigot spigot() {
-        return new Player.Spigot(){
+        return new Player.Spigot() {
             @Override
             public InetSocketAddress getRawAddress() {
                 MyPlugin.fixme();

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,11 +67,19 @@ public class MyPlugin extends PluginReference.PluginBase {
     public static PlayerMetadataStore playerMetadataStore = new PlayerMetadataStore();
 
     public static void fixme() {
-        logger.info("[BukkitBridge] FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
+        if(DebugMode){
+            logger.log(Level.INFO, "FIXME: stub method", new UnsupportedOperationException());
+        }else {
+            logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
+        }
     }
 
     public static void fixme(String s) {
-        logger.info("[BukkitBridge] FIXME: " + s + " at " + new UnsupportedOperationException().getStackTrace()[1].toString());
+        if(DebugMode){
+            logger.log(Level.INFO, String.format("FIXME: %s", s), new UnsupportedOperationException());
+        }else {
+            logger.info("FIXME: " + s + " at " + new UnsupportedOperationException().getStackTrace()[1].toString());
+        }
     }
 
     public MyPlugin() {
@@ -93,7 +102,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onStartup(MC_Server argServer) {
-        System.out.println("BukkitBridge v2.4 --- Starting up...");
+        logger.info("BukkitBridge v2.4 --- Starting up...");
         server = argServer;
 
         server.registerServerPacketListener(new PacketListener());
@@ -118,7 +127,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onShutdown() {
-        System.out.println("BukkitBridge v2.4 --- Shutting down...");
+        logger.info("BukkitBridge v2.4 --- Shutting down...");
         pluginManager.disablePlugins();
     }
 
@@ -137,7 +146,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         for (Plugin plugin : plugins) {
             try {
                 String message = String.format("[BukkitBridge] Loading Bukkit plugin: %s", plugin.getDescription().getFullName());
-                System.out.println(message);
+                logger.info(message);
                 /*
                 try {
                     Field f = JavaPlugin.class.getDeclaredField("logger");
@@ -199,7 +208,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onPlayerLogin(String playerName, UUID uuid, String ip) {
         if (DebugMode) {
             String logMsg = String.format("%s onPlayerLogin from IP %s. UUID=%s", playerName, ip, uuid.toString());
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         // don't call events if no one listens
@@ -213,7 +222,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onPlayerLogout(String playerName, UUID uuid) {
         if (DebugMode) {
             String logMsg = String.format("%s onPlayerLogout. UUID=%s", playerName, uuid.toString());
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         // don't call events if no one listens
@@ -232,7 +241,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         if (DebugMode) {
             String logMsg = String.format("%s onPlayerInput: %s", plr.getName(), msg);
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         super.onPlayerInput(plr, msg, ei);
@@ -262,7 +271,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptEntityDamage(MC_Entity ent, MC_DamageType dmgType, double amt, MC_EventInfo ei) {
         if (DebugMode) {
             String logMsg = String.format("onAttemptEntityDamage: %s %s for %.2f", ent.getName(), dmgType.toString(), amt);
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         // don't call events if no one listens
@@ -279,7 +288,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onPlayerDeath(MC_Player plrVictim, MC_Player plrKiller, MC_DamageType dmgType, String deathMsg) {
         if (DebugMode) {
             String logMsg = String.format("onPlayerDeath. player=%s, killer=%s, damage=%s, deathMsg=%s", plrVictim.getName(), plrKiller.getName(), dmgType.toString(), deathMsg);
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         // don't call events if no one listens
@@ -294,7 +303,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onPlayerRespawn(MC_Player plr) {
         if (DebugMode) {
             String logMsg = String.format("onPlayerRespawn. player=%s", plr.getName());
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         // don't call events if no one listens
@@ -313,7 +322,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptBlockBreak(MC_Player plr, MC_Location loc, MC_EventInfo ei) {
         if (DebugMode) {
             String logMsg = String.format("PlayerInteractEvent. player=%s, action=LEFT_CLICK_BLOCK, loc=%s", plr.getName(), loc.toString());
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
         // Interact Event
         // fixme blockFace
@@ -331,7 +340,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         if(!ei.isCancelled){
             if (DebugMode) {
                 String logMsg = String.format("BlockDamageEvent. player=%s, loc=%s", plr.getName(), loc.toString());
-                System.out.println("BukkitBridge -- " + logMsg);
+                logger.info("BukkitBridge -- " + logMsg);
             }
 
             // don't call events if no one listens
@@ -348,7 +357,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         if(!ei.isCancelled) {
             if (DebugMode) {
                 String logMsg = String.format("BlockBreakEvent. player=%s, loc=%s", plr.getName(), loc.toString());
-                System.out.println("BukkitBridge -- " + logMsg);
+                logger.info("BukkitBridge -- " + logMsg);
             }
 
             // don't call events if no one listens
@@ -367,7 +376,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         skipItemUse = true;
         if (DebugMode) {
             String logMsg = String.format("PlayerInteractEvent. player=%s, action=RIGHT_CLICK_BLOCK, loc=%s", plr.getName(), loc.toString());
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         // don't call events if no one listens
@@ -427,7 +436,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onItemPlaced(MC_Player plr, MC_Location loc, MC_ItemStack isHandItem, MC_Location locPlacedAgainst, MC_DirectionNESWUD dir) {
-        if (DebugMode) System.out.println("BukkitBridge -- onItemPlaced to BlockPlaceEvent");
+        if (DebugMode) logger.info("BukkitBridge -- onItemPlaced to BlockPlaceEvent");
 
         // don't call events if no one listens
         if(BlockPlaceEvent.getHandlerList().getRegisteredListeners().length == 0)return;
@@ -453,7 +462,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         if (DebugMode) {
             String logMsg = String.format("BlockPlaceEvent. player=%s, loc=%s", plr.getName(), loc.toString());
-            System.out.println("BukkitBridge -- " + logMsg);
+            logger.info("BukkitBridge -- " + logMsg);
         }
 
         BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced.getLocation(), 0, (byte) 0), fakeBlockAgainst, isPlaced, who, true);
@@ -468,8 +477,8 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptItemUse(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
         if (DebugMode) {
             String logMsg = String.format("onAttemptItemUse: PlayerInteractEvent. player=%s, action=RIGHT_CLICK_AIR", plr.getName());
-            System.out.println("BukkitBridge -- " + logMsg);
-            if(skipItemUse)System.out.println("BukkitBridge -- onAttemptItemUse: skipped");
+            logger.info("BukkitBridge -- " + logMsg);
+            if(skipItemUse)logger.info("BukkitBridge -- onAttemptItemUse: skipped");
         }
 
         if(skipItemUse){
@@ -531,16 +540,16 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
-        if(DebugMode)System.out.println("handlePluginMessage " + player.getName() + ": " + tag);
+        if(DebugMode)logger.info("handlePluginMessage " + player.getName() + ": " + tag);
         Player sender = PlayerManager.getPlayer(player);
-        if(DebugMode && sender == null)System.out.println("Player is null :-(");
+        if(DebugMode && sender == null)logger.info("Player is null :-(");
         if(sender != null)messenger.dispatchIncomingMessage(sender, tag, data);
     }
 
     @Override
     public Boolean onRequestPermission(String playerKey, String permission) {
 
-        if(DebugMode)System.out.print("onRequestPermission(" + playerKey + ", " + permission + ")");
+        if(DebugMode)logger.info("onRequestPermission(" + playerKey + ", " + permission + ")");
 
         if(playerKey.equals("*"))return null;
 
