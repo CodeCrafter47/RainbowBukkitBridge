@@ -1,6 +1,7 @@
 package PluginBukkitBridge;
 
 import PluginReference.MC_Entity;
+import PluginReference.MC_ItemStack;
 import PluginReference.MC_Player;
 
 import java.lang.reflect.Field;
@@ -24,6 +25,21 @@ public class ReflectionUtil {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityHeight", MyPlugin.DebugMode?e:null);
         }
         return 0;
+    }
+
+    public static MC_ItemStack getItemStackOfEntityItem(MC_Entity entity){
+        try {
+            Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
+            Method method = Class.forName("joebkt.EntityGeneric").getDeclaredMethod("getItemStack", null);
+            method.setAccessible(true);
+            Object mcItemStack = method.invoke(mcEntity, null);
+            MC_ItemStack is = MyPlugin.server.createItemStack(1, 1, 1);
+            is.getClass().getDeclaredField("is").set(is, mcItemStack);
+            return is;
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getItemStackOfEntityItem", MyPlugin.DebugMode?e:null);
+        }
+        return null;
     }
 
     public static UUID getEntityUUID(MC_Entity entity) {
