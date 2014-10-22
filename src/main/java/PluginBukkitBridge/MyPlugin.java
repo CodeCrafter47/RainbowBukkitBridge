@@ -308,6 +308,10 @@ public class MyPlugin extends PluginReference.PluginBase {
             logger.info("BukkitBridge -- " + logMsg);
         }
 
+        // refresh reference
+        PlayerManager.removePlayer(plr.getUUID());
+        PlayerManager.addPlayer(plr);
+
         // don't call events if no one listens
         if(PlayerRespawnEvent.getHandlerList().getRegisteredListeners().length == 0)return;
 
@@ -332,7 +336,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         // don't call events if no one listens
         if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length != 0) {
             PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
-                    Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), BlockFace.DOWN);
+                    PlayerManager.getPlayer(plr).getItemInHand(), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), BlockFace.DOWN);
             event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
             ei.isCancelled = event.isCancelled();
@@ -348,7 +352,7 @@ public class MyPlugin extends PluginReference.PluginBase {
             // don't call events if no one listens
             if(BlockDamageEvent.getHandlerList().getRegisteredListeners().length != 0) {
                 BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
-                        server.getWorld(loc.dimension)), Util.getItemStack(plr.getItemInHand()), false);
+                        server.getWorld(loc.dimension)),PlayerManager.getPlayer(plr).getItemInHand(), false);
                 event2.setCancelled(ei.isCancelled);
                 pluginManager.callEvent(event2);
                 ei.isCancelled = event2.isCancelled();
@@ -384,7 +388,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         // don't call events if no one listens
         if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length == 0)return;
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_BLOCK,
-                Util.getItemStack(plr.getItemInHand()), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), Util.getFace(dir));
+                PlayerManager.getPlayer(plr).getItemInHand(), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), Util.getFace(dir));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
