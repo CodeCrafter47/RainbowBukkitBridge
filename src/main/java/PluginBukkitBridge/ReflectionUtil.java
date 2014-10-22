@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -112,6 +113,22 @@ public class ReflectionUtil {
         Method m = packetHandler.getClass().getDeclaredMethod("handleIncomingPacket", new Class[]{cPacketBase});
         m.setAccessible(true);
         m.invoke(packetHandler, packet);
+    }
+
+    public static String getProperty(String key){
+        Properties properties;
+        try {
+            properties = getServerConfig();
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getServerProperties", MyPlugin.DebugMode ? e : null);
+            return null;
+        }
+        if(!properties.containsKey(key))return null;
+        return properties.getProperty(key);
+    }
+
+    private static Properties getServerConfig() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+        return (Properties) getMember(getMember(Class.forName("joebkt.MinecraftServer"), null, "k"), "serverProperties");
     }
 
     private static void setMember(Object o, String name, Object o2) throws IllegalAccessException, NoSuchFieldException {

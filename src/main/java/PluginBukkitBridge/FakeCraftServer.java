@@ -1,5 +1,6 @@
 package PluginBukkitBridge;
 
+import PluginBukkitBridge.entity.FakePlayer;
 import PluginReference.MC_Player;
 import PluginReference.MC_Server;
 import com.avaje.ebean.config.ServerConfig;
@@ -29,6 +30,8 @@ import java.util.logging.Logger;
 
 public class FakeCraftServer implements Server {
     public static MC_Server server = null;
+
+    private FakeItemFactory itemFactory = new FakeItemFactory();
 
     @Override
     public String getName() {
@@ -148,7 +151,17 @@ public class FakeCraftServer implements Server {
     @Override
     public boolean dispatchCommand(CommandSender sender, String commandLine) throws CommandException {
         // fixme also execute rainbow commands
-        return MyPlugin.commandMap.dispatch(sender, commandLine);
+        if(!MyPlugin.commandMap.dispatch(sender, commandLine)){
+            if(sender instanceof Player){
+                ((FakePlayer)sender).player.executeCommand(commandLine);
+                return true;
+            }
+            else{
+                server.executeCommand(commandLine);
+                return true;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -264,20 +277,31 @@ public class FakeCraftServer implements Server {
 
     @Override
     public boolean getAllowEnd() {
-        MyPlugin.fixme();
-        return false;
+        // rainbow doesn't has a setting for this
+        // --> it's allowed
+        return true;
     }
 
     @Override
     public boolean getAllowFlight() {
-        MyPlugin.fixme();
-        return false;
+        String result = ReflectionUtil.getProperty("allow-flight");
+        if(result == null){
+            MyPlugin.fixme("unable to get property allow-flight");
+            // return default
+            return false;
+        }
+        return Boolean.valueOf(result);
     }
 
     @Override
     public boolean getAllowNether() {
-        MyPlugin.fixme();
-        return false;
+        String result = ReflectionUtil.getProperty("allow-nether");
+        if(result == null){
+            MyPlugin.fixme("unable to get property allow-nether");
+            // return default
+            return false;
+        }
+        return Boolean.valueOf(result);
     }
 
     @Override
@@ -326,14 +350,24 @@ public class FakeCraftServer implements Server {
 
     @Override
     public GameMode getDefaultGameMode() {
-        MyPlugin.fixme();
-        return GameMode.SURVIVAL;
+        String result = ReflectionUtil.getProperty("gamemode");
+        if(result == null){
+            MyPlugin.fixme("unable to get property gamemode");
+            // return default
+            return GameMode.SURVIVAL;
+        }
+        return GameMode.getByValue(Integer.valueOf(result));
     }
 
     @Override
     public boolean getGenerateStructures() {
-        MyPlugin.fixme();
-        return false;
+        String result = ReflectionUtil.getProperty("generate-structures");
+        if(result == null){
+            MyPlugin.fixme("unable to get property generate-structures");
+            // return default
+            return false;
+        }
+        return Boolean.valueOf(result);
     }
 
     @Override
@@ -356,7 +390,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public ItemFactory getItemFactory() {
-        return new FakeItemFactory();
+        return itemFactory;
     }
 
     @Override
@@ -367,8 +401,13 @@ public class FakeCraftServer implements Server {
 
     @Override
     public int getMaxPlayers() {
-        MyPlugin.fixme();
-        return 0;
+        String result = ReflectionUtil.getProperty("max-players");
+        if(result == null){
+            MyPlugin.fixme("unable to get property max-players");
+            // return default
+            return 20;
+        }
+        return Integer.valueOf(result);
     }
 
     @Override
@@ -385,7 +424,7 @@ public class FakeCraftServer implements Server {
     @Override
     public String getShutdownMessage() {
         MyPlugin.fixme();
-        return null;
+        return "<insert shutdown message here>";
     }
 
     @Override
@@ -422,7 +461,7 @@ public class FakeCraftServer implements Server {
     @Override
     public Set<OfflinePlayer> getOperators() {
         MyPlugin.fixme();
-        return null;
+        return new HashSet<>();
     }
 
     @Override
@@ -433,7 +472,7 @@ public class FakeCraftServer implements Server {
     @Override
     public List<Recipe> getRecipesFor(ItemStack arg0) {
         MyPlugin.fixme();
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -462,7 +501,43 @@ public class FakeCraftServer implements Server {
     @Override
     public UnsafeValues getUnsafe() {
         MyPlugin.fixme();
-        return null;
+        return new UnsafeValues() {
+            @Override
+            public Material getMaterialFromInternalName(String s) {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public List<String> tabCompleteInternalMaterialName(String s, List<String> strings) {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public ItemStack modifyItemStack(ItemStack itemStack, String s) {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public Statistic getStatisticFromInternalName(String s) {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public Achievement getAchievementFromInternalName(String s) {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public List<String> tabCompleteInternalStatisticOrAchievementName(String s, List<String> strings) {
+                MyPlugin.fixme();
+                return null;
+            }
+        };
     }
 
     @Override
@@ -478,8 +553,13 @@ public class FakeCraftServer implements Server {
 
     @Override
     public int getViewDistance() {
-        MyPlugin.fixme();
-        return 0;
+        String result = ReflectionUtil.getProperty("view-distance");
+        if(result == null){
+            MyPlugin.fixme("unable to get property view-distance");
+            // return default
+            return 10;
+        }
+        return Integer.valueOf(result);
     }
 
     @Override
@@ -497,7 +577,7 @@ public class FakeCraftServer implements Server {
     @Override
     public Set<OfflinePlayer> getWhitelistedPlayers() {
         MyPlugin.fixme();
-        return null;
+        return new HashSet<>();
     }
 
     @Override
@@ -534,8 +614,13 @@ public class FakeCraftServer implements Server {
 
     @Override
     public boolean isHardcore() {
-        MyPlugin.fixme();
-        return false;
+        String result = ReflectionUtil.getProperty("hardcore");
+        if(result == null){
+            MyPlugin.fixme("unable to get property hardcore");
+            // return default
+            return false;
+        }
+        return Boolean.valueOf(result);
     }
 
     @Override
