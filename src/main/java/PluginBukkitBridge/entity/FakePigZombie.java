@@ -1,14 +1,14 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginReference.MC_Entity;
+import PluginReference.MC_Zombie;
 import org.bukkit.entity.PigZombie;
 
 /**
  * Created by florian on 12.10.14.
  */
 public class FakePigZombie extends FakeZombie implements PigZombie {
-    public FakePigZombie(MC_Entity argEnt) {
+    public FakePigZombie(MC_Zombie argEnt) {
         super(argEnt);
     }
 

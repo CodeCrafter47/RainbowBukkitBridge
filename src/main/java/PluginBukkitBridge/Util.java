@@ -248,7 +248,7 @@ public class Util {
                 case CREEPER:
                     return new FakeCreeper(entity);
                 case ENDERMAN:
-                    return new FakeEnderman(entity);
+                    return new FakeEnderman((MC_Enderman) entity);
                 case ENDERMITE:
                     // fixme
                     break;
@@ -262,7 +262,7 @@ public class Util {
                 case LAVA_SLIME:
                     return new FakeMagmaCube(entity);
                 case PIG_ZOMBIE:
-                    return new FakePigZombie(entity);
+                    return new FakePigZombie((MC_Zombie) entity);
                 case SILVERFISH:
                     return new FakeSilverfish(entity);
                 case SKELETON:

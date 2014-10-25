@@ -112,7 +112,7 @@ public class ReflectionUtil {
             setMember(playerListItem, "a", action);
             Class cTextComponent = Class.forName("joebkt.TextComponent");
             Object text = cTextComponent.getDeclaredConstructor(String.class).newInstance(name);
-            Class cItem = Class.forName("joebkt.kk");
+            Class cItem = Class.forName("joebkt.kk_PacketListItemRelated");
             Object item = cItem.getDeclaredConstructors()[0].newInstance(playerListItem, getMember(Class.forName("joebkt.EntityHuman"), getMember(uuid, "plr"), "gameProf"), 0, null, text);
             setMember(playerListItem, "b", Arrays.asList(new Object[]{item}));
             sendPacket(receiver, playerListItem);
