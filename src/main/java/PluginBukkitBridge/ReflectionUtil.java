@@ -144,7 +144,7 @@ public class ReflectionUtil {
     }
 
     private static Properties getServerConfig() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
-        return (Properties) getMember(getMember(Class.forName("joebkt.MinecraftServer"), null, "k"), "serverProperties");
+        return (Properties) getMember(getMember(getMember(Class.forName("net.minecraft.server.MinecraftServer"), null, "k"), "serverProperties"), "b");
     }
 
     private static void setMember(Object o, String name, Object o2) throws IllegalAccessException, NoSuchFieldException {

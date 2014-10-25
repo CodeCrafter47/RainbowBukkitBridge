@@ -274,7 +274,7 @@ public class Util {
                 case WITCH:
                     return new FakeWitch(entity);
                 case ZOMBIE:
-                    return new FakeZombie(entity);
+                    return new FakeZombie((MC_Zombie) entity);
                 case FISHING_HOOK:
                     return new FakeFishingHook(entity);
                 case ARROW:

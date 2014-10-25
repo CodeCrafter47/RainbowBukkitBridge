@@ -1,15 +1,18 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginReference.MC_Entity;
+import PluginReference.MC_Zombie;
 import org.bukkit.entity.Zombie;
 
 /**
  * Created by florian on 12.10.14.
  */
 public class FakeZombie extends FakeCreature implements Zombie{
-    public FakeZombie(MC_Entity argEnt) {
+    MC_Zombie zombie;
+
+    public FakeZombie(MC_Zombie argEnt) {
         super(argEnt);
+        zombie = argEnt;
     }
 
     @Override
@@ -25,8 +28,7 @@ public class FakeZombie extends FakeCreature implements Zombie{
 
     @Override
     public boolean isVillager() {
-        MyPlugin.fixme("stub method");
-        return false;
+        return zombie.isVillager();
     }
 
     @Override
