@@ -25,6 +25,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
@@ -576,5 +577,15 @@ public class MyPlugin extends PluginReference.PluginBase {
         if(!player.permissions.isPermissionSet(permission))return null;
 
         return player.permissions.hasPermission(permission);
+    }
+
+    @Override
+    public void onAttemptDamageHangingEntity(MC_Player plr, MC_Location loc, MC_HangingEntityType entType, MC_EventInfo ei) {
+        if(HangingBreakByEntityEvent.getHandlerList().getRegisteredListeners().length > 0) {
+            HangingBreakByEntityEvent event = new HangingBreakByEntityEvent(new FakedFakeHanging(loc, entType), PlayerManager.getPlayer(plr));
+            event.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event);
+            ei.isCancelled = event.isCancelled();
+        }
     }
 }
