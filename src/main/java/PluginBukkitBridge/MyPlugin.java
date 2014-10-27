@@ -32,6 +32,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.StandardMessenger;
+import org.bukkit.scheduler.BukkitWorker;
 
 import java.io.File;
 import java.net.InetSocketAddress;
@@ -113,6 +114,15 @@ public class MyPlugin extends PluginReference.PluginBase {
         // Initialize Bukkit server object...
         fakeServer.server = server;
         Bukkit.setServer(fakeServer);
+
+        // Load plugin JARs...
+        loadPlugins();
+
+        helpMap.clear();
+        helpMap.initializeGeneralTopics();
+
+        // Call onEnable for plugins...
+        enablePlugins(PluginLoadOrder.STARTUP);
     }
 
     @Override
@@ -121,13 +131,6 @@ public class MyPlugin extends PluginReference.PluginBase {
         WorldManager.refresh();
         // load all plugins postworld
 
-        helpMap.clear();
-        helpMap.initializeGeneralTopics();
-        // Load plugin JARs...
-        loadPlugins();
-
-        // Call onEnable for plugins...
-        enablePlugins(PluginLoadOrder.STARTUP);
         enablePlugins(PluginLoadOrder.POSTWORLD);
 
         helpMap.initializeCommands();
@@ -145,7 +148,6 @@ public class MyPlugin extends PluginReference.PluginBase {
         return info;
     }
 
-
     public static void loadPlugins() {
         pluginManager.registerInterface(JavaPluginLoader.class);
 
@@ -154,15 +156,6 @@ public class MyPlugin extends PluginReference.PluginBase {
             try {
                 String message = String.format("[BukkitBridge] Loading Bukkit plugin: %s", plugin.getDescription().getFullName());
                 logger.info(message);
-                /*
-                try {
-                    Field f = JavaPlugin.class.getDeclaredField("logger");
-                    f.setAccessible(true);
-                    f.set(plugin, new PluginBukkitBridge.logging.PluginLogger(plugin));
-                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                */
                 plugin.onLoad();
             } catch (Throwable ex) {
                 ex.printStackTrace();
@@ -198,6 +191,44 @@ public class MyPlugin extends PluginReference.PluginBase {
         } catch (Throwable ex) {
             ex.printStackTrace();
         }
+    }
+
+    public void reload() {
+        pluginManager.clearPlugins();
+        commandMap.clearCommands();
+
+        int pollCount = 0;
+
+        // Wait for at most 2.5 seconds for plugins to close their threads
+        while (pollCount < 50 && scheduler.getActiveWorkers().size() > 0) {
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {}
+            pollCount++;
+        }
+
+        List<BukkitWorker> overdueWorkers = scheduler.getActiveWorkers();
+        for (BukkitWorker worker : overdueWorkers) {
+            Plugin plugin = worker.getOwner();
+            String author = "<NoAuthorGiven>";
+            if (plugin.getDescription().getAuthors().size() > 0) {
+                author = plugin.getDescription().getAuthors().get(0);
+            }
+            logger.log(Level.SEVERE, String.format(
+                    "Nag author: '%s' of '%s' about the following: %s",
+                    author,
+                    plugin.getDescription().getName(),
+                    "This plugin is not properly shutting down its async tasks when it is being reloaded.  This may cause conflicts with the newly loaded version of the plugin"
+            ));
+        }
+
+        helpMap.clear();
+        helpMap.initializeGeneralTopics();
+        loadPlugins();
+        enablePlugins(PluginLoadOrder.STARTUP);
+        enablePlugins(PluginLoadOrder.POSTWORLD);
+
+        helpMap.initializeCommands();
     }
 
     public void onTick(int tickNumber) {

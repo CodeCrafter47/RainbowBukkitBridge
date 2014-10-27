@@ -649,7 +649,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public void reload() {
-        MyPlugin.fixme();
+        MyPlugin.instance.reload();
     }
 
     @Override

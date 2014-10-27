@@ -3,6 +3,7 @@ package PluginBukkitBridge.commands;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.command.defaults.ReloadCommand;
 
 import java.util.Map;
 
@@ -28,5 +29,6 @@ public class MyCommandMap extends SimpleCommandMap{
         register("bukkit", new PluginsCommand("plugins"));
         register("bukkit", new DebugCommand("bbdebug"));
         register("bbhelp", new HelpCommand());
+        register("reload", new ReloadCommand("reload"));
     }
 }
