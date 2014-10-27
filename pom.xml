@@ -15,11 +15,12 @@
             <releases>
                 <enabled>true</enabled>
                 <checksumPolicy>ignore</checksumPolicy>
+                <updatePolicy>ignore</updatePolicy>
             </releases>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-            <url>file://~/.m2/repository</url>
+            <url>file://${project.basedir}/repository/</url>
         </repository>
     </repositories>
 
@@ -32,6 +33,12 @@
     </pluginRepositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.1</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>rainbow</groupId>
             <artifactId>PluginReference</artifactId>
@@ -93,6 +100,14 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.google.gson</pattern>
+                                    <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
