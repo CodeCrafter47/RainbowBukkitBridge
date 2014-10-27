@@ -320,7 +320,7 @@ public class Util {
         } catch (Exception ignored) {
             if(MyPlugin.DebugMode)ignored.printStackTrace();
         }
-        MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
+        if(MyPlugin.DebugMode)MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
         return new FakeEntity(entity);
     }
 
