@@ -120,12 +120,16 @@ public class MyPlugin extends PluginReference.PluginBase {
         WorldManager.refresh();
         // load all plugins postworld
 
+        helpMap.clear();
+        helpMap.initializeGeneralTopics();
         // Load plugin JARs...
         loadPlugins();
 
         // Call onEnable for plugins...
         enablePlugins(PluginLoadOrder.STARTUP);
         enablePlugins(PluginLoadOrder.POSTWORLD);
+
+        helpMap.initializeCommands();
     }
 
     public void onShutdown() {

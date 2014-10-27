@@ -22,7 +22,7 @@ public class HelpCommand extends VanillaCommand {
     public HelpCommand() {
         super("bbhelp");
         this.description = "Shows the help menu";
-        this.usageMessage = "/bbhelp <pageNumber>\n/help <topic>\n/help <topic> <pageNumber>";
+        this.usageMessage = "/bbhelp <pageNumber>\n/bbhelp <topic>\n/bbhelp <topic> <pageNumber>";
         this.setAliases(Arrays.asList("?"));
         this.setPermission("bukkit.command.help");
     }
