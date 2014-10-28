@@ -38,6 +38,7 @@ import org.bukkit.scheduler.BukkitWorker;
 import java.io.File;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Handler;
@@ -301,7 +302,12 @@ public class MyPlugin extends PluginReference.PluginBase {
                 if (commandMap.dispatch(PlayerManager.getPlayer(plr), match.group(1))) ei.isCancelled = true;
             }
         } else {
-            // fixme call PlayerChatEvent ?
+            if(AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(false, player, msg, new HashSet<>(Bukkit.getOnlinePlayers()));
+                event.setCancelled(ei.isCancelled);
+                pluginManager.callEvent(event);
+                ei.isCancelled = event.isCancelled();
+            }
         }
 
     } // end of onPlayerInput
