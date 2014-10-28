@@ -17,6 +17,7 @@ import org.bukkit.craftbukkit.metadata.EntityMetadataStore;
 import org.bukkit.craftbukkit.metadata.PlayerMetadataStore;
 import org.bukkit.craftbukkit.metadata.WorldMetadataStore;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -317,9 +318,15 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         Entity fakeEnt = Util.wrapEntity(ent);
         EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
+
+        if(fakeEnt instanceof HumanEntity && !ei.isCancelled){
+            fakeEnt.setLastDamageCause(event);
+        }
+
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
+
 
     }
 

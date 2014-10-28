@@ -1,6 +1,8 @@
 package PluginBukkitBridge.entity;
 
-import PluginBukkitBridge.*;
+import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.PermissionHelper;
+import PluginBukkitBridge.Util;
 import PluginBukkitBridge.inventory.FakeEnderchest;
 import PluginBukkitBridge.inventory.FakePlayerInventory;
 import PluginReference.MC_GameMode;
@@ -9,6 +11,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -26,6 +29,8 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
     public MC_Player player;
 
     public PermissibleBase permissions;
+
+    EntityDamageEvent lastDamageCause = null;
 
     public FakeHumanEntity(MC_Player argEnt) {
         super(argEnt);
@@ -212,5 +217,35 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
     public void setOp(boolean arg0) {
         if(arg0)MyPlugin.server.executeCommand("op "+getName());
         else MyPlugin.server.executeCommand("deop "+getName());
+    }
+
+    @Override
+    public double getLastDamage() {
+        return lastDamageCause.getFinalDamage();
+    }
+
+    @Override
+    public int _INVALID_getLastDamage() {
+        return (int)getLastDamage();
+    }
+
+    @Override
+    public void setLastDamage(double v) {
+        lastDamageCause.setDamage(v);
+    }
+
+    @Override
+    public void _INVALID_setLastDamage(int i) {
+        setLastDamage(i);
+    }
+
+    @Override
+    public EntityDamageEvent getLastDamageCause() {
+        return lastDamageCause;
+    }
+
+    @Override
+    public void setLastDamageCause(EntityDamageEvent arg0) {
+        lastDamageCause = arg0;
     }
 }
