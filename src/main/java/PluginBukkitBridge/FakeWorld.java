@@ -407,8 +407,7 @@ public class FakeWorld implements World {
 
     @Override
     public long getSeed() {
-        MyPlugin.fixme();
-        return 0;
+        return ReflectionUtil.getWorldSeed(world);
     }
 
     @Override

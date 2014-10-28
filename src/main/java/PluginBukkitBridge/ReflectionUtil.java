@@ -3,6 +3,7 @@ package PluginBukkitBridge;
 import PluginReference.MC_Entity;
 import PluginReference.MC_ItemStack;
 import PluginReference.MC_Player;
+import PluginReference.MC_World;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -141,6 +142,18 @@ public class ReflectionUtil {
         }
         if(!properties.containsKey(key))return null;
         return properties.getProperty(key);
+    }
+
+    public static long getWorldSeed(MC_World world){
+        try {
+            Object mcWorld = getMember(world, "world");
+            Method getSeed = Class.forName("joebkt.World").getDeclaredMethod("getSeedNumber");
+            getSeed.setAccessible(true);
+            return (long) getSeed.invoke(mcWorld);
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getServerProperties", MyPlugin.DebugMode ? e : null);
+            return 0;
+        }
     }
 
     private static Properties getServerConfig() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
