@@ -469,8 +469,7 @@ public class FakeWorld implements World {
 
     @Override
     public boolean hasStorm() {
-        MyPlugin.fixme();
-        return false;
+        return ReflectionUtil.hasStorm(world);
     }
 
     @Override

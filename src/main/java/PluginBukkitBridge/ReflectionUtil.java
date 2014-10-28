@@ -153,6 +153,19 @@ public class ReflectionUtil {
         }
     }
 
+    public static boolean hasStorm(MC_World world){
+        try {
+            Object mcWorld = getMember(world, "world");
+            Object worldData = getMember(Class.forName("joebkt.World"), mcWorld, "worldData");
+            Method getIsThundering = Class.forName("joebkt.WorldData").getDeclaredMethod("getIsThundering");
+            getIsThundering.setAccessible(true);
+            return (boolean) getIsThundering.invoke(worldData);
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: hasStorm", MyPlugin.DebugMode ? e : null);
+            return false;
+        }
+    }
+
     public static int readFurnaceBurnTime(MC_Container furnace){
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
