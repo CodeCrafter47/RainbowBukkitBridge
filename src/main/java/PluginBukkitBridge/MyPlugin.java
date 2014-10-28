@@ -720,4 +720,14 @@ public class MyPlugin extends PluginReference.PluginBase {
             pluginManager.callEvent(event);
         }
     }
+
+    @Override
+    public void onAttemptEntityInteract(MC_Player plr, MC_Entity ent, MC_EventInfo ei) {
+        if(PlayerInteractEntityEvent.getHandlerList().getRegisteredListeners().length > 0){
+            PlayerInteractEntityEvent event = new PlayerInteractEntityEvent(PlayerManager.getPlayer(plr), Util.wrapEntity(ent));
+            event.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event);
+            ei.isCancelled = event.isCancelled();
+        }
+    }
 }
