@@ -684,4 +684,14 @@ public class MyPlugin extends PluginReference.PluginBase {
                 break;
         }
     }
+
+    @Override
+    public void onAttemptFishingReel(MC_Player plr, MC_ItemStack isCatch, MC_Entity entCatch, boolean groundCatch, MC_EventInfo ei) {
+        if(PlayerFishEvent.getHandlerList().getRegisteredListeners().length > 0){
+            PlayerFishEvent event = new PlayerFishEvent(PlayerManager.getPlayer(plr), Util.wrapEntity(entCatch), null, PlayerFishEvent.State.CAUGHT_ENTITY);
+            event.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event);
+            ei.isCancelled = event.isCancelled();
+        }
+    }
 }
