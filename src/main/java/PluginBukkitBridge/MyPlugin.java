@@ -702,4 +702,13 @@ public class MyPlugin extends PluginReference.PluginBase {
             pluginManager.callEvent(event);
         }
     }
+
+    @Override
+    public void onPlayerBedLeave(MC_Player plr, MC_Block blkBed, MC_Location locBed) {
+        if(PlayerBedLeaveEvent.getHandlerList().getRegisteredListeners().length > 0){
+            PlayerBedLeaveEvent event = new PlayerBedLeaveEvent(PlayerManager.getPlayer(plr), new FakeBlock(Location.locToBlock(locBed.x),
+                    Location.locToBlock(locBed.y), Location.locToBlock(locBed.z), server.getWorld(locBed.dimension)));
+            pluginManager.callEvent(event);
+        }
+    }
 }
