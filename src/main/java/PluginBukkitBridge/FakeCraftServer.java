@@ -324,8 +324,11 @@ public class FakeCraftServer implements Server {
 
     @Override
     public Set<OfflinePlayer> getBannedPlayers() {
-        MyPlugin.fixme();
-        return null;
+        Set<OfflinePlayer> result = new HashSet<>();
+        for(String name: ReflectionUtil.getBannedPlayers()){
+            result.add(getOfflinePlayer(name));
+        }
+        return result;
     }
 
     @Override

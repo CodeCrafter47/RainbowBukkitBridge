@@ -204,6 +204,20 @@ public class ReflectionUtil {
         }
     }
 
+    public static String[] getBannedPlayers(){
+        try {
+            Object banList = getBanList();
+            return (String[]) banList.getClass().getDeclaredMethod("a").invoke(banList);
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getBannedPlayers", MyPlugin.DebugMode ? e : null);
+            return new String[0];
+        }
+    }
+
+    private static Object getBanList() throws Exception{
+        return getMember(getMember(getMember(Class.forName("net.minecraft.server.MinecraftServer"), null, "k"), "playerList"), "m_bannedPlayers");
+    }
+
     private static Properties getServerConfig() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
         return (Properties) getMember(getMember(getMember(Class.forName("net.minecraft.server.MinecraftServer"), null, "k"), "serverProperties"), "b");
     }
