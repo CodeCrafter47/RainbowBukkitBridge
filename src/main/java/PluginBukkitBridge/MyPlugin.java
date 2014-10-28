@@ -559,7 +559,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         // don't call events if no one listens
         if(PlayerDropItemEvent.getHandlerList().getRegisteredListeners().length == 0)return;
 
-        PlayerDropItemEvent event = new PlayerDropItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is)));
+        PlayerDropItemEvent event = new PlayerDropItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is), Util.getLocation(plr.getLocation())));
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();
@@ -571,7 +571,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         // don't call events if no one listens
         if(PlayerPickupItemEvent.getHandlerList().getRegisteredListeners().length == 0)return;
 
-        PlayerPickupItemEvent event = new PlayerPickupItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is)), 0);
+        PlayerPickupItemEvent event = new PlayerPickupItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is), Util.getLocation(plr.getLocation())), 0);
         event.setCancelled(ei.isCancelled);
         pluginManager.callEvent(event);
         ei.isCancelled = event.isCancelled();

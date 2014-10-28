@@ -20,9 +20,11 @@ import java.util.UUID;
 public class FakedFakeItem implements Item {
 
     ItemStack is;
+    Location location;
 
-    public FakedFakeItem(ItemStack is) {
+    public FakedFakeItem(ItemStack is, Location location) {
         this.is = is;
+        this.location = location;
     }
 
     @Override
@@ -48,8 +50,7 @@ public class FakedFakeItem implements Item {
 
     @Override
     public Location getLocation() {
-        MyPlugin.fixme();
-        return null;
+        return location;
     }
 
     @Override
@@ -65,8 +66,7 @@ public class FakedFakeItem implements Item {
 
     @Override
     public Vector getVelocity() {
-        MyPlugin.fixme();
-        return null;
+        return new Vector();
     }
 
     @Override
@@ -77,8 +77,7 @@ public class FakedFakeItem implements Item {
 
     @Override
     public World getWorld() {
-        MyPlugin.fixme();
-        return null;
+        return location.getWorld();
     }
 
     @Override
