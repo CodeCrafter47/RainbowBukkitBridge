@@ -1,9 +1,6 @@
 package PluginBukkitBridge;
 
-import PluginReference.MC_Entity;
-import PluginReference.MC_ItemStack;
-import PluginReference.MC_Player;
-import PluginReference.MC_World;
+import PluginReference.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -151,8 +148,46 @@ public class ReflectionUtil {
             getSeed.setAccessible(true);
             return (long) getSeed.invoke(mcWorld);
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getServerProperties", MyPlugin.DebugMode ? e : null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getWorldSeed", MyPlugin.DebugMode ? e : null);
             return 0;
+        }
+    }
+
+    public static short readFurnaceBurnTime(MC_Container furnace){
+        try {
+            Object mcfurnace = getMember(furnace, "m_inventory");
+            return (short) getMember(mcfurnace, "burnTime");
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: readFurnaceBurnTime", MyPlugin.DebugMode ? e : null);
+            return 0;
+        }
+    }
+
+    public static short readFurnaceCookTime(MC_Container furnace){
+        try {
+            Object mcfurnace = getMember(furnace, "m_inventory");
+            return (short) getMember(mcfurnace, "cookTime");
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: readFurnaceCookTime", MyPlugin.DebugMode ? e : null);
+            return 0;
+        }
+    }
+
+    public static void writeFurnaceBurnTime(MC_Container furnace, short burnTime){
+        try {
+            Object mcfurnace = getMember(furnace, "m_inventory");
+            setMember(mcfurnace, "burnTime", burnTime);
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: writeFurnaceBurnTime", MyPlugin.DebugMode ? e : null);
+        }
+    }
+
+    public static void writeFurnaceCookTime(MC_Container furnace, short cookTime){
+        try {
+            Object mcfurnace = getMember(furnace, "m_inventory");
+            setMember(mcfurnace, "cookTime", cookTime);
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: writeFurnaceCookTime", MyPlugin.DebugMode ? e : null);
         }
     }
 
