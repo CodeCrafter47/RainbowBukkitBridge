@@ -20,10 +20,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -652,6 +649,39 @@ public class MyPlugin extends PluginReference.PluginBase {
             event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
             ei.isCancelled = event.isCancelled();
+        }
+    }
+
+    @Override
+    public void onAttemptEntityMiscGrief(MC_Entity ent, MC_Location loc, MC_MiscGriefType griefType, MC_EventInfo ei) {
+        switch (griefType) {
+            case ENDERDRAGON_BRUSH:
+                break;
+            case ENDERMAN_PICKUP_BLOCK:
+                break;
+            case ENDERMAN_PLACE_CARRIED_BLOCK:
+                break;
+            case SHEEP_GRAZING_GRASS:
+                break;
+            case SILVERFISH_BREAK_MONSTER_EGG_BLOCK:
+                break;
+            case RABBIT_EATS_CARROT:
+                break;
+            case VILLAGER_HARVEST:
+                break;
+            case VILLAGER_PLANT_SEEDS:
+                break;
+            case WITHER_BREAK:
+                break;
+            case ZOMBIE_DOOR_BREAK:
+                if(EntityBreakDoorEvent.getHandlerList().getRegisteredListeners().length > 0) {
+                    EntityBreakDoorEvent event = new EntityBreakDoorEvent((org.bukkit.entity.LivingEntity) Util.wrapEntity(ent), new FakeBlock(Location.locToBlock(loc.x),
+                            Location.locToBlock(loc.y), Location.locToBlock(loc.z), server.getWorld(loc.dimension)));
+                    event.setCancelled(ei.isCancelled);
+                    pluginManager.callEvent(event);
+                    ei.isCancelled = event.isCancelled();
+                }
+                break;
         }
     }
 }
