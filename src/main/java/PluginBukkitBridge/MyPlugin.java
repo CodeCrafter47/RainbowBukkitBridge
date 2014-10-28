@@ -696,14 +696,6 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     @Override
-    public void onAttemptDeath(MC_Entity entVictim, MC_Entity entKiller, MC_DamageType dmgType, float dmgAmount) {
-        if(entVictim.getHealth() <= 0 && EntityDeathEvent.getHandlerList().getRegisteredListeners().length > 0){
-            EntityDeathEvent event = new EntityDeathEvent((org.bukkit.entity.LivingEntity) Util.wrapEntity(entVictim), new ArrayList<ItemStack>(), 0);
-            pluginManager.callEvent(event);
-        }
-    }
-
-    @Override
     public void onPlayerBedLeave(MC_Player plr, MC_Block blkBed, MC_Location locBed) {
         if(PlayerBedLeaveEvent.getHandlerList().getRegisteredListeners().length > 0){
             PlayerBedLeaveEvent event = new PlayerBedLeaveEvent(PlayerManager.getPlayer(plr), new FakeBlock(Location.locToBlock(locBed.x),
@@ -728,6 +720,14 @@ public class MyPlugin extends PluginReference.PluginBase {
             event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
             ei.isCancelled = event.isCancelled();
+        }
+    }
+
+    @Override
+    public void onNonPlayerEntityDeath(MC_Entity entVictim, MC_Entity entKiller, MC_DamageType dmgType) {
+        if(entVictim.getHealth() <= 0 && EntityDeathEvent.getHandlerList().getRegisteredListeners().length > 0){
+            EntityDeathEvent event = new EntityDeathEvent((org.bukkit.entity.LivingEntity) Util.wrapEntity(entVictim), new ArrayList<ItemStack>(), 0);
+            pluginManager.callEvent(event);
         }
     }
 }
