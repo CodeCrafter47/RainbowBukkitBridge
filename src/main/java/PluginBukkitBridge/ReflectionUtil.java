@@ -213,6 +213,22 @@ public class ReflectionUtil {
             return new String[0];
         }
     }
+/*
+    public Collection<Recipe> getRecipes(){
+        try {
+            Object recipeBook = Class.forName("joebkt.RecipeBook").getDeclaredMethod("getRecipeBook").invoke(null);
+            List recipes = (List) recipeBook.getClass().getDeclaredMethod("getCraftingResultEntries").invoke(recipeBook);
+            Collection<Recipe> result = new ArrayList<>();
+            for(Object o: recipes){
+                if(Class.forName("joebkt.CraftingResultEntry").isAssignableFrom(o.getClass())){
+                    // shaped recipe
+                }
+            }
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getRecipes", MyPlugin.DebugMode ? e : null);
+            return new ArrayList<>();
+        }
+    }*/
 
     private static Object getBanList() throws Exception{
         return getMember(getMember(getMember(Class.forName("net.minecraft.server.MinecraftServer"), null, "k"), "playerList"), "m_bannedPlayers");
