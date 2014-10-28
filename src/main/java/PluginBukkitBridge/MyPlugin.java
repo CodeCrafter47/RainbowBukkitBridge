@@ -711,4 +711,13 @@ public class MyPlugin extends PluginReference.PluginBase {
             pluginManager.callEvent(event);
         }
     }
+
+    @Override
+    public void onPlayerBedEnter(MC_Player plr, MC_Block blkBed, MC_Location locBed) {
+        if(PlayerBedEnterEvent.getHandlerList().getRegisteredListeners().length > 0){
+            PlayerBedEnterEvent event = new PlayerBedEnterEvent(PlayerManager.getPlayer(plr), new FakeBlock(Location.locToBlock(locBed.x),
+                    Location.locToBlock(locBed.y), Location.locToBlock(locBed.z), server.getWorld(locBed.dimension)));
+            pluginManager.callEvent(event);
+        }
+    }
 }
