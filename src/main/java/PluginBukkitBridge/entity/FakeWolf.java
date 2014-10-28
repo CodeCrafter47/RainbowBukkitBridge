@@ -1,7 +1,6 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginReference.MC_EntityAgeable;
 import PluginReference.MC_Wolf;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.AnimalTamer;
@@ -14,7 +13,7 @@ public class FakeWolf extends FakeAnimal implements Wolf{
     MC_Wolf wolf;
 
     public FakeWolf(MC_Wolf wolf) {
-        super((MC_EntityAgeable) wolf);
+        super(wolf);
         this.wolf = wolf;
     }
 

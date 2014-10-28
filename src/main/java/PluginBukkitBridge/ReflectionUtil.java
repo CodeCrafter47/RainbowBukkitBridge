@@ -114,7 +114,7 @@ public class ReflectionUtil {
             Object text = cTextComponent.getDeclaredConstructor(String.class).newInstance(name);
             Class cItem = Class.forName("joebkt.kk_PacketListItemRelated");
             Object item = cItem.getDeclaredConstructors()[0].newInstance(playerListItem, getMember(Class.forName("joebkt.EntityHuman"), getMember(uuid, "plr"), "gameProf"), 0, null, text);
-            setMember(playerListItem, "b", Arrays.asList(new Object[]{item}));
+            setMember(playerListItem, "b", Arrays.asList(item));
             sendPacket(receiver, playerListItem);
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPlayerListItemChangeDisplayName", MyPlugin.DebugMode?e:null);

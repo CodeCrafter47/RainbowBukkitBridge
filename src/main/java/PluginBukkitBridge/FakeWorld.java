@@ -702,7 +702,7 @@ public class FakeWorld implements World {
 
         Arrow a = (Arrow) world.spawnEntity(MC_EntityType.ARROW, Util.getLocation(loc), null);
         a.setVelocity(velocity);
-        return (Arrow) a;
+        return a;
     }
 
     @Override
