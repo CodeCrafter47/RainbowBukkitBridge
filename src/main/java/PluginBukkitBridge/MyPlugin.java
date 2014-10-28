@@ -694,4 +694,12 @@ public class MyPlugin extends PluginReference.PluginBase {
             ei.isCancelled = event.isCancelled();
         }
     }
+
+    @Override
+    public void onAttemptDeath(MC_Entity entVictim, MC_Entity entKiller, MC_DamageType dmgType, float dmgAmount) {
+        if(entVictim.getHealth() <= 0 && EntityDeathEvent.getHandlerList().getRegisteredListeners().length > 0){
+            EntityDeathEvent event = new EntityDeathEvent((org.bukkit.entity.LivingEntity) Util.wrapEntity(entVictim), new ArrayList<ItemStack>(), 0);
+            pluginManager.callEvent(event);
+        }
+    }
 }
