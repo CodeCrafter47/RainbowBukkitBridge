@@ -25,6 +25,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
@@ -627,6 +628,16 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptDamageHangingEntity(MC_Player plr, MC_Location loc, MC_HangingEntityType entType, MC_EventInfo ei) {
         if(HangingBreakByEntityEvent.getHandlerList().getRegisteredListeners().length > 0) {
             HangingBreakByEntityEvent event = new HangingBreakByEntityEvent(new FakedFakeHanging(loc, entType), PlayerManager.getPlayer(plr));
+            event.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event);
+            ei.isCancelled = event.isCancelled();
+        }
+    }
+
+    @Override
+    public void onAttemptEntitySpawn(MC_Entity ent, MC_EventInfo ei) {
+        if(EntitySpawnEvent.getHandlerList().getRegisteredListeners().length > 0){
+            EntitySpawnEvent event = new EntitySpawnEvent(Util.wrapEntity(ent));
             event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
             ei.isCancelled = event.isCancelled();
