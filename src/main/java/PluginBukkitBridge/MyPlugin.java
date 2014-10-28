@@ -19,10 +19,7 @@ import org.bukkit.craftbukkit.metadata.WorldMetadataStore;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -35,6 +32,7 @@ import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.StandardMessenger;
 import org.bukkit.scheduler.BukkitWorker;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.net.InetSocketAddress;
@@ -66,7 +64,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public static boolean DebugMode = false;
 
     List<Runnable> invokeLater = new ArrayList<>();
-    
+
     public static MyPlugin instance;
 
     public static WorldMetadataStore worldMetadataStorage = new WorldMetadataStore();
@@ -74,17 +72,17 @@ public class MyPlugin extends PluginReference.PluginBase {
     public static EntityMetadataStore entityMetadataStore = new EntityMetadataStore();
 
     public static void fixme() {
-        if(DebugMode){
+        if (DebugMode) {
             logger.log(Level.INFO, "FIXME: stub method", new UnsupportedOperationException());
-        }else {
+        } else {
             logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
         }
     }
 
     public static void fixme(String s) {
-        if(DebugMode){
+        if (DebugMode) {
             logger.log(Level.INFO, String.format("FIXME: %s", s), new UnsupportedOperationException());
-        }else {
+        } else {
             logger.info("FIXME: " + s + " at " + new UnsupportedOperationException().getStackTrace()[1].toString());
         }
     }
@@ -95,7 +93,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         //SimpleFormatter formatter = new SimpleFormatter();
         //Handler handler = new StreamHandler(System.out, new MyLogFormatter());
         logger = Logger.getLogger("");
-        for(Handler h: logger.getHandlers())logger.removeHandler(h);
+        for (Handler h : logger.getHandlers()) logger.removeHandler(h);
         logger.addHandler(new MyLogHandler());
 
 
@@ -206,7 +204,8 @@ public class MyPlugin extends PluginReference.PluginBase {
         while (pollCount < 50 && scheduler.getActiveWorkers().size() > 0) {
             try {
                 Thread.sleep(50);
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+            }
             pollCount++;
         }
 
@@ -235,10 +234,10 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     public void onTick(int tickNumber) {
-        for(Runnable r: invokeLater){
+        for (Runnable r : invokeLater) {
             try {
                 r.run();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -253,7 +252,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // don't call events if no one listens
-        if(AsyncPlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (AsyncPlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(playerName, new InetSocketAddress(ip, 0).getAddress(), uuid);
         pluginManager.callEvent(event);
@@ -267,7 +266,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // don't call events if no one listens
-        if(PlayerQuitEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerQuitEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         // fixme message
         pluginManager.callEvent(new PlayerQuitEvent(PlayerManager.getPlayer(uuid), ""));
@@ -292,7 +291,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         if (match.matches()) {
 
             // don't call events if no one listens
-            if(PlayerCommandPreprocessEvent.getHandlerList().getRegisteredListeners().length != 0) {
+            if (PlayerCommandPreprocessEvent.getHandlerList().getRegisteredListeners().length != 0) {
                 PlayerCommandPreprocessEvent event = new PlayerCommandPreprocessEvent(player, msg);
                 event.setCancelled(ei.isCancelled);
                 pluginManager.callEvent(event);
@@ -303,7 +302,7 @@ public class MyPlugin extends PluginReference.PluginBase {
                 if (commandMap.dispatch(PlayerManager.getPlayer(plr), match.group(1))) ei.isCancelled = true;
             }
         } else {
-            if(AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length > 0) {
+            if (AsyncPlayerChatEvent.getHandlerList().getRegisteredListeners().length > 0) {
                 AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(false, player, msg, new HashSet<>(Bukkit.getOnlinePlayers()));
                 event.setCancelled(ei.isCancelled);
                 pluginManager.callEvent(event);
@@ -321,12 +320,12 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // don't call events if no one listens
-        if(EntityDamageEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (EntityDamageEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         Entity fakeEnt = Util.wrapEntity(ent);
         EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
 
-        if(fakeEnt instanceof HumanEntity && !ei.isCancelled){
+        if (fakeEnt instanceof HumanEntity && !ei.isCancelled) {
             fakeEnt.setLastDamageCause(event);
         }
 
@@ -344,7 +343,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // don't call events if no one listens
-        if(PlayerDeathEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerDeathEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         // fixme set killer
         PlayerDeathEvent event = new PlayerDeathEvent(PlayerManager.getPlayer(plrVictim), new ArrayList<ItemStack>(), 0, deathMsg);
@@ -363,7 +362,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         PlayerManager.addPlayer(plr);
 
         // don't call events if no one listens
-        if(PlayerRespawnEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerRespawnEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         // fixme location, bed spawn
         PlayerRespawnEvent event = new PlayerRespawnEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), false);
@@ -384,7 +383,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         // fixme blockFace
 
         // don't call events if no one listens
-        if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length != 0) {
+        if (PlayerInteractEvent.getHandlerList().getRegisteredListeners().length != 0) {
             PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.LEFT_CLICK_BLOCK,
                     PlayerManager.getPlayer(plr).getItemInHand(), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), BlockFace.DOWN);
             event.setCancelled(ei.isCancelled);
@@ -393,16 +392,16 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // BlockDamageEvent
-        if(!ei.isCancelled){
+        if (!ei.isCancelled) {
             if (DebugMode) {
                 String logMsg = String.format("BlockDamageEvent. player=%s, loc=%s", plr.getName(), loc.toString());
                 logger.info("BukkitBridge -- " + logMsg);
             }
 
             // don't call events if no one listens
-            if(BlockDamageEvent.getHandlerList().getRegisteredListeners().length != 0) {
+            if (BlockDamageEvent.getHandlerList().getRegisteredListeners().length != 0) {
                 BlockDamageEvent event2 = new BlockDamageEvent(PlayerManager.getPlayer(plr), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
-                        server.getWorld(loc.dimension)),PlayerManager.getPlayer(plr).getItemInHand(), false);
+                        server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr).getItemInHand(), false);
                 event2.setCancelled(ei.isCancelled);
                 pluginManager.callEvent(event2);
                 ei.isCancelled = event2.isCancelled();
@@ -410,14 +409,14 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // BlockBreakEvent
-        if(!ei.isCancelled) {
+        if (!ei.isCancelled) {
             if (DebugMode) {
                 String logMsg = String.format("BlockBreakEvent. player=%s, loc=%s", plr.getName(), loc.toString());
                 logger.info("BukkitBridge -- " + logMsg);
             }
 
             // don't call events if no one listens
-            if(BlockBreakEvent.getHandlerList().getRegisteredListeners().length != 0) {
+            if (BlockBreakEvent.getHandlerList().getRegisteredListeners().length != 0) {
                 BlockBreakEvent event2 = new BlockBreakEvent(new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z),
                         server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr));
                 event2.setCancelled(ei.isCancelled);
@@ -428,6 +427,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     }
 
     boolean skipItemUse = false;
+
     public void onAttemptPlaceOrInteract(MC_Player plr, MC_Location loc, MC_EventInfo ei, MC_DirectionNESWUD dir) {
         skipItemUse = true;
         if (DebugMode) {
@@ -436,7 +436,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
 
         // don't call events if no one listens
-        if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerInteractEvent.getHandlerList().getRegisteredListeners().length == 0) return;
         PlayerInteractEvent event = new PlayerInteractEvent(PlayerManager.getPlayer(plr), Action.RIGHT_CLICK_BLOCK,
                 PlayerManager.getPlayer(plr).getItemInHand(), new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y), Location.locToBlock(loc.z), plr.getWorld()), Util.getFace(dir));
         event.setCancelled(ei.isCancelled);
@@ -450,7 +450,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         if (allowTeleport) return;
 
         // don't call events if no one listens
-        if(PlayerTeleportEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerTeleportEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         PlayerTeleportEvent event = new PlayerTeleportEvent(PlayerManager.getPlayer(plr), Util.getLocation(plr.getLocation()), Util.getLocation(loc));
         event.setCancelled(ei.isCancelled);
@@ -461,7 +461,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptPlayerMove(final MC_Player plr, MC_Location locFrom, MC_Location locTo, MC_EventInfo ei) {
 
         // don't call events if no one listens
-        if(PlayerMoveEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerMoveEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         PlayerMoveEvent event = new PlayerMoveEvent(PlayerManager.getPlayer(plr), Util.getLocation(locFrom), Util.getLocation(locTo));
         event.setCancelled(ei.isCancelled);
@@ -495,7 +495,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         if (DebugMode) logger.info("BukkitBridge -- onItemPlaced to BlockPlaceEvent");
 
         // don't call events if no one listens
-        if(BlockPlaceEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (BlockPlaceEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         Player who = new FakePlayer(plr);
         MC_ItemStack isHand = plr.getItemInHand();
@@ -512,7 +512,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         FakeBlock fakeBlockPlaced = new FakeBlock(x, y, z, world);
 
-        if(fakeBlockPlaced.getType() == Material.AIR)return;
+        if (fakeBlockPlaced.getType() == Material.AIR) return;
 
         FakeBlock fakeBlockAgainst = new FakeBlock(x2, y2, z2, world);
 
@@ -523,7 +523,7 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         BlockPlaceEvent event = new BlockPlaceEvent(fakeBlockPlaced, new FakeBlockState(fakeBlockPlaced.getLocation(), 0, (byte) 0), fakeBlockAgainst, isPlaced, who, true);
         pluginManager.callEvent(event);
-        if(event.isCancelled()){
+        if (event.isCancelled()) {
             PlayerManager.getPlayer(plr).getInventory().addItem(new ItemStack(fakeBlockPlaced.getType()));
             fakeBlockPlaced.setType(Material.AIR);
         }
@@ -534,16 +534,16 @@ public class MyPlugin extends PluginReference.PluginBase {
         if (DebugMode) {
             String logMsg = String.format("onAttemptItemUse: PlayerInteractEvent. player=%s, action=RIGHT_CLICK_AIR", plr.getName());
             logger.info("BukkitBridge -- " + logMsg);
-            if(skipItemUse)logger.info("BukkitBridge -- onAttemptItemUse: skipped");
+            if (skipItemUse) logger.info("BukkitBridge -- onAttemptItemUse: skipped");
         }
 
-        if(skipItemUse){
+        if (skipItemUse) {
             skipItemUse = false;
             return;
         }
 
         // don't call events if no one listens
-        if(PlayerInteractEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerInteractEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         Player player = PlayerManager.getPlayer(plr);
 
@@ -558,7 +558,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptItemDrop(MC_Player plr, MC_ItemStack is, MC_EventInfo ei) {
 
         // don't call events if no one listens
-        if(PlayerDropItemEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerDropItemEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         PlayerDropItemEvent event = new PlayerDropItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is), Util.getLocation(plr.getLocation())));
         event.setCancelled(ei.isCancelled);
@@ -570,7 +570,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onAttemptItemPickup(MC_Player plr, MC_ItemStack is, boolean isXpOrb, MC_EventInfo ei) {
 
         // don't call events if no one listens
-        if(PlayerPickupItemEvent.getHandlerList().getRegisteredListeners().length == 0)return;
+        if (PlayerPickupItemEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         PlayerPickupItemEvent event = new PlayerPickupItemEvent(PlayerManager.getPlayer(plr), new FakedFakeItem(Util.getItemStack(is), Util.getLocation(plr.getLocation())), 0);
         event.setCancelled(ei.isCancelled);
@@ -582,51 +582,51 @@ public class MyPlugin extends PluginReference.PluginBase {
     public boolean onAttemptExplodeSpecific(MC_Entity ent, List<MC_Location> locs) {
 
         // don't call events if no one listens
-        if(EntityExplodeEvent.getHandlerList().getRegisteredListeners().length == 0)return false;
+        if (EntityExplodeEvent.getHandlerList().getRegisteredListeners().length == 0) return false;
 
         // fixme yield, cancel
         List<Block> blocks = new ArrayList<>();
-        for(MC_Location loc: locs){
+        for (MC_Location loc : locs) {
             Location l = Util.getLocation(loc);
             blocks.add(l.getWorld().getBlockAt(l));
         }
-        EntityExplodeEvent event = new EntityExplodeEvent(Util.wrapEntity(ent),Util.getLocation(ent.getLocation()),blocks,1);
+        EntityExplodeEvent event = new EntityExplodeEvent(Util.wrapEntity(ent), Util.getLocation(ent.getLocation()), blocks, 1);
         pluginManager.callEvent(event);
         return false;
     }
 
     public void handlePluginMessage(MC_Player player, String tag, byte[] data, MC_EventInfo mc_eventInfo) {
-        if(DebugMode)logger.info("handlePluginMessage " + player.getName() + ": " + tag);
+        if (DebugMode) logger.info("handlePluginMessage " + player.getName() + ": " + tag);
         Player sender = PlayerManager.getPlayer(player);
-        if(DebugMode && sender == null)logger.info("Player is null :-(");
-        if(sender != null)messenger.dispatchIncomingMessage(sender, tag, data);
+        if (DebugMode && sender == null) logger.info("Player is null :-(");
+        if (sender != null) messenger.dispatchIncomingMessage(sender, tag, data);
     }
 
     @Override
     public Boolean onRequestPermission(String playerKey, String permission) {
 
-        if(DebugMode)logger.info("onRequestPermission(" + playerKey + ", " + permission + ")");
+        if (DebugMode) logger.info("onRequestPermission(" + playerKey + ", " + permission + ")");
 
-        if(playerKey.equals("*"))return null;
+        if (playerKey.equals("*")) return null;
 
         MC_Player p0;
-        if(playerKey.length() <= 16)p0 = server.getOnlinePlayerByName(server.getPlayerExactName(playerKey));
+        if (playerKey.length() <= 16) p0 = server.getOnlinePlayerByName(server.getPlayerExactName(playerKey));
         else p0 = server.getOnlinePlayerByName(server.getLastKnownPlayerNameFromUUID(playerKey));
 
-        if(p0 == null)return null;
+        if (p0 == null) return null;
 
         FakePlayer player = (FakePlayer) PlayerManager.getPlayer(p0);
 
-        if(player == null)return null;
+        if (player == null) return null;
 
-        if(!player.permissions.isPermissionSet(permission))return null;
+        if (!player.permissions.isPermissionSet(permission)) return null;
 
         return player.permissions.hasPermission(permission);
     }
 
     @Override
     public void onAttemptDamageHangingEntity(MC_Player plr, MC_Location loc, MC_HangingEntityType entType, MC_EventInfo ei) {
-        if(HangingBreakByEntityEvent.getHandlerList().getRegisteredListeners().length > 0) {
+        if (HangingBreakByEntityEvent.getHandlerList().getRegisteredListeners().length > 0) {
             HangingBreakByEntityEvent event = new HangingBreakByEntityEvent(new FakedFakeHanging(loc, entType), PlayerManager.getPlayer(plr));
             event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
@@ -636,8 +636,19 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptEntitySpawn(MC_Entity ent, MC_EventInfo ei) {
-        if(EntitySpawnEvent.getHandlerList().getRegisteredListeners().length > 0){
+        if (EntitySpawnEvent.getHandlerList().getRegisteredListeners().length > 0) {
             EntitySpawnEvent event = new EntitySpawnEvent(Util.wrapEntity(ent));
+            event.setCancelled(ei.isCancelled);
+            pluginManager.callEvent(event);
+            ei.isCancelled = event.isCancelled();
+        }
+    }
+
+    @Override
+    public void onAttemptDispense(MC_Location loc, int idxItem, MC_Container container, MC_EventInfo ei) {
+        if (BlockDispenseEvent.getHandlerList().getRegisteredListeners().length > 0) {
+            BlockDispenseEvent event = new BlockDispenseEvent(new FakeBlock(Location.locToBlock(loc.x), Location.locToBlock(loc.y),
+                    Location.locToBlock(loc.z), server.getWorld(loc.dimension)), new ItemStack(idxItem), new Vector());
             event.setCancelled(ei.isCancelled);
             pluginManager.callEvent(event);
             ei.isCancelled = event.isCancelled();
