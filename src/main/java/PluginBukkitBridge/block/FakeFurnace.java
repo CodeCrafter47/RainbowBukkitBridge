@@ -10,10 +10,10 @@ import org.bukkit.inventory.FurnaceInventory;
 /**
  * Created by florian on 14.10.14.
  */
-public class FakeFurnace extends FakeBlockState implements Furnace {
+public class FakeFurnace extends FakeContainerBlockState implements Furnace {
 
-    short burnTime;
-    short cookTime;
+    int burnTime;
+    int cookTime;
 
     public FakeFurnace(FakeBlock arg) {
         super(arg);
@@ -24,7 +24,7 @@ public class FakeFurnace extends FakeBlockState implements Furnace {
 
     @Override
     public short getBurnTime() {
-        return burnTime;
+        return (short) burnTime;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FakeFurnace extends FakeBlockState implements Furnace {
 
     @Override
     public short getCookTime() {
-        return cookTime;
+        return (short) cookTime;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class FakeFurnace extends FakeBlockState implements Furnace {
 
     @Override
     public FurnaceInventory getInventory() {
-        return new FakeFurnaceInventory();
+        return new FakeFurnaceInventory(this, 64);
     }
 
     @Override

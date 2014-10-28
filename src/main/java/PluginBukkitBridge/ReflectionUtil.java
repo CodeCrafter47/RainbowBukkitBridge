@@ -153,27 +153,27 @@ public class ReflectionUtil {
         }
     }
 
-    public static short readFurnaceBurnTime(MC_Container furnace){
+    public static int readFurnaceBurnTime(MC_Container furnace){
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
-            return (short) getMember(mcfurnace, "burnTime");
+            return (int) getMember(mcfurnace, "burnTime");
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: readFurnaceBurnTime", MyPlugin.DebugMode ? e : null);
             return 0;
         }
     }
 
-    public static short readFurnaceCookTime(MC_Container furnace){
+    public static int readFurnaceCookTime(MC_Container furnace){
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
-            return (short) getMember(mcfurnace, "cookTime");
+            return (int) getMember(mcfurnace, "cookTime");
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: readFurnaceCookTime", MyPlugin.DebugMode ? e : null);
             return 0;
         }
     }
 
-    public static void writeFurnaceBurnTime(MC_Container furnace, short burnTime){
+    public static void writeFurnaceBurnTime(MC_Container furnace, int burnTime){
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
             setMember(mcfurnace, "burnTime", burnTime);
@@ -182,7 +182,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static void writeFurnaceCookTime(MC_Container furnace, short cookTime){
+    public static void writeFurnaceCookTime(MC_Container furnace, int cookTime){
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
             setMember(mcfurnace, "cookTime", cookTime);

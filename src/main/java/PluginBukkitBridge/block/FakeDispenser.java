@@ -1,7 +1,7 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.inventory.UndefinedFakeInventory;
+import PluginBukkitBridge.inventory.FakeDispenserInventory;
 import org.bukkit.block.Dispenser;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.projectiles.BlockProjectileSource;
@@ -9,7 +9,7 @@ import org.bukkit.projectiles.BlockProjectileSource;
 /**
  * Created by florian on 14.10.14.
  */
-public class FakeDispenser extends FakeBlockState implements Dispenser {
+public class FakeDispenser extends FakeContainerBlockState implements Dispenser {
     public FakeDispenser(FakeBlock arg) {
         super(arg);
     }
@@ -28,6 +28,6 @@ public class FakeDispenser extends FakeBlockState implements Dispenser {
 
     @Override
     public Inventory getInventory() {
-        return new UndefinedFakeInventory();
+        return new FakeDispenserInventory(this, 16);
     }
 }

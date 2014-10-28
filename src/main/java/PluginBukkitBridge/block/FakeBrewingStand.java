@@ -8,7 +8,7 @@ import org.bukkit.inventory.BrewerInventory;
 /**
  * Created by florian on 14.10.14.
  */
-public class FakeBrewingStand extends FakeBlockState implements BrewingStand {
+public class FakeBrewingStand extends FakeContainerBlockState implements BrewingStand {
     public FakeBrewingStand(FakeBlock arg) {
         super(arg);
     }
@@ -27,6 +27,6 @@ public class FakeBrewingStand extends FakeBlockState implements BrewingStand {
 
     @Override
     public BrewerInventory getInventory() {
-        return new FakeBrewerInventory();
+        return new FakeBrewerInventory(this, 64);
     }
 }
