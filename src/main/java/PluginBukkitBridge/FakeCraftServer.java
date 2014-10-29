@@ -1,6 +1,7 @@
 package PluginBukkitBridge;
 
 import PluginBukkitBridge.entity.FakePlayer;
+import PluginBukkitBridge.item.FakeItemFactory;
 import PluginReference.MC_Player;
 import PluginReference.MC_Server;
 import com.avaje.ebean.config.ServerConfig;

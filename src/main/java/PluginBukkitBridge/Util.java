@@ -2,7 +2,9 @@ package PluginBukkitBridge;
 
 import PluginBukkitBridge.block.*;
 import PluginBukkitBridge.entity.*;
+import PluginBukkitBridge.item.*;
 import PluginReference.*;
+import lombok.SneakyThrows;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -13,8 +15,15 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import org.jnbt.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Util {
 
@@ -37,13 +46,52 @@ public class Util {
         return md;
     }
 
+    @SneakyThrows
     public static ItemStack getItemStack(MC_ItemStack i) {
         if (i == null || i.getId() == 0 || i.getCount() == 0) return null;
+        ByteArrayInputStream is1 = new ByteArrayInputStream(i.serialize());
+        NBTInputStream in = new NBTInputStream(is1);
+        Map<String,Tag> tags = new HashMap<>();
+        while(is1.available() > 1) {
+            Tag tag = in.readTag();
+            tags.put(tag.getName(), tag);
+        }
+        CompoundTag tag = new CompoundTag("item", tags);
         ItemStack is = new ItemStack(i.getId(), i.getCount(), (short) i.getDamage());
-        is.setItemMeta(new FakeItemMeta(i));
+        is.setItemMeta(getItemMeta(is.getType(), (CompoundTag) tag.getValue().get("tag")));
         return is;
     }
 
+    public static ItemMeta getItemMeta(Material material, CompoundTag tag) {
+        switch (material) {
+            case AIR:
+                return null;
+            case WRITTEN_BOOK:
+            case BOOK_AND_QUILL:
+                return new FakeBookMeta(tag);
+            case SKULL_ITEM:
+                return new FakeSkullMeta(tag);
+            case LEATHER_HELMET:
+            case LEATHER_CHESTPLATE:
+            case LEATHER_LEGGINGS:
+            case LEATHER_BOOTS:
+                return new FakeLeatherArmorMeta(tag);
+            case POTION:
+                return new FakePotionMeta(tag);
+            case MAP:
+                return new FakeMapMeta(tag);
+            case FIREWORK:
+                return new FakeFireworkMeta(tag);
+            case FIREWORK_CHARGE:
+                return new FakeFireworkEffectMeta(tag);
+            case ENCHANTED_BOOK:
+                return new FakeEnchantedBookMeta(tag);
+            default:
+                return new FakeItemMeta(tag);
+        }
+    }
+
+    @SneakyThrows
     public static MC_ItemStack getItemStack(final ItemStack is) {
         if (is == null || is.getType() == Material.AIR) {
             MC_ItemStack is2 = MyPlugin.server.createItemStack(1, 1, 1);
@@ -56,10 +104,22 @@ public class Util {
             }
             return is2;
         }
-        MC_ItemStack is2 = ((FakeItemMeta) is.getItemMeta()).is;
-        is2.setCount(is.getAmount());
-        is2.setDamage(is.getDurability());
-        return is2;
+        MC_ItemStack is2 = MyPlugin.server.createItemStack(is.getTypeId(), is.getAmount(), is.getDurability());
+        ByteArrayInputStream is1 = new ByteArrayInputStream(is2.serialize());
+        NBTInputStream in = new NBTInputStream(is1);
+        Map<String,Tag> tags = new HashMap<>();
+        while(is1.available() > 1) {
+            Tag tag = in.readTag();
+            tags.put(tag.getName(), tag);
+        }
+        if(((FakeItemMeta)is.getItemMeta()).getTag() != null)
+            tags.put("tag", ((FakeItemMeta)is.getItemMeta()).getTag());
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        NBTOutputStream out = new NBTOutputStream(os);
+        for(Tag tag: tags.values())out.writeTag(tag);
+        out.close();
+        os.write(NBTConstants.TYPE_END);
+        return MyPlugin.server.createItemStack(os.toByteArray());
     }
 
     public static BlockFace getFace(MC_DirectionNESWUD dir) {
