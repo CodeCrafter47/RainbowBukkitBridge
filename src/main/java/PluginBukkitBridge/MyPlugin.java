@@ -30,6 +30,7 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.plugin.messaging.StandardMessenger;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitWorker;
 import org.bukkit.util.Vector;
 
@@ -108,6 +109,8 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         setupEnchantments();
 
+        setupPotionEffectTypes();
+
         server.registerServerPacketListener(new PacketListener());
 
         // Initialize Bukkit server object...
@@ -122,6 +125,33 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         // Call onEnable for plugins...
         enablePlugins(PluginLoadOrder.STARTUP);
+    }
+
+    private void setupPotionEffectTypes() {
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(1, "SPEED", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(2, "SLOWNESS", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(3, "HASTE", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(4, "MINING_FATIGUE", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(5, "STRENGTH", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(6, "INSTANT_HEALTH", true));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(7, "INSTANT_DAMAGE", true));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(8, "JUMP_BOOST", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(9, "NAUSEA", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(10, "REGENERATION", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(11, "RESISTANCE", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(12, "FIRE_RESISTANCE", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(13, "WATER_BREATHING", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(14, "INVISIBILITY", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(15, "BLINDNESS", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(16, "NIGHT_VISION", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(17, "HUNGER", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(18, "WEAKNESS", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(19, "POISON", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(20, "WITHER", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(21, "HEALTH_BOOST", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(22, "ABSORPTION", false));
+        PotionEffectType.registerPotionEffectType(new FakePotionEffectType(23, "SATURATION", false));
+        PotionEffectType.stopAcceptingRegistrations();
     }
 
     private void setupEnchantments() {

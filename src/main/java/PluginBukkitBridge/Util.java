@@ -539,85 +539,34 @@ public class Util {
     }
 
     public static PotionEffectType getPotionEffectType(MC_PotionEffectType type) {
-        switch (type) {
-            default:
-            case UNSPECIFIED:
-                MyPlugin.fixme("potion effect type is " + type.name());
-                return null;
-            case INSTANT_HEALTH:
-                return PotionEffectType.HEAL;
-            case INSTANT_DAMAGE:
-                return PotionEffectType.HARM;
-            case SPEED:
-                return PotionEffectType.SPEED;
-            case SLOWNESS:
-                return PotionEffectType.SLOW;
-            case HASTE:
-                return PotionEffectType.FAST_DIGGING;
-            case MINING_FATIGUE:
-                return PotionEffectType.SLOW_DIGGING;
-            case STRENGTH:
-                return PotionEffectType.INCREASE_DAMAGE;
-            case JUMP_BOOST:
-                return PotionEffectType.JUMP;
-            case NAUSEA:
-                return PotionEffectType.CONFUSION;
-            case REGENERATION:
-                return PotionEffectType.REGENERATION;
-            case RESISTANCE:
-                return PotionEffectType.DAMAGE_RESISTANCE;
-            case FIRE_RESISTANCE:
-                return PotionEffectType.FIRE_RESISTANCE;
-            case WATER_BREATHING:
-                return PotionEffectType.WATER_BREATHING;
-            case INVISIBILITY:
-                return PotionEffectType.INVISIBILITY;
-            case BLINDNESS:
-                return PotionEffectType.BLINDNESS;
-            case NIGHT_VISION:
-                return PotionEffectType.NIGHT_VISION;
-            case HUNGER:
-                return PotionEffectType.HUNGER;
-            case WEAKNESS:
-                return PotionEffectType.WEAKNESS;
-            case POISON:
-                return PotionEffectType.POISON;
-            case WITHER:
-                return PotionEffectType.WITHER;
-            case HEALTH_BOOST:
-                return PotionEffectType.HEALTH_BOOST;
-            case ABSORPTION:
-                return PotionEffectType.ABSORPTION;
-            case SATURATION:
-                return PotionEffectType.SATURATION;
-        }
+        return PotionEffectType.getByName(type.name());
     }
 
     public static MC_PotionEffectType getPotionEffectType(PotionEffectType type) {
-        if (type == PotionEffectType.ABSORPTION) return MC_PotionEffectType.ABSORPTION;
-        if (type == PotionEffectType.BLINDNESS) return MC_PotionEffectType.BLINDNESS;
-        if (type == PotionEffectType.CONFUSION) return MC_PotionEffectType.NAUSEA;
-        if (type == PotionEffectType.DAMAGE_RESISTANCE) return MC_PotionEffectType.RESISTANCE;
-        if (type == PotionEffectType.FAST_DIGGING) return MC_PotionEffectType.HASTE;
-        if (type == PotionEffectType.FIRE_RESISTANCE) return MC_PotionEffectType.FIRE_RESISTANCE;
-        if (type == PotionEffectType.HARM) return MC_PotionEffectType.INSTANT_DAMAGE;
-        if (type == PotionEffectType.HEAL) return MC_PotionEffectType.INSTANT_HEALTH;
-        if (type == PotionEffectType.HEALTH_BOOST) return MC_PotionEffectType.HEALTH_BOOST;
-        if (type == PotionEffectType.HUNGER) return MC_PotionEffectType.HUNGER;
-        if (type == PotionEffectType.INCREASE_DAMAGE) return MC_PotionEffectType.STRENGTH;
-        if (type == PotionEffectType.DAMAGE_RESISTANCE) return MC_PotionEffectType.RESISTANCE;
-        if (type == PotionEffectType.INVISIBILITY) return MC_PotionEffectType.INVISIBILITY;
-        if (type == PotionEffectType.JUMP) return MC_PotionEffectType.JUMP_BOOST;
-        if (type == PotionEffectType.NIGHT_VISION) return MC_PotionEffectType.NIGHT_VISION;
-        if (type == PotionEffectType.POISON) return MC_PotionEffectType.POISON;
-        if (type == PotionEffectType.REGENERATION) return MC_PotionEffectType.REGENERATION;
-        if (type == PotionEffectType.SATURATION) return MC_PotionEffectType.SATURATION;
-        if (type == PotionEffectType.SLOW) return MC_PotionEffectType.SLOWNESS;
-        if (type == PotionEffectType.SLOW_DIGGING) return MC_PotionEffectType.MINING_FATIGUE;
-        if (type == PotionEffectType.SPEED) return MC_PotionEffectType.SPEED;
-        if (type == PotionEffectType.WATER_BREATHING) return MC_PotionEffectType.WATER_BREATHING;
-        if (type == PotionEffectType.WEAKNESS) return MC_PotionEffectType.WEAKNESS;
-        if (type == PotionEffectType.WITHER) return MC_PotionEffectType.WITHER;
+        if (type.getName().equals("ABSORPTION")) return MC_PotionEffectType.ABSORPTION;
+        if (type.getName().equals("BLINDNESS")) return MC_PotionEffectType.BLINDNESS;
+        if (type.getName().equals("NAUSEA")) return MC_PotionEffectType.NAUSEA;
+        if (type.getName().equals("RESISTANCE")) return MC_PotionEffectType.RESISTANCE;
+        if (type.getName().equals("HASTE")) return MC_PotionEffectType.HASTE;
+        if (type.getName().equals("FIRE_RESISTANCE")) return MC_PotionEffectType.FIRE_RESISTANCE;
+        if (type.getName().equals("INSTANT_DAMAGE")) return MC_PotionEffectType.INSTANT_DAMAGE;
+        if (type.getName().equals("INSTANT_HEALTH")) return MC_PotionEffectType.INSTANT_HEALTH;
+        if (type.getName().equals("HEALTH_BOOST")) return MC_PotionEffectType.HEALTH_BOOST;
+        if (type.getName().equals("HUNGER")) return MC_PotionEffectType.HUNGER;
+        if (type.getName().equals("STRENGTH")) return MC_PotionEffectType.STRENGTH;
+        if (type.getName().equals("RESISTANCE")) return MC_PotionEffectType.RESISTANCE;
+        if (type.getName().equals("INVISIBILITY")) return MC_PotionEffectType.INVISIBILITY;
+        if (type.getName().equals("JUMP_BOOST")) return MC_PotionEffectType.JUMP_BOOST;
+        if (type.getName().equals("NIGHT_VISION")) return MC_PotionEffectType.NIGHT_VISION;
+        if (type.getName().equals("POISON")) return MC_PotionEffectType.POISON;
+        if (type.getName().equals("REGENERATION")) return MC_PotionEffectType.REGENERATION;
+        if (type.getName().equals("SATURATION")) return MC_PotionEffectType.SATURATION;
+        if (type.getName().equals("SLOWNESS")) return MC_PotionEffectType.SLOWNESS;
+        if (type.getName().equals("MINING_FATIGUE")) return MC_PotionEffectType.MINING_FATIGUE;
+        if (type.getName().equals("SPEED")) return MC_PotionEffectType.SPEED;
+        if (type.getName().equals("WATER_BREATHING")) return MC_PotionEffectType.WATER_BREATHING;
+        if (type.getName().equals("WEAKNESS")) return MC_PotionEffectType.WEAKNESS;
+        if (type.getName().equals("WITHER")) return MC_PotionEffectType.WITHER;
         MyPlugin.fixme("unable to unwrap potionEffect " + type.getName());
         return null;
     }
