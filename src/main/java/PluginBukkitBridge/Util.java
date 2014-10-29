@@ -18,29 +18,34 @@ import org.bukkit.util.Vector;
 
 public class Util {
 
-    public static MC_Location getLocation(Location loc){
+    public static MC_Location getLocation(Location loc) {
         return new MC_Location(loc.getX(), loc.getY(), loc.getZ(), loc.getWorld().getEnvironment().getId(), loc.getYaw(), loc.getPitch());
     }
-    public static Location getLocation(MC_Location loc){
+
+    public static Location getLocation(MC_Location loc) {
         return new Location(WorldManager.getWorld(MyPlugin.server.getWorld(loc.dimension).getName()), loc.x, loc.y, loc.z, loc.yaw, loc.pitch);
     }
-    public static Vector getDirection(MC_MotionData md){
+
+    public static Vector getDirection(MC_MotionData md) {
         return new Vector(md.xMotion, md.yMotion, md.zMotion);
     }
-    public static MC_MotionData getMotionData(Vector v, MC_MotionData md){
+
+    public static MC_MotionData getMotionData(Vector v, MC_MotionData md) {
         md.xMotion = v.getX();
         md.yMotion = v.getY();
         md.zMotion = v.getZ();
         return md;
     }
-    public static ItemStack getItemStack(MC_ItemStack i){
-        if(i == null || i.getId() == 0 || i.getCount() == 0)return null;
-        ItemStack is = new ItemStack(i.getId(), i.getCount(), (short)i.getDamage());
+
+    public static ItemStack getItemStack(MC_ItemStack i) {
+        if (i == null || i.getId() == 0 || i.getCount() == 0) return null;
+        ItemStack is = new ItemStack(i.getId(), i.getCount(), (short) i.getDamage());
         is.setItemMeta(new FakeItemMeta(i));
         return is;
     }
-    public static MC_ItemStack getItemStack(final ItemStack is){
-        if(is == null || is.getType() == Material.AIR){
+
+    public static MC_ItemStack getItemStack(final ItemStack is) {
+        if (is == null || is.getType() == Material.AIR) {
             MC_ItemStack is2 = MyPlugin.server.createItemStack(1, 1, 1);
             try {
                 is2.getClass().getDeclaredField("is").set(is2, null);
@@ -51,13 +56,13 @@ public class Util {
             }
             return is2;
         }
-        MC_ItemStack is2 = ((FakeItemMeta)is.getItemMeta()).is;
+        MC_ItemStack is2 = ((FakeItemMeta) is.getItemMeta()).is;
         is2.setCount(is.getAmount());
         is2.setDamage(is.getDurability());
         return is2;
     }
 
-    public static BlockFace getFace(MC_DirectionNESWUD dir){
+    public static BlockFace getFace(MC_DirectionNESWUD dir) {
         switch (dir) {
             case UNSPECIFIED:
                 return BlockFace.SELF;
@@ -77,17 +82,17 @@ public class Util {
         return BlockFace.SELF;
     }
 
-    public static MC_Enchantment wrapEnchantment(Enchantment enchantment, int level){
+    public static MC_Enchantment wrapEnchantment(Enchantment enchantment, int level) {
         MC_EnchantmentType type = wrapEnchantmentType(enchantment.getId());
-        if(type == null){
+        if (type == null) {
             MyPlugin.logger.warning("Unknown Enchantment ID: " + enchantment.getId());
             return null;
         }
         return new MC_Enchantment(type, level);
     }
 
-    public static MC_EnchantmentType wrapEnchantmentType(int id){
-        switch (id){
+    public static MC_EnchantmentType wrapEnchantmentType(int id) {
+        switch (id) {
             case 0:
                 return MC_EnchantmentType.PROTECTION;
             case 1:
@@ -142,72 +147,18 @@ public class Util {
         return null;
     }
 
-    public static Enchantment wrapEnchantmentType(MC_EnchantmentType enchantment){
-        switch (enchantment){
-            case PROTECTION:
-                return Enchantment.PROTECTION_ENVIRONMENTAL;
-            case FIRE_PROTECTION:
-                return Enchantment.PROTECTION_FIRE;
-            case FEATHER_FALLING:
-                return Enchantment.PROTECTION_FALL;
-            case BLAST_PROTECTION:
-                return Enchantment.PROTECTION_EXPLOSIONS;
-            case PROJECTILE_PROTECTION:
-                return Enchantment.PROTECTION_PROJECTILE;
-            case RESPIRATION:
-                return Enchantment.OXYGEN;
-            case AQUA_AFFINITY:
-                return Enchantment.WATER_WORKER;
-            case THORNS:
-                return Enchantment.THORNS;
-            case DEPTH_STRIDER:
-                // fixme
-                return null;
-            case SHARPNESS:
-                return Enchantment.DAMAGE_ALL;
-            case SMITE:
-                return Enchantment.DAMAGE_UNDEAD;
-            case BANE_OF_ARTHROPODS:
-                return Enchantment.DAMAGE_ARTHROPODS;
-            case KNOCKBACK:
-                return Enchantment.KNOCKBACK;
-            case FIRE_ASPECT:
-                return Enchantment.FIRE_ASPECT;
-            case LOOTING:
-                return Enchantment.LOOT_BONUS_MOBS;
-            case EFFICIENCY:
-                return Enchantment.DIG_SPEED;
-            case SILK_TOUCH:
-                return Enchantment.SILK_TOUCH;
-            case UNBREAKING:
-                return Enchantment.DURABILITY;
-            case FORTUNE:
-                return Enchantment.LOOT_BONUS_BLOCKS;
-            case POWER:
-                return Enchantment.ARROW_DAMAGE;
-            case PUNCH:
-                return Enchantment.ARROW_KNOCKBACK;
-            case FLAME:
-                return Enchantment.ARROW_FIRE;
-            case INFINITY:
-                return Enchantment.ARROW_INFINITE;
-            case LUCK_OF_THE_SEA:
-                return Enchantment.LUCK;
-            case LURE:
-                return Enchantment.LURE;
-        }
-        return null;
+    public static Enchantment wrapEnchantmentType(MC_EnchantmentType enchantment) {
+        return Enchantment.getByName(enchantment.name());
     }
 
-    public static Entity wrapEntity(MC_Entity entity)
-    {
-        if(entity == null)return null;
+    public static Entity wrapEntity(MC_Entity entity) {
+        if (entity == null) return null;
         try {
-            switch (entity.getType()){
+            switch (entity.getType()) {
                 case UNSPECIFIED:
                     return new FakeEntity(entity);
                 case PLAYER:
-                    return PlayerManager.getPlayer((MC_Player)entity);
+                    return PlayerManager.getPlayer((MC_Player) entity);
                 case BAT:
                     return new FakeBat(entity);
                 case CHICKEN:
@@ -318,13 +269,13 @@ public class Util {
                     return new FakeEnderCrystal(entity);
             }
         } catch (Exception ignored) {
-            if(MyPlugin.DebugMode)ignored.printStackTrace();
+            if (MyPlugin.DebugMode) ignored.printStackTrace();
         }
-        if(MyPlugin.DebugMode)MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
+        if (MyPlugin.DebugMode) MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
         return new FakeEntity(entity);
     }
 
-    public static Horse.Variant wrapHorseType(MC_HorseType type){
+    public static Horse.Variant wrapHorseType(MC_HorseType type) {
         switch (type) {
             case HORSE:
                 return Horse.Variant.HORSE;
@@ -342,7 +293,7 @@ public class Util {
         return Horse.Variant.HORSE;
     }
 
-    public static MC_HorseType wrapHorseType(Horse.Variant type){
+    public static MC_HorseType wrapHorseType(Horse.Variant type) {
         switch (type) {
             case HORSE:
                 return MC_HorseType.HORSE;
@@ -358,7 +309,7 @@ public class Util {
         return MC_HorseType.UNKNOWN;
     }
 
-    public static MC_HorseVariant wrapHorseVariant(Horse.Style type){
+    public static MC_HorseVariant wrapHorseVariant(Horse.Style type) {
         MyPlugin.fixme("cry");
         switch (type) {
             case NONE:
@@ -375,7 +326,7 @@ public class Util {
         return MC_HorseVariant.UNKNOWN;
     }
 
-    public static Horse.Style wrapHorseVariant(MC_HorseVariant type){
+    public static Horse.Style wrapHorseVariant(MC_HorseVariant type) {
         MyPlugin.fixme("cry");
         switch (type) {
             case WHITE:
@@ -399,23 +350,26 @@ public class Util {
     }
 
     public static BlockState wrapBlockState(FakeBlock fakeBlock) {
-        if(fakeBlock.getType() == Material.BEACON)return new FakeBeacon(fakeBlock);
-        if(fakeBlock.getType() == Material.BREWING_STAND)return new FakeBrewingStand(fakeBlock);
-        if(fakeBlock.getType() == Material.CHEST || fakeBlock.getType() == Material.TRAPPED_CHEST)return new FakeChest(fakeBlock);
-        if(fakeBlock.getType() == Material.COMMAND)return new FakeCommandBlock(fakeBlock);
-        if(fakeBlock.getType() == Material.MOB_SPAWNER)return new FakeCreatureSpawner(fakeBlock);
-        if(fakeBlock.getType() == Material.DISPENSER)return new FakeDispenser(fakeBlock);
-        if(fakeBlock.getType() == Material.DROPPER)return new FakeDropper(fakeBlock);
-        if(fakeBlock.getType() == Material.FURNACE || fakeBlock.getType() == Material.BURNING_FURNACE)return new FakeFurnace(fakeBlock);
-        if(fakeBlock.getType() == Material.HOPPER)return new FakeHopper(fakeBlock);
-        if(fakeBlock.getType() == Material.JUKEBOX)return new FakeJukebox(fakeBlock);
-        if(fakeBlock.getType() == Material.NOTE_BLOCK)return new FakeNoteBlock(fakeBlock);
-        if(fakeBlock.getType() == Material.SIGN_POST || fakeBlock.getType() == Material.SIGN || fakeBlock.getType() == Material.WALL_SIGN)return new FakeSign(fakeBlock);
-        if(fakeBlock.getType() == Material.SKULL)return new FakeSkull(fakeBlock);
+        if (fakeBlock.getType() == Material.BEACON) return new FakeBeacon(fakeBlock);
+        if (fakeBlock.getType() == Material.BREWING_STAND) return new FakeBrewingStand(fakeBlock);
+        if (fakeBlock.getType() == Material.CHEST || fakeBlock.getType() == Material.TRAPPED_CHEST)
+            return new FakeChest(fakeBlock);
+        if (fakeBlock.getType() == Material.COMMAND) return new FakeCommandBlock(fakeBlock);
+        if (fakeBlock.getType() == Material.MOB_SPAWNER) return new FakeCreatureSpawner(fakeBlock);
+        if (fakeBlock.getType() == Material.DISPENSER) return new FakeDispenser(fakeBlock);
+        if (fakeBlock.getType() == Material.DROPPER) return new FakeDropper(fakeBlock);
+        if (fakeBlock.getType() == Material.FURNACE || fakeBlock.getType() == Material.BURNING_FURNACE)
+            return new FakeFurnace(fakeBlock);
+        if (fakeBlock.getType() == Material.HOPPER) return new FakeHopper(fakeBlock);
+        if (fakeBlock.getType() == Material.JUKEBOX) return new FakeJukebox(fakeBlock);
+        if (fakeBlock.getType() == Material.NOTE_BLOCK) return new FakeNoteBlock(fakeBlock);
+        if (fakeBlock.getType() == Material.SIGN_POST || fakeBlock.getType() == Material.SIGN || fakeBlock.getType() == Material.WALL_SIGN)
+            return new FakeSign(fakeBlock);
+        if (fakeBlock.getType() == Material.SKULL) return new FakeSkull(fakeBlock);
         return new FakeBlockState(fakeBlock);
     }
 
-    public static Skeleton.SkeletonType getSkeletonType(MC_SkeletonType type){
+    public static Skeleton.SkeletonType getSkeletonType(MC_SkeletonType type) {
         switch (type) {
             case UNSPECIFIED:
                 return Skeleton.SkeletonType.NORMAL;
@@ -427,7 +381,7 @@ public class Util {
         return Skeleton.SkeletonType.NORMAL;
     }
 
-    public static MC_SkeletonType getSkeletonType(Skeleton.SkeletonType type){
+    public static MC_SkeletonType getSkeletonType(Skeleton.SkeletonType type) {
         switch (type) {
             case NORMAL:
                 return MC_SkeletonType.SKELETON;
@@ -588,7 +542,7 @@ public class Util {
         switch (type) {
             default:
             case UNSPECIFIED:
-                MyPlugin.fixme("potion effect type is "+type.name());
+                MyPlugin.fixme("potion effect type is " + type.name());
                 return null;
             case INSTANT_HEALTH:
                 return PotionEffectType.HEAL;
@@ -639,32 +593,32 @@ public class Util {
         }
     }
 
-    public static MC_PotionEffectType getPotionEffectType(PotionEffectType type){
-        if(type == PotionEffectType.ABSORPTION)return MC_PotionEffectType.ABSORPTION;
-        if(type == PotionEffectType.BLINDNESS)return MC_PotionEffectType.BLINDNESS;
-        if(type == PotionEffectType.CONFUSION)return MC_PotionEffectType.NAUSEA;
-        if(type == PotionEffectType.DAMAGE_RESISTANCE)return MC_PotionEffectType.RESISTANCE;
-        if(type == PotionEffectType.FAST_DIGGING)return MC_PotionEffectType.HASTE;
-        if(type == PotionEffectType.FIRE_RESISTANCE)return MC_PotionEffectType.FIRE_RESISTANCE;
-        if(type == PotionEffectType.HARM)return MC_PotionEffectType.INSTANT_DAMAGE;
-        if(type == PotionEffectType.HEAL)return MC_PotionEffectType.INSTANT_HEALTH;
-        if(type == PotionEffectType.HEALTH_BOOST)return MC_PotionEffectType.HEALTH_BOOST;
-        if(type == PotionEffectType.HUNGER)return MC_PotionEffectType.HUNGER;
-        if(type == PotionEffectType.INCREASE_DAMAGE)return MC_PotionEffectType.STRENGTH;
-        if(type == PotionEffectType.DAMAGE_RESISTANCE)return MC_PotionEffectType.RESISTANCE;
-        if(type == PotionEffectType.INVISIBILITY)return MC_PotionEffectType.INVISIBILITY;
-        if(type == PotionEffectType.JUMP)return MC_PotionEffectType.JUMP_BOOST;
-        if(type == PotionEffectType.NIGHT_VISION)return MC_PotionEffectType.NIGHT_VISION;
-        if(type == PotionEffectType.POISON)return MC_PotionEffectType.POISON;
-        if(type == PotionEffectType.REGENERATION)return MC_PotionEffectType.REGENERATION;
-        if(type == PotionEffectType.SATURATION)return MC_PotionEffectType.SATURATION;
-        if(type == PotionEffectType.SLOW)return MC_PotionEffectType.SLOWNESS;
-        if(type == PotionEffectType.SLOW_DIGGING)return MC_PotionEffectType.MINING_FATIGUE;
-        if(type == PotionEffectType.SPEED)return MC_PotionEffectType.SPEED;
-        if(type == PotionEffectType.WATER_BREATHING)return MC_PotionEffectType.WATER_BREATHING;
-        if(type == PotionEffectType.WEAKNESS)return MC_PotionEffectType.WEAKNESS;
-        if(type == PotionEffectType.WITHER)return MC_PotionEffectType.WITHER;
-        MyPlugin.fixme("unable to unwrap potionEffect "+type.getName());
+    public static MC_PotionEffectType getPotionEffectType(PotionEffectType type) {
+        if (type == PotionEffectType.ABSORPTION) return MC_PotionEffectType.ABSORPTION;
+        if (type == PotionEffectType.BLINDNESS) return MC_PotionEffectType.BLINDNESS;
+        if (type == PotionEffectType.CONFUSION) return MC_PotionEffectType.NAUSEA;
+        if (type == PotionEffectType.DAMAGE_RESISTANCE) return MC_PotionEffectType.RESISTANCE;
+        if (type == PotionEffectType.FAST_DIGGING) return MC_PotionEffectType.HASTE;
+        if (type == PotionEffectType.FIRE_RESISTANCE) return MC_PotionEffectType.FIRE_RESISTANCE;
+        if (type == PotionEffectType.HARM) return MC_PotionEffectType.INSTANT_DAMAGE;
+        if (type == PotionEffectType.HEAL) return MC_PotionEffectType.INSTANT_HEALTH;
+        if (type == PotionEffectType.HEALTH_BOOST) return MC_PotionEffectType.HEALTH_BOOST;
+        if (type == PotionEffectType.HUNGER) return MC_PotionEffectType.HUNGER;
+        if (type == PotionEffectType.INCREASE_DAMAGE) return MC_PotionEffectType.STRENGTH;
+        if (type == PotionEffectType.DAMAGE_RESISTANCE) return MC_PotionEffectType.RESISTANCE;
+        if (type == PotionEffectType.INVISIBILITY) return MC_PotionEffectType.INVISIBILITY;
+        if (type == PotionEffectType.JUMP) return MC_PotionEffectType.JUMP_BOOST;
+        if (type == PotionEffectType.NIGHT_VISION) return MC_PotionEffectType.NIGHT_VISION;
+        if (type == PotionEffectType.POISON) return MC_PotionEffectType.POISON;
+        if (type == PotionEffectType.REGENERATION) return MC_PotionEffectType.REGENERATION;
+        if (type == PotionEffectType.SATURATION) return MC_PotionEffectType.SATURATION;
+        if (type == PotionEffectType.SLOW) return MC_PotionEffectType.SLOWNESS;
+        if (type == PotionEffectType.SLOW_DIGGING) return MC_PotionEffectType.MINING_FATIGUE;
+        if (type == PotionEffectType.SPEED) return MC_PotionEffectType.SPEED;
+        if (type == PotionEffectType.WATER_BREATHING) return MC_PotionEffectType.WATER_BREATHING;
+        if (type == PotionEffectType.WEAKNESS) return MC_PotionEffectType.WEAKNESS;
+        if (type == PotionEffectType.WITHER) return MC_PotionEffectType.WITHER;
+        MyPlugin.fixme("unable to unwrap potionEffect " + type.getName());
         return null;
     }
 }

@@ -16,6 +16,8 @@ import org.bukkit.craftbukkit.help.SimpleHelpMap;
 import org.bukkit.craftbukkit.metadata.EntityMetadataStore;
 import org.bukkit.craftbukkit.metadata.PlayerMetadataStore;
 import org.bukkit.craftbukkit.metadata.WorldMetadataStore;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -33,10 +35,7 @@ import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -107,6 +106,8 @@ public class MyPlugin extends PluginReference.PluginBase {
         logger.info("BukkitBridge v2.4 --- Starting up...");
         server = argServer;
 
+        setupEnchantments();
+
         server.registerServerPacketListener(new PacketListener());
 
         // Initialize Bukkit server object...
@@ -121,6 +122,35 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         // Call onEnable for plugins...
         enablePlugins(PluginLoadOrder.STARTUP);
+    }
+
+    private void setupEnchantments() {
+        Enchantment.registerEnchantment(new FakeEnchantment(0, MC_EnchantmentType.PROTECTION, "PROTECTION", 1, 4, EnchantmentTarget.ARMOR, Arrays.asList(1,3,4)));
+        Enchantment.registerEnchantment(new FakeEnchantment(1, MC_EnchantmentType.FIRE_PROTECTION, "FIRE_PROTECTION", 1, 4, EnchantmentTarget.ARMOR, Arrays.asList(0,3,4)));
+        Enchantment.registerEnchantment(new FakeEnchantment(2, MC_EnchantmentType.FEATHER_FALLING, "FEATHER_FALLING", 1, 4, EnchantmentTarget.ARMOR_FEET, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(3, MC_EnchantmentType.BLAST_PROTECTION, "BLAST_PROTECTION", 1, 4, EnchantmentTarget.ARMOR, Arrays.asList(0,1,4)));
+        Enchantment.registerEnchantment(new FakeEnchantment(4, MC_EnchantmentType.PROJECTILE_PROTECTION, "PROJECTILE_PROTECTION", 1, 4, EnchantmentTarget.ARMOR, Arrays.asList(0,1,3)));
+        Enchantment.registerEnchantment(new FakeEnchantment(5, MC_EnchantmentType.RESPIRATION, "RESPIRATION", 1, 3, EnchantmentTarget.ARMOR_HEAD, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(6, MC_EnchantmentType.AQUA_AFFINITY, "AQUA_AFFINITY", 1, 1, EnchantmentTarget.ARMOR_HEAD, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(7, MC_EnchantmentType.THORNS, "THORNS", 1, 3, EnchantmentTarget.ARMOR, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(8, MC_EnchantmentType.DEPTH_STRIDER, "DEPTH_STRIDER", 1, 3, EnchantmentTarget.ARMOR_FEET, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(16, MC_EnchantmentType.SHARPNESS, "SHARPNESS", 1, 5, EnchantmentTarget.WEAPON, Arrays.asList(17,18)));
+        Enchantment.registerEnchantment(new FakeEnchantment(17, MC_EnchantmentType.SMITE, "SMITE", 1, 5, EnchantmentTarget.WEAPON, Arrays.asList(16,18)));
+        Enchantment.registerEnchantment(new FakeEnchantment(18, MC_EnchantmentType.BANE_OF_ARTHROPODS, "BANE_OF_ARTHROPODS", 1, 5, EnchantmentTarget.WEAPON, Arrays.asList(16,17)));
+        Enchantment.registerEnchantment(new FakeEnchantment(19, MC_EnchantmentType.KNOCKBACK, "KNOCKBACK", 1, 2, EnchantmentTarget.WEAPON, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(20, MC_EnchantmentType.FIRE_ASPECT, "FIRE_ASPECT", 1, 2, EnchantmentTarget.WEAPON, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(21, MC_EnchantmentType.LOOTING, "LOOTING", 1, 3, EnchantmentTarget.WEAPON, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(32, MC_EnchantmentType.EFFICIENCY, "EFFICIENCY", 1, 5, EnchantmentTarget.TOOL, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(33, MC_EnchantmentType.SILK_TOUCH, "SILK_TOUCH", 1, 1, EnchantmentTarget.TOOL, Arrays.asList(35)));
+        Enchantment.registerEnchantment(new FakeEnchantment(34, MC_EnchantmentType.UNBREAKING, "UNBREAKING", 1, 3, EnchantmentTarget.TOOL, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(35, MC_EnchantmentType.FORTUNE, "FORTUNE", 1, 3, EnchantmentTarget.TOOL, Arrays.asList(33)));
+        Enchantment.registerEnchantment(new FakeEnchantment(48, MC_EnchantmentType.POWER, "POWER", 1, 5, EnchantmentTarget.BOW, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(49, MC_EnchantmentType.PUNCH, "PUNCH", 1, 2, EnchantmentTarget.BOW, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(50, MC_EnchantmentType.FLAME, "FLAME", 1, 1, EnchantmentTarget.BOW, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(51, MC_EnchantmentType.INFINITY, "INFINITY", 1, 1, EnchantmentTarget.BOW, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(61, MC_EnchantmentType.LUCK_OF_THE_SEA, "LUCK_OF_THE_SEA", 1, 3, EnchantmentTarget.FISHING_ROD, new ArrayList<Integer>()));
+        Enchantment.registerEnchantment(new FakeEnchantment(62, MC_EnchantmentType.LURE, "LURE", 1, 3, EnchantmentTarget.FISHING_ROD, new ArrayList<Integer>()));
+        Enchantment.stopAcceptingRegistrations();
     }
 
     @Override
