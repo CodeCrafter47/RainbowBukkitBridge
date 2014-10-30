@@ -25,12 +25,12 @@ public class ReflectionUtil {
             Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
             return (float) getMember(Class.forName("joebkt.EntityGeneric"), mcEntity, "height");
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityHeight", MyPlugin.DebugMode?e:null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getEntityHeight", MyPlugin.DebugMode ? e : null);
         }
         return 0;
     }
 
-    public static MC_ItemStack getItemStackOfEntityItem(MC_Entity entity){
+    public static MC_ItemStack getItemStackOfEntityItem(MC_Entity entity) {
         try {
             Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
             Method method = Class.forName("joebkt.EntityGeneric").getDeclaredMethod("getItemStack", null);
@@ -40,7 +40,7 @@ public class ReflectionUtil {
             is.getClass().getDeclaredField("is").set(is, mcItemStack);
             return is;
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getItemStackOfEntityItem", MyPlugin.DebugMode?e:null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getItemStackOfEntityItem", MyPlugin.DebugMode ? e : null);
         }
         return null;
     }
@@ -53,7 +53,7 @@ public class ReflectionUtil {
             Object height = f_height.invoke(mcEntity, null);
             return (UUID) height;
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", MyPlugin.DebugMode?e:null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", MyPlugin.DebugMode ? e : null);
         }
         return null;
     }
@@ -75,7 +75,7 @@ public class ReflectionUtil {
             }
             return null;
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", MyPlugin.DebugMode?e:null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getTarget", MyPlugin.DebugMode ? e : null);
         }
         return null;
     }
@@ -90,18 +90,18 @@ public class ReflectionUtil {
             f_target.setAccessible(true);
             f_target.set(mcEntity, mcTarget);
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTarget", MyPlugin.DebugMode?e:null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTarget", MyPlugin.DebugMode ? e : null);
         }
     }
 
-    public static void sendPluginMessage(MC_Player player, String tag, byte[] data){
+    public static void sendPluginMessage(MC_Player player, String tag, byte[] data) {
         try {
             Object byteBuf = Class.forName("io.netty.buffer.Unpooled").getDeclaredMethod("wrappedBuffer", byte[].class).invoke(null, data);
             Object byteData = Class.forName("joebkt.ByteData").getDeclaredConstructor(Class.forName("io.netty.buffer.ByteBuf")).newInstance(byteBuf);
             Object packet = Class.forName("joebkt.Packet_PluginMessage").getDeclaredConstructor(String.class, Class.forName("joebkt.ByteData")).newInstance(tag, byteData);
             sendPacket(player, packet);
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPluginMessage", MyPlugin.DebugMode?e:null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPluginMessage", MyPlugin.DebugMode ? e : null);
         }
     }
 
@@ -120,7 +120,7 @@ public class ReflectionUtil {
             setMember(playerListItem, "b", Arrays.asList(item));
             sendPacket(receiver, playerListItem);
         } catch (Exception e) {
-            MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPlayerListItemChangeDisplayName", MyPlugin.DebugMode?e:null);
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: sendPlayerListItemChangeDisplayName", MyPlugin.DebugMode ? e : null);
         }
     }
 
@@ -134,7 +134,7 @@ public class ReflectionUtil {
         m.invoke(packetHandler, packet);
     }
 
-    public static String getProperty(String key){
+    public static String getProperty(String key) {
         Properties properties;
         try {
             properties = getServerConfig();
@@ -142,11 +142,11 @@ public class ReflectionUtil {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getServerProperties", MyPlugin.DebugMode ? e : null);
             return null;
         }
-        if(!properties.containsKey(key))return null;
+        if (!properties.containsKey(key)) return null;
         return properties.getProperty(key);
     }
 
-    public static long getWorldSeed(MC_World world){
+    public static long getWorldSeed(MC_World world) {
         try {
             Object mcWorld = getMember(world, "world");
             Method getSeed = Class.forName("joebkt.World").getDeclaredMethod("getSeedNumber");
@@ -158,7 +158,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static boolean hasStorm(MC_World world){
+    public static boolean hasStorm(MC_World world) {
         try {
             Object mcWorld = getMember(world, "world");
             Object worldData = getMember(Class.forName("joebkt.World"), mcWorld, "worldData");
@@ -171,7 +171,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static void regenChunk(MC_World world, int x, int z){
+    public static void regenChunk(MC_World world, int x, int z) {
         try {
             Object mcWorld = getMember(world, "world");
             Object chunkCache = getMember(Class.forName("joebkt.WorldServer"), mcWorld, "cachedChunks");
@@ -189,13 +189,13 @@ public class ReflectionUtil {
 
             chunkMap.getClass().getDeclaredMethod("put", long.class, Object.class).invoke(chunkMap, index, chunk);
             List chunkList = (List) getMember(chunkCache, "loadedChunkList");
-            if(chunkList.contains(oldChunk))chunkList.remove(oldChunk);
+            if (chunkList.contains(oldChunk)) chunkList.remove(oldChunk);
             chunkList.add(chunk);
             Object wChunkMap = getMember(Class.forName("joebkt.WorldServer"), mcWorld, "m_chunkMap");
             chunkMap = getMember(wChunkMap, "d_longHashMap");
             chunkMap.getClass().getDeclaredMethod("put", long.class, Object.class).invoke(chunkMap, index, chunk);
             chunkList = (List) getMember(wChunkMap, "f");
-            if(chunkList.contains(oldChunk))chunkList.remove(oldChunk);
+            if (chunkList.contains(oldChunk)) chunkList.remove(oldChunk);
             chunkList.add(chunk);
 
             // add entities
@@ -245,45 +245,45 @@ public class ReflectionUtil {
         }
     }
 
-    static public boolean isFirstJoin(MC_Player player){
+    static public boolean isFirstJoin(MC_Player player) {
         try {
-            Object data = ((ConcurrentHashMap)getMember(Class.forName("joebkt._JOT_OnlineTimeUtils").getDeclaredField("Data").get(null), "playerData")).get(player.getName());
+            Object data = ((ConcurrentHashMap) getMember(Class.forName("joebkt._JOT_OnlineTimeUtils").getDeclaredField("Data").get(null), "playerData")).get(player.getName());
             long lastLogin = (long) getMember(data, "msLastLogin");
-            long lastLogout= (long) getMember(data, "msLastLogout");
+            long lastLogout = (long) getMember(data, "msLastLogout");
             return lastLogin == lastLogout;
-        } catch (Exception e){
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: isFirstJoin", MyPlugin.DebugMode ? e : null);
         }
         return false;
     }
 
-    static public Location getBedSpawnLocation(MC_Player player){
+    static public Location getBedSpawnLocation(MC_Player player) {
         try {
             Object coords = getMember(Class.forName("joebkt.EntityHuman"), getMember(player, "plr"), "bedRespawnCoords");
-            if(coords == null)return null;
+            if (coords == null) return null;
             Method getX = Class.forName("joebkt.CoordComparer").getDeclaredMethod("getX");
             Method getY = Class.forName("joebkt.CoordComparer").getDeclaredMethod("getY");
             Method getZ = Class.forName("joebkt.CoordComparer").getDeclaredMethod("getZ");
             World w = WorldManager.getWorld(player.getWorld().getName());
             return new Location(w, (int) getX.invoke(coords), (int) getY.invoke(coords), (int) getZ.invoke(coords));
-        } catch (Exception e){
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: getBedSpawnLocation", MyPlugin.DebugMode ? e : null);
         }
         return null;
     }
 
-    static public void savePlayerData(MC_Player player){
+    static public void savePlayerData(MC_Player player) {
         try {
             Object playerList = getPlayerList();
             Method savePlayerStats = Class.forName("joebkt.PlayerList").getDeclaredMethod("savePlayerStats", Class.forName("joebkt.EntityPlayer"));
             savePlayerStats.setAccessible(true);
             savePlayerStats.invoke(playerList, getMember(player, "plr"));
-        } catch (Exception e){
+        } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: savePlayerData", MyPlugin.DebugMode ? e : null);
         }
     }
 
-    public static int readFurnaceBurnTime(MC_Container furnace){
+    public static int readFurnaceBurnTime(MC_Container furnace) {
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
             return (int) getMember(mcfurnace, "burnTime");
@@ -293,7 +293,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static int readFurnaceCookTime(MC_Container furnace){
+    public static int readFurnaceCookTime(MC_Container furnace) {
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
             return (int) getMember(mcfurnace, "cookTime");
@@ -303,7 +303,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static void writeFurnaceBurnTime(MC_Container furnace, int burnTime){
+    public static void writeFurnaceBurnTime(MC_Container furnace, int burnTime) {
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
             setMember(mcfurnace, "burnTime", burnTime);
@@ -312,7 +312,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static void writeFurnaceCookTime(MC_Container furnace, int cookTime){
+    public static void writeFurnaceCookTime(MC_Container furnace, int cookTime) {
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
             setMember(mcfurnace, "cookTime", cookTime);
@@ -321,7 +321,7 @@ public class ReflectionUtil {
         }
     }
 
-    public static String[] getBannedPlayers(){
+    public static String[] getBannedPlayers() {
         try {
             Object banList = getBanList();
             return (String[]) banList.getClass().getDeclaredMethod("a").invoke(banList);
@@ -347,7 +347,28 @@ public class ReflectionUtil {
         }
     }*/
 
-    private static Object getBanList() throws Exception{
+    public static float getFoodSaturation(MC_Player player) {
+        try {
+            return (float) getMember(getHungerStatus(player), "foodSaturationLevel");
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getBannedPlayers", MyPlugin.DebugMode ? e : null);
+            return 0;
+        }
+    }
+
+    public static void setFoodSaturation(MC_Player player, float level) {
+        try {
+            setMember(getHungerStatus(player), "foodSaturationLevel", level);
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getBannedPlayers", MyPlugin.DebugMode ? e : null);
+        }
+    }
+
+    private static Object getHungerStatus(MC_Player player) throws NoSuchFieldException, IllegalAccessException, ClassNotFoundException {
+        return getMember(Class.forName("joebkt.EntityHuman"), getMember(player, "plr"), "hungerStatus");
+    }
+
+    private static Object getBanList() throws Exception {
         return getMember(Class.forName("joebkt.PlayerList"), getPlayerList(), "m_bannedPlayers");
     }
 

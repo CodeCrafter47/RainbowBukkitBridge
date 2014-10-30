@@ -458,8 +458,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public float getSaturation() {
-        MyPlugin.fixme();
-        return 0;
+        return ReflectionUtil.getFoodSaturation(player);
     }
 
     @Override
@@ -651,7 +650,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void setSaturation(float arg0) {
-        MyPlugin.fixme();
+        ReflectionUtil.setFoodSaturation(player, arg0);
     }
 
     @Override
