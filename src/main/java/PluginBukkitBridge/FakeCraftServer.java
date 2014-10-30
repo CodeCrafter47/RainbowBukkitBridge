@@ -2,6 +2,7 @@ package PluginBukkitBridge;
 
 import PluginBukkitBridge.entity.FakePlayer;
 import PluginBukkitBridge.item.FakeItemFactory;
+import PluginReference.MC_Block;
 import PluginReference.MC_Player;
 import PluginReference.MC_Server;
 import com.avaje.ebean.config.ServerConfig;
@@ -508,8 +509,12 @@ public class FakeCraftServer implements Server {
         return new UnsafeValues() {
             @Override
             public Material getMaterialFromInternalName(String s) {
-                MyPlugin.fixme();
-                return null;
+                MC_Block block = MyPlugin.server.getBlockFromName(s);
+                if(block == null){
+                    MyPlugin.fixme();
+                    return null;
+                }
+                return Material.getMaterial(block.getId());
             }
 
             @Override
