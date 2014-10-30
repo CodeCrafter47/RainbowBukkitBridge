@@ -570,7 +570,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void saveData() {
-        MyPlugin.fixme();
+        ReflectionUtil.savePlayerData(player);
     }
 
     @Override

@@ -272,6 +272,17 @@ public class ReflectionUtil {
         return null;
     }
 
+    static public void savePlayerData(MC_Player player){
+        try {
+            Object playerList = getPlayerList();
+            Method savePlayerStats = Class.forName("joebkt.PlayerList").getDeclaredMethod("savePlayerStats", Class.forName("joebkt.EntityPlayer"));
+            savePlayerStats.setAccessible(true);
+            savePlayerStats.invoke(playerList, getMember(player, "plr"));
+        } catch (Exception e){
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: savePlayerData", MyPlugin.DebugMode ? e : null);
+        }
+    }
+
     public static int readFurnaceBurnTime(MC_Container furnace){
         try {
             Object mcfurnace = getMember(furnace, "m_inventory");
@@ -337,7 +348,11 @@ public class ReflectionUtil {
     }*/
 
     private static Object getBanList() throws Exception{
-        return getMember(getMember(getMember(Class.forName("net.minecraft.server.MinecraftServer"), null, "k"), "playerList"), "m_bannedPlayers");
+        return getMember(Class.forName("joebkt.PlayerList"), getPlayerList(), "m_bannedPlayers");
+    }
+
+    private static Object getPlayerList() throws IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
+        return getMember(Class.forName("net.minecraft.server.MinecraftServer"), getMember(Class.forName("net.minecraft.server.MinecraftServer"), null, "k"), "playerList");
     }
 
     private static Properties getServerConfig() throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
