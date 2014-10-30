@@ -389,8 +389,7 @@ public class FakeWorld implements World {
 
     @Override
     public boolean getPVP() {
-        MyPlugin.fixme();
-        return true;
+        return Boolean.valueOf(ReflectionUtil.getProperty("pvp"));
     }
 
     @Override
