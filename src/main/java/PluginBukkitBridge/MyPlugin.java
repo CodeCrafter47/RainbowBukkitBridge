@@ -380,6 +380,12 @@ public class MyPlugin extends PluginReference.PluginBase {
         if (EntityDamageEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         Entity fakeEnt = Util.wrapEntity(ent);
+
+        // check noDamageTicks
+        if(fakeEnt instanceof Player){
+            if(((Player)fakeEnt).getNoDamageTicks() > 0)return;
+        }
+
         EntityDamageEvent event = new EntityDamageEvent(fakeEnt, FakeHelper.GetDamageCause(dmgType), amt);
 
         if (fakeEnt instanceof HumanEntity && !ei.isCancelled) {

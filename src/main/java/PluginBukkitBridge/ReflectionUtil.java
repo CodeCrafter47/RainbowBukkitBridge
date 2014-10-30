@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 /**
@@ -240,6 +241,18 @@ public class ReflectionUtil {
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: regenChunk", MyPlugin.DebugMode ? e : null);
         }
+    }
+
+    static public boolean isFirstJoin(MC_Player player){
+        try {
+            Object data = ((ConcurrentHashMap)getMember(Class.forName("joebkt._JOT_OnlineTimeUtils").getDeclaredField("Data").get(null), "playerData")).get(player.getName());
+            long lastLogin = (long) getMember(data, "msLastLogin");
+            long lastLogout= (long) getMember(data, "msLastLogout");
+            return lastLogin == lastLogout;
+        } catch (Exception e){
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: isFirstJoin", MyPlugin.DebugMode ? e : null);
+        }
+        return false;
     }
 
     public static int readFurnaceBurnTime(MC_Container furnace){

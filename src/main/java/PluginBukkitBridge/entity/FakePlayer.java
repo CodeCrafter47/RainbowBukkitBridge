@@ -27,6 +27,8 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     private String playerListName = null;
 
+    private int noDamageTicks = 0;
+
     public FakePlayer(MC_Player player) {
         super(player);
         this.player = player;
@@ -347,9 +349,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public boolean hasPlayedBefore() {
-        MyPlugin.fixme();
-        // return true as work around for AuthMe
-        return true;
+        return !ReflectionUtil.isFirstJoin(player);
     }
 
     @Override
@@ -796,5 +796,19 @@ public class FakePlayer extends FakeHumanEntity implements Player {
     @Override
     public void setMetadata(String arg0, MetadataValue arg1) {
         MyPlugin.playerMetadataStore.setMetadata(this, arg0, arg1);
+    }
+
+    public void doTick(){
+        if(noDamageTicks > 0)noDamageTicks--;
+    }
+
+    @Override
+    public void setNoDamageTicks(int arg0) {
+        noDamageTicks = arg0;
+    }
+
+    @Override
+    public int getNoDamageTicks() {
+        return noDamageTicks;
     }
 }
