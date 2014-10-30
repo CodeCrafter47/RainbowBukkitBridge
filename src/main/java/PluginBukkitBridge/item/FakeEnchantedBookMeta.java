@@ -90,6 +90,7 @@ public class FakeEnchantedBookMeta extends FakeItemMeta implements EnchantmentSt
             if(ench == null){
                 ench = new CompoundTag("", new HashMap<String, Tag>());
                 ench.getValue().put("id", new ShortTag("id", (short) enchantment.getId()));
+                list.getValue().add(ench);
             }
             ench.getValue().put("lvl", new ShortTag("lvl", (short) level));
             return old != level;

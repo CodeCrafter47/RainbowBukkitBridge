@@ -159,7 +159,7 @@ public class FakeItemMeta implements ItemMeta, Repairable {
             ListTag list = (ListTag) tag.getValue().get("ench");
             for (Tag tag : list.getValue()) {
                 CompoundTag compoundTag = (CompoundTag) tag;
-                if (compoundTag.getValue().containsKey("id") && compoundTag.getValue().containsKey("lvl")) {
+                if (compoundTag.getValue().containsKey("id")) {
                     if(((ShortTag) compoundTag.getValue().get("id")).getValue() == enchantment.getId()){
                         ench = compoundTag;
                     }
@@ -168,6 +168,7 @@ public class FakeItemMeta implements ItemMeta, Repairable {
             if(ench == null){
                 ench = new CompoundTag("", new HashMap<String, Tag>());
                 ench.getValue().put("id", new ShortTag("id", (short) enchantment.getId()));
+                list.getValue().add(ench);
             }
             ench.getValue().put("lvl", new ShortTag("lvl", (short) level));
             return old != level;
