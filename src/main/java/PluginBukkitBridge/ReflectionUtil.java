@@ -1,6 +1,8 @@
 package PluginBukkitBridge;
 
 import PluginReference.*;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -253,6 +255,21 @@ public class ReflectionUtil {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: isFirstJoin", MyPlugin.DebugMode ? e : null);
         }
         return false;
+    }
+
+    static public Location getBedSpawnLocation(MC_Player player){
+        try {
+            Object coords = getMember(Class.forName("joebkt.EntityHuman"), getMember(player, "plr"), "bedRespawnCoords");
+            if(coords == null)return null;
+            Method getX = Class.forName("joebkt.CoordComparer").getDeclaredMethod("getX");
+            Method getY = Class.forName("joebkt.CoordComparer").getDeclaredMethod("getY");
+            Method getZ = Class.forName("joebkt.CoordComparer").getDeclaredMethod("getZ");
+            World w = WorldManager.getWorld(player.getWorld().getName());
+            return new Location(w, (int) getX.invoke(coords), (int) getY.invoke(coords), (int) getZ.invoke(coords));
+        } catch (Exception e){
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: getBedSpawnLocation", MyPlugin.DebugMode ? e : null);
+        }
+        return null;
     }
 
     public static int readFurnaceBurnTime(MC_Container furnace){

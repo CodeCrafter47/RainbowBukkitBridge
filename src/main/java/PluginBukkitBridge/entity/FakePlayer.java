@@ -441,8 +441,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public Location getBedSpawnLocation() {
-        MyPlugin.fixme();
-        return null;
+        return ReflectionUtil.getBedSpawnLocation(player);
     }
 
     @Override
