@@ -2,10 +2,12 @@ package PluginBukkitBridge;
 
 import PluginReference.*;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -163,6 +165,80 @@ public class ReflectionUtil {
         } catch (Exception e) {
             MyPlugin.logger.log(Level.WARNING, "Reflection failed: hasStorm", MyPlugin.DebugMode ? e : null);
             return false;
+        }
+    }
+
+    public static void regenChunk(MC_World world, int x, int z){
+        try {
+            Object mcWorld = getMember(world, "world");
+            Object chunkCache = getMember(Class.forName("joebkt.WorldServer"), mcWorld, "cachedChunks");
+            Object chunkProviderServer = getMember(Class.forName("joebkt.ServerChunkCache"), chunkCache, "chunkProvider");
+            Method createChunk = Class.forName("joebkt.IChunkProvider").getDeclaredMethod("getOrCreateChunk", int.class, int.class);
+            createChunk.setAccessible(true);
+            Object chunk = createChunk.invoke(chunkProviderServer, x, z);
+
+            long index = (long) Class.forName("joebkt.ChunkCoordIntPair").getDeclaredMethod("a", int.class, int.class).invoke(null, x, z);
+            Object chunkMap = getMember(chunkCache, "loadedChunkMap");
+            Object oldChunk = chunkMap.getClass().getDeclaredMethod("get", long.class).invoke(chunkMap, index);
+            // fixme remove old entities
+            Method removeEntities = Class.forName("joebkt.Chunk").getDeclaredMethod("d");
+            removeEntities.invoke(oldChunk);
+
+            chunkMap.getClass().getDeclaredMethod("put", long.class, Object.class).invoke(chunkMap, index, chunk);
+            List chunkList = (List) getMember(chunkCache, "loadedChunkList");
+            if(chunkList.contains(oldChunk))chunkList.remove(oldChunk);
+            chunkList.add(chunk);
+            Object wChunkMap = getMember(Class.forName("joebkt.WorldServer"), mcWorld, "m_chunkMap");
+            chunkMap = getMember(wChunkMap, "d_longHashMap");
+            chunkMap.getClass().getDeclaredMethod("put", long.class, Object.class).invoke(chunkMap, index, chunk);
+            chunkList = (List) getMember(wChunkMap, "f");
+            if(chunkList.contains(oldChunk))chunkList.remove(oldChunk);
+            chunkList.add(chunk);
+
+            // add entities
+            Method addEntitiesToWorld = Class.forName("joebkt.Chunk").getDeclaredMethod("addEntitiesToWorld");
+            addEntitiesToWorld.invoke(chunk);
+
+            // refresh surrounding chunks maybe?
+            Method loadAdjacentChunks = Class.forName("joebkt.Chunk").getDeclaredMethod("loadAdjacentChunks",
+                    Class.forName("joebkt.IChunkProvider"), Class.forName("joebkt.IChunkProvider"), int.class, int.class);
+            loadAdjacentChunks.invoke(chunk, chunkProviderServer, chunkProviderServer, x, z);
+
+            // refresh the chunk
+            int px = x << 4;
+            int pz = z << 4;
+
+            // If there are more than 64 updates to a chunk at once, it will update all 'touched' sections within the chunk
+            // And will include biome data if all sections have been 'touched'
+            // This flags 65 blocks distributed across all the sections of the chunk, so that everything is sent, including biomes
+            Method notifyBlockDataChangedAt = Class.forName("joebkt.World").getDeclaredMethod("notifyBlockDataChangedAt", Class.forName("joebkt.IntegerCoordinates"));
+            Constructor cooordWrapper = Class.forName("joebkt.IntegerCoordinates").getConstructor(int.class, int.class, int.class);
+            int height = 256 / 16;
+            for (int idx = 0; idx < 64; idx++) {
+                Object coords = cooordWrapper.newInstance(px + (idx / height), ((idx % height) * 16), pz);
+                notifyBlockDataChangedAt.invoke(mcWorld, coords);
+            }
+            Object coords = cooordWrapper.newInstance(px + 15, (height * 16) - 1, pz + 15);
+            notifyBlockDataChangedAt.invoke(mcWorld, coords);
+            /*
+            // copy block by block
+            Method getBlock = Class.forName("joebkt.Chunk").getDeclaredMethod("getBlock2", int.class, int.class, int.class);
+            Method toBlockState = Class.forName("joebkt.BlockObject").getDeclaredMethod("toBlockState");
+            Constructor blockWrapper = Class.forName("WrapperObjects.BlockWrapper").getDeclaredConstructors()[0];
+            for(int cx = 0; cx < 16; cx++){
+                for(int y = 0; y < 256; y++){
+                    for(int cz = 0; cz < 16; cz++){
+                        Object block = getBlock.invoke(chunk, cx, y, cz);
+                        Object blockState = toBlockState.invoke(block);
+                        MC_Block wrappedBlock = (MC_Block) blockWrapper.newInstance(blockState);
+                        world.setBlockAt(x*16 + cx, y, z*16 + cz, wrappedBlock, wrappedBlock.getSubtype());
+                        System.out.println("set block at " + (x*16+cx) + "," + y + "," + (z*16+cz) + " to " + wrappedBlock.getId());
+                    }
+                }
+            }
+            */
+        } catch (Exception e) {
+            MyPlugin.logger.log(Level.WARNING, "Reflection failed: regenChunk", MyPlugin.DebugMode ? e : null);
         }
     }
 

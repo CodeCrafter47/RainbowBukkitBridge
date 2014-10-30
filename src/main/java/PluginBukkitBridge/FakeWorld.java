@@ -576,8 +576,8 @@ public class FakeWorld implements World {
 
     @Override
     public boolean regenerateChunk(int arg0, int arg1) {
-        MyPlugin.fixme();
-        return false;
+        ReflectionUtil.regenChunk(world, arg0, arg1);
+        return true;
     }
 
     @Override
