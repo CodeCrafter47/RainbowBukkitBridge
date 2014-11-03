@@ -216,7 +216,7 @@ final class PluginClassLoader extends URLClassLoader {
                 name = m.group( 2 );
             }
             // *MAGIC*
-            if(name.contains("google") && !name.contains("gson")){
+            if(name.contains("google") && !name.contains("gson") && !name.contains("voxelsniper")){
                 value = prefix + "remapped/" + name + suffix;
             }
             return value;
