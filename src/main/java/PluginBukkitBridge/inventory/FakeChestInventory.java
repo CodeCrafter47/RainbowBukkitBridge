@@ -7,6 +7,7 @@ import PluginReference.MC_Chest;
 import PluginReference.MC_ItemStack;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.craftbukkit.inventory.InventoryIterator;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
@@ -430,8 +431,7 @@ public class FakeChestInventory implements Inventory{
 
     @Override
     public InventoryHolder getHolder() {
-        MyPlugin.fixme();
-        return null;
+        return ((Chest)blk.getState());
     }
 
     @Override
