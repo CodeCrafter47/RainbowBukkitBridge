@@ -1,0 +1,9 @@
+# This is the configuration file of PluginBukkitBridge
+#
+# ignoreCommands: list commands which shouldn't be handled by the bridge. Normally the bridge can detect that automatically, but if you use Essentials there's an issue.
+#
+#
+
+ignoreCommands:
+  - bal
+  - help

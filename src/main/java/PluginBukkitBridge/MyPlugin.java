@@ -54,6 +54,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public final static SimpleCommandMap commandMap = new MyCommandMap(fakeServer);
     public final static PluginManager pluginManager = new MyPluginManager(fakeServer, commandMap);
     public static SimpleHelpMap helpMap;
+	public static BukkitBridgeConfig bridgeConfig;
 
     public final static File pluginDir = new File("plugins");
     public final static File updateDir = new File(pluginDir, "update");
@@ -101,6 +102,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         pluginDir.mkdirs();
         updateDir.mkdirs();
         helpMap = new SimpleHelpMap(fakeServer);
+		bridgeConfig = new BukkitBridgeConfig();
     }
 
     public void onStartup(MC_Server argServer) {
@@ -345,7 +347,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         Matcher match = Pattern.compile(" */(.*)").matcher(msg);
         Player player = PlayerManager.getPlayer(plr);
         player.getLocation();
-        if (match.matches()) {
+        if (match.matches() && !bridgeConfig.getIgnoredCommands().contains(match.group(1).split(" ")[0])) {
 
             // don't call events if no one listens
             if (PlayerCommandPreprocessEvent.getHandlerList().getRegisteredListeners().length != 0) {
