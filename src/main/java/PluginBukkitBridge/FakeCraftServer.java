@@ -2,6 +2,7 @@ package PluginBukkitBridge;
 
 import PluginBukkitBridge.entity.FakePlayer;
 import PluginBukkitBridge.item.FakeItemFactory;
+import PluginBukkitBridge.scoreboard.FakeScoreboardManager;
 import PluginReference.MC_Block;
 import PluginReference.MC_Player;
 import PluginReference.MC_Server;
@@ -34,6 +35,8 @@ public class FakeCraftServer implements Server {
     public static MC_Server server = null;
 
     private FakeItemFactory itemFactory = new FakeItemFactory();
+
+	private FakeScoreboardManager scoreboardManager = new FakeScoreboardManager();
 
     @Override
     public String getName() {
@@ -482,8 +485,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public ScoreboardManager getScoreboardManager() {
-        MyPlugin.fixme();
-        return null;
+        return scoreboardManager;
     }
 
     @Override

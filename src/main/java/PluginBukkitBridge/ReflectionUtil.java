@@ -1,5 +1,8 @@
 package PluginBukkitBridge;
 
+import PluginBukkitBridge.scoreboard.FakeObjective;
+import PluginBukkitBridge.scoreboard.FakeScoreboard;
+import PluginBukkitBridge.scoreboard.FakeTeam;
 import PluginReference.*;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -8,10 +11,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
@@ -346,6 +346,100 @@ public class ReflectionUtil {
             return new ArrayList<>();
         }
     }*/
+	public static FakeScoreboard getNewScoreboard(){
+		try{
+			Object handle = Class.forName("joebkt.Scoreboard").getDeclaredConstructor().newInstance();
+			return new FakeScoreboard(handle);
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: getNewScoreboard", MyPlugin.DebugMode ? e : null);
+			return null;
+		}
+	}
+	public static FakeScoreboard getMainScoreboard(){
+		try{
+			Object worldServer = ((Object[])getMember(Class.forName("net.minecraft.server.MinecraftServer"),
+					getMember(Class.forName("net.minecraft.server.MinecraftServer"), null, "k"), "worldServers"))[0];
+			Object handle = getMember(Class.forName("joebkt.World"), worldServer, "scoreboard");
+			return new FakeScoreboard(handle);
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: getMainScoreboard", MyPlugin.DebugMode ? e : null);
+			return null;
+		}
+	}
+	public static FakeObjective getObjective(Object handle, String name){
+		try{
+			Method m = Class.forName("joebkt.Scoreboard").getDeclaredMethod("getObjectiveByName", String.class);
+			Object handle2 = m.invoke(handle, name);
+			return new FakeObjective(handle2);
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: getObjective", MyPlugin.DebugMode ? e : null);
+			return null;
+		}
+	}
+	public static FakeObjective registerNewObjective(Object scoreboard, String name){
+		try{
+			Method m = Class.forName("joebkt.Scoreboard").getDeclaredMethod("a", String.class, Class.forName("joebkt.StatRelated"));
+			Object handle2 = m.invoke(scoreboard, name, getMember(Class.forName("joebkt.StatRelated"), null, "dummy"));
+			return new FakeObjective(handle2);
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: registerNewObjective", MyPlugin.DebugMode ? e : null);
+			return null;
+		}
+	}
+	public static FakeTeam registerNewTeam(Object scoreboard, String name){
+		try{
+			Method m = Class.forName("joebkt.Scoreboard").getDeclaredMethod("e", String.class);
+			Object handle = m.invoke(scoreboard, name);
+			return new FakeTeam(handle, new FakeScoreboard(scoreboard));
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: registerNewTeam", MyPlugin.DebugMode ? e : null);
+			return null;
+		}
+	}
+	public static void setTeamDisplayName(Object team, String displayName){
+		try{
+			setMember(team, "d", displayName);
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTeamDisplayName", MyPlugin.DebugMode ? e : null);
+		}
+	}
+	public static void setTeamPrefix(Object team, String name){
+		try{
+			Method m = Class.forName("joebkt.NamePrefixDeathRelated").getDeclaredMethod("setPrefix", String.class);
+			m.invoke(team, name);
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTeamPrefix", MyPlugin.DebugMode ? e : null);
+		}
+	}
+	public static void setTeamSuffix(Object team, String name){
+		try{
+			Method m = Class.forName("joebkt.NamePrefixDeathRelated").getDeclaredMethod("c", String.class);
+			m.invoke(team, name);
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: setTeamSuffix", MyPlugin.DebugMode ? e : null);
+		}
+	}
+	public static void addPlayerToTeam(Object scoreboard, Object team, String name){
+		try{
+			Method m = Class.forName("joebkt.Scoreboard").getDeclaredMethod("a", String.class, String.class);
+			m.invoke(scoreboard, name, getMember(team, "b"));
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: addPlayerToTeam", MyPlugin.DebugMode ? e : null);
+		}
+	}
+	public static Collection<FakeTeam> getTeams(Object scoreboard){
+		try{
+			Method m = Class.forName("joebkt.Scoreboard").getDeclaredMethod("g");
+			Collection<FakeTeam> teams = new ArrayList<>();
+			for(Object handle: ((Collection)m.invoke(scoreboard))){
+				teams.add(new FakeTeam(handle, new FakeScoreboard(scoreboard)));
+			}
+			return teams;
+		} catch (Exception e){
+			MyPlugin.logger.log(Level.WARNING, "Reflection failed: addPlayerToTeam", MyPlugin.DebugMode ? e : null);
+			return null;
+		}
+	}
 
     public static float getFoodSaturation(MC_Player player) {
         try {
