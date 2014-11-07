@@ -203,6 +203,40 @@ final class PluginClassLoader extends URLClassLoader {
             extends Remapper
     {
         private final Pattern classPattern = Pattern.compile("(\\[*)?L(.+);");
+
+		public Object mapValue( Object object )
+		{
+			if ( object instanceof String )
+			{
+				String name = (String) object;
+				String value = name;
+				String prefix = "";
+				String suffix = "";
+				Matcher m = classPattern.matcher( name );
+				if ( m.matches() )
+				{
+					prefix = m.group( 1 ) + "L";
+					suffix = ";";
+					name = m.group( 2 );
+				}
+				if ( name.equals("net.glowstone.entity.GlowHumanEntity") )
+				{
+					value = prefix + "PluginBukkitBridge.entity.FakeHumanEntity" + suffix;
+				}
+				if ( name.equals("net/glowstone/entity/GlowHumanEntity") )
+				{
+					value = prefix + "PluginBukkitBridge/entity/FakeHumanEntity" + suffix;
+				}
+				/*
+				if(name.contains("glowstone")){
+					System.out.println(name + " -> " + value);
+				}
+				*/
+				return value;
+			}
+			return super.mapValue( object );
+		}
+
         public String map( String name )
         {
             String value = name;
