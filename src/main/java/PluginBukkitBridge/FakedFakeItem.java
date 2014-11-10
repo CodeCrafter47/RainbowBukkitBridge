@@ -55,8 +55,15 @@ public class FakedFakeItem implements Item {
 
     @Override
     public Location getLocation(Location location) {
-        MyPlugin.fixme();
-        return null;
+        if(location == null)return this.location;
+		location.setWorld(this.location.getWorld());
+		location.setDirection(this.location.getDirection());
+		location.setX(this.location.getX());
+		location.setY(this.location.getY());
+		location.setZ(this.location.getZ());
+		location.setPitch(this.location.getPitch());
+		location.setYaw(this.location.getYaw());
+        return location;
     }
 
     @Override
