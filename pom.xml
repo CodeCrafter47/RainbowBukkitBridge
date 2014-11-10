@@ -42,7 +42,7 @@
         <dependency>
             <groupId>rainbow</groupId>
             <artifactId>PluginReference</artifactId>
-            <version>1.0</version>
+            <version>47</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>

@@ -15,14 +15,13 @@ public class WorldManager {
     static List<World> worlds = new ArrayList<>();
 
     public static void refresh(){
-        for(int i = -1; i <= 2; i++){
-            MC_World world = MyPlugin.server.getWorld(i);
-            if(world != null && world.getName() != null && !world.getName().isEmpty()){
-                if(!hasWorld(world.getName())){
-                    worlds.add(new FakeWorld(world));
-                }
-            }
-        }
+        for(MC_World world: MyPlugin.server.getWorlds()) {
+			if (world != null && world.getName() != null && !world.getName().isEmpty()) {
+				if (!hasWorld(world.getName())) {
+					worlds.add(new FakeWorld(world));
+				}
+			}
+		}
     }
 
     public static boolean hasWorld(String name){
