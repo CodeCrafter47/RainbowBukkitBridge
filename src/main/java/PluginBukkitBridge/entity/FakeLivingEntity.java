@@ -5,6 +5,7 @@ import PluginBukkitBridge.ReflectionUtil;
 import PluginBukkitBridge.Util;
 import PluginBukkitBridge.inventory.FakeEntityEquipment;
 import PluginReference.MC_Entity;
+import PluginReference.MC_Player;
 import PluginReference.MC_PotionEffect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -166,7 +167,9 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public Player getKiller() {
-        MyPlugin.fixme("stub method");
+        if(m_ent.getAttacker() != null && m_ent.getAttacker() instanceof MC_Player){
+			return (Player) Util.wrapEntity(m_ent.getAttacker());
+		}
         return null;
     }
 
