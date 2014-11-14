@@ -24,6 +24,10 @@ public class FakedFakeItem implements Item {
 
     public FakedFakeItem(ItemStack is, Location location) {
         this.is = is;
+		if(is == null){
+			MyPlugin.fixme("itemstack is null, pretending dirt");
+			is = new ItemStack(Material.DIRT);
+		}
         this.location = location;
     }
 
