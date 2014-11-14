@@ -271,7 +271,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public void setCustomNameVisible(boolean arg0) {
-        MyPlugin.fixme();
+        // we can ignore this as the custom name is always visible
     }
 
     @Override
