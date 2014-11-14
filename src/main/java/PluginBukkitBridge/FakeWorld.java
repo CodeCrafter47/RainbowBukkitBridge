@@ -237,6 +237,16 @@ public class FakeWorld implements World {
 
     @Override
     public Difficulty getDifficulty() {
+		try{
+			return Difficulty.valueOf(ReflectionUtil.getProperty("difficulty"));
+		}catch(Exception ignored){
+
+		}
+		try{
+			return Difficulty.getByValue(Integer.valueOf(ReflectionUtil.getProperty("difficulty")));
+		}catch(Exception ignored){
+
+		}
         MyPlugin.fixme();
         return Difficulty.NORMAL;
     }
