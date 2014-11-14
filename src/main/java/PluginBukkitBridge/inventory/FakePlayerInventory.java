@@ -200,7 +200,8 @@ public class FakePlayerInventory implements PlayerInventory {
     @Override
     public List<HumanEntity> getViewers() {
         MyPlugin.fixme();
-        return null;
+		// I'm not sure what this is supposed to return for a player inventory
+        return new ArrayList<>();
     }
 
     @Override
