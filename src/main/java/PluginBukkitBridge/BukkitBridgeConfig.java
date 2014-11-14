@@ -16,7 +16,8 @@ public class BukkitBridgeConfig {
 	private YamlConfiguration config;
 
 	public BukkitBridgeConfig() {
-		File yamlFile = new File("BukkitBridge.yml");
+		File yamlFile = new File("plugins_mod/PluginBukkitBridge/BukkitBridge.yml");
+		yamlFile.mkdirs();
 		YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(getClass().getClassLoader().getResourceAsStream("configurations/BukkitBridge.yml"), Charsets.UTF_8));
 
 		try {
