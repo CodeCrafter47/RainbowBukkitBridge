@@ -328,8 +328,7 @@ public class FakeWorld implements World {
 
     @Override
     public ChunkGenerator getGenerator() {
-        MyPlugin.fixme();
-        return null;
+        return new FakeChunkGenerator();
     }
 
     @Override
