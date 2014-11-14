@@ -3,6 +3,7 @@ package PluginBukkitBridge;
 import PluginBukkitBridge.block.FakeBlock;
 import PluginBukkitBridge.block.FakeBlockState;
 import PluginBukkitBridge.commands.MyCommandMap;
+import PluginBukkitBridge.entity.FakeEntity;
 import PluginBukkitBridge.entity.FakePlayer;
 import PluginBukkitBridge.logging.MyLogHandler;
 import PluginReference.*;
@@ -808,6 +809,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onNonPlayerEntityDeath(MC_Entity entVictim, MC_Entity entKiller, MC_DamageType dmgType) {
         if(entVictim.getHealth() <= 0 && EntityDeathEvent.getHandlerList().getRegisteredListeners().length > 0){
             EntityDeathEvent event = new EntityDeathEvent((org.bukkit.entity.LivingEntity) Util.wrapEntity(entVictim), new ArrayList<ItemStack>(), 0);
+			((FakeEntity)event.getEntity()).setDamageCause(FakeHelper.GetDamageCause(dmgType));
             pluginManager.callEvent(event);
         }
     }

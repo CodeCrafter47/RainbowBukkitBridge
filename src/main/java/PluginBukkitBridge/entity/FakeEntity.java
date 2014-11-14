@@ -19,6 +19,12 @@ import java.util.UUID;
 public class FakeEntity implements Entity {
     public MC_Entity m_ent;
 
+	public void setDamageCause(EntityDamageEvent.DamageCause damageCause) {
+		this.damageCause = damageCause;
+	}
+
+	public EntityDamageEvent.DamageCause damageCause = null;
+
     public FakeEntity(MC_Entity argEnt) {
         m_ent = argEnt;
     }
@@ -62,8 +68,11 @@ public class FakeEntity implements Entity {
 
     @Override
     public EntityDamageEvent getLastDamageCause() {
-        MyPlugin.fixme();
-        return null;
+        if(damageCause == null){
+			MyPlugin.fixme();
+			return null;
+		}
+        return new EntityDamageEvent(this, damageCause, 999);
     }
 
     @Override
