@@ -26,7 +26,7 @@ public class FakedFakeItem implements Item {
         this.is = is;
 		if(is == null){
 			MyPlugin.fixme("itemstack is null, pretending dirt");
-			is = new ItemStack(Material.DIRT);
+			this.is = new ItemStack(Material.DIRT);
 		}
         this.location = location;
     }
