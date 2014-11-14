@@ -20,6 +20,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
@@ -699,6 +700,7 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
     }
 
+	boolean inEvent = false;
     @Override
     public void onAttemptEntitySpawn(MC_Entity ent, MC_EventInfo ei) {
         if (EntitySpawnEvent.getHandlerList().getRegisteredListeners().length > 0) {
@@ -707,6 +709,17 @@ public class MyPlugin extends PluginReference.PluginBase {
             pluginManager.callEvent(event);
             ei.isCancelled = event.isCancelled();
         }
+		if(CreatureSpawnEvent.getHandlerList().getRegisteredListeners().length > 0 && !inEvent){
+			Entity ent2 = Util.wrapEntity(ent);
+			if(ent2 instanceof LivingEntity) {
+				CreatureSpawnEvent event = new CreatureSpawnEvent((LivingEntity) ent2, CreatureSpawnEvent.SpawnReason.NATURAL);
+				event.setCancelled(ei.isCancelled);
+				inEvent = true;
+				pluginManager.callEvent(event);
+				inEvent = false;
+				ei.isCancelled = event.isCancelled();
+			}
+		}
     }
 
     @Override
