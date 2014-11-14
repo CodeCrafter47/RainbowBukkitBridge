@@ -7,6 +7,7 @@ import PluginReference.*;
 import lombok.SneakyThrows;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
@@ -630,4 +631,221 @@ public class Util {
         MyPlugin.fixme("unable to unwrap potionEffect " + type.getName());
         return null;
     }
+
+	public static MC_WorldBiomeType wrapBiome(Biome arg2) {
+		switch (arg2) {
+			case SWAMPLAND:
+				return MC_WorldBiomeType.SWAMPLAND;
+			case FOREST:
+				return MC_WorldBiomeType.FOREST;
+			case TAIGA:
+				return MC_WorldBiomeType.TAIGA;
+			case DESERT:
+				return MC_WorldBiomeType.DESERT;
+			case PLAINS:
+				return MC_WorldBiomeType.PLAINS;
+			case HELL:
+				return MC_WorldBiomeType.HELL;
+			case SKY:
+				return MC_WorldBiomeType.THE_END;
+			case OCEAN:
+				return MC_WorldBiomeType.OCEAN;
+			case RIVER:
+				return MC_WorldBiomeType.RIVER;
+			case EXTREME_HILLS:
+				return MC_WorldBiomeType.EXTREME_HILLS;
+			case FROZEN_OCEAN:
+				return MC_WorldBiomeType.FROZEN_OCEAN;
+			case FROZEN_RIVER:
+				return MC_WorldBiomeType.FROZEN_RIVER;
+			case ICE_PLAINS:
+				return MC_WorldBiomeType.ICE_PLAINS;
+			case ICE_MOUNTAINS:
+				return MC_WorldBiomeType.ICE_MOUNTAINS;
+			case MUSHROOM_ISLAND:
+				return MC_WorldBiomeType.MUSHROOM_ISLAND;
+			case MUSHROOM_SHORE:
+				return MC_WorldBiomeType.MUSHROOM_ISLAND_SHORE;
+			case BEACH:
+				return MC_WorldBiomeType.BEACH;
+			case DESERT_HILLS:
+				return MC_WorldBiomeType.DESERT_HILLS;
+			case FOREST_HILLS:
+				return MC_WorldBiomeType.FOREST_HILLS;
+			case TAIGA_HILLS:
+				return MC_WorldBiomeType.TAIGA_HILLS;
+			case SMALL_MOUNTAINS:
+				return MC_WorldBiomeType.UNSPECIFIED;
+			case JUNGLE:
+				return MC_WorldBiomeType.JUNGLE;
+			case JUNGLE_HILLS:
+				return MC_WorldBiomeType.JUNGLE_HILLS;
+			case JUNGLE_EDGE:
+				return MC_WorldBiomeType.JUNGLE_EDGE;
+			case DEEP_OCEAN:
+				return MC_WorldBiomeType.DEEP_OCEAN;
+			case STONE_BEACH:
+				return MC_WorldBiomeType.STONE_BEACH;
+			case COLD_BEACH:
+				return MC_WorldBiomeType.COLD_BEACH;
+			case BIRCH_FOREST:
+				return MC_WorldBiomeType.BIRCH_FOREST;
+			case BIRCH_FOREST_HILLS:
+				return MC_WorldBiomeType.BIRCH_FOREST_HILLS;
+			case ROOFED_FOREST:
+				return MC_WorldBiomeType.ROOFED_FOREST;
+			case COLD_TAIGA:
+				return MC_WorldBiomeType.COLD_TAIGA;
+			case COLD_TAIGA_HILLS:
+				return MC_WorldBiomeType.COLD_TAIGA_HILLS;
+			case MEGA_TAIGA:
+				return MC_WorldBiomeType.MEGA_TAIGA;
+			case MEGA_TAIGA_HILLS:
+				return MC_WorldBiomeType.MEGA_TAIGA_HILLS;
+			case EXTREME_HILLS_PLUS:
+				return MC_WorldBiomeType.EXTREME_HILLS_PLUS;
+			case SAVANNA:
+				return MC_WorldBiomeType.SAVANNA;
+			case SAVANNA_PLATEAU:
+				return MC_WorldBiomeType.SAVANNA_PLATEAU;
+			case MESA:
+				return MC_WorldBiomeType.MESA;
+			case MESA_PLATEAU_FOREST:
+				return MC_WorldBiomeType.MESA_PLATEAU_F;
+			case MESA_PLATEAU:
+				return MC_WorldBiomeType.MESA_PLATEAU;
+			case SUNFLOWER_PLAINS:
+				return MC_WorldBiomeType.PLAINS;
+			case DESERT_MOUNTAINS:
+				return MC_WorldBiomeType.DESERT_HILLS;
+			case FLOWER_FOREST:
+				return MC_WorldBiomeType.FOREST;
+			case TAIGA_MOUNTAINS:
+				return MC_WorldBiomeType.TAIGA_HILLS;
+			case SWAMPLAND_MOUNTAINS:
+				return MC_WorldBiomeType.SWAMPLAND;
+			case ICE_PLAINS_SPIKES:
+				return MC_WorldBiomeType.ICE_MOUNTAINS;
+			case JUNGLE_MOUNTAINS:
+				return MC_WorldBiomeType.JUNGLE_HILLS;
+			case JUNGLE_EDGE_MOUNTAINS:
+				return MC_WorldBiomeType.JUNGLE_EDGE;
+			case COLD_TAIGA_MOUNTAINS:
+				return MC_WorldBiomeType.COLD_TAIGA_HILLS;
+			case SAVANNA_MOUNTAINS:
+				return MC_WorldBiomeType.SAVANNA;
+			case SAVANNA_PLATEAU_MOUNTAINS:
+				return MC_WorldBiomeType.SAVANNA_PLATEAU;
+			case MESA_BRYCE:
+				return MC_WorldBiomeType.MESA;
+			case MESA_PLATEAU_FOREST_MOUNTAINS:
+				return MC_WorldBiomeType.MESA_PLATEAU_F;
+			case MESA_PLATEAU_MOUNTAINS:
+				return MC_WorldBiomeType.MESA_PLATEAU;
+			case BIRCH_FOREST_MOUNTAINS:
+				return MC_WorldBiomeType.BIRCH_FOREST_HILLS;
+			case BIRCH_FOREST_HILLS_MOUNTAINS:
+				return MC_WorldBiomeType.BIRCH_FOREST_HILLS;
+			case ROOFED_FOREST_MOUNTAINS:
+				return MC_WorldBiomeType.ROOFED_FOREST;
+			case MEGA_SPRUCE_TAIGA:
+				return MC_WorldBiomeType.UNSPECIFIED;
+			case EXTREME_HILLS_MOUNTAINS:
+				return MC_WorldBiomeType.EXTREME_HILLS;
+			case EXTREME_HILLS_PLUS_MOUNTAINS:
+				return MC_WorldBiomeType.EXTREME_HILLS_PLUS;
+			case MEGA_SPRUCE_TAIGA_HILLS:
+				return MC_WorldBiomeType.UNSPECIFIED;
+		}
+		return MC_WorldBiomeType.UNSPECIFIED;
+	}
+
+	public static Biome wrapBiome(MC_WorldBiomeType biomeType) {
+		switch (biomeType) {
+			case UNSPECIFIED:
+				MyPlugin.fixme("Unknown biome " + biomeType);
+				return null;
+			case OCEAN:
+				return Biome.OCEAN;
+			case PLAINS:
+				return Biome.PLAINS;
+			case DESERT:
+				return Biome.DESERT;
+			case EXTREME_HILLS:
+				return Biome.EXTREME_HILLS;
+			case FOREST:
+				return Biome.FOREST;
+			case TAIGA:
+				return Biome.TAIGA;
+			case SWAMPLAND:
+				return Biome.SWAMPLAND;
+			case RIVER:
+				return Biome.RIVER;
+			case HELL:
+				return Biome.HELL;
+			case THE_END:
+				return Biome.SKY;
+			case FROZEN_OCEAN:
+				return Biome.FROZEN_OCEAN;
+			case FROZEN_RIVER:
+				return Biome.FROZEN_RIVER;
+			case ICE_PLAINS:
+				return Biome.ICE_PLAINS;
+			case ICE_MOUNTAINS:
+				return Biome.ICE_MOUNTAINS;
+			case MUSHROOM_ISLAND:
+				return Biome.MUSHROOM_ISLAND;
+			case MUSHROOM_ISLAND_SHORE:
+				return Biome.MUSHROOM_SHORE;
+			case BEACH:
+				return Biome.BEACH;
+			case DESERT_HILLS:
+				return Biome.DESERT_HILLS;
+			case FOREST_HILLS:
+				return Biome.FOREST_HILLS;
+			case TAIGA_HILLS:
+				return Biome.TAIGA_HILLS;
+			case EXTREME_HILLS_EDGE:
+				return Biome.EXTREME_HILLS;
+			case JUNGLE:
+				return Biome.JUNGLE;
+			case JUNGLE_HILLS:
+				return Biome.JUNGLE_HILLS;
+			case JUNGLE_EDGE:
+				return Biome.JUNGLE_EDGE;
+			case DEEP_OCEAN:
+				return Biome.DEEP_OCEAN;
+			case STONE_BEACH:
+				return Biome.STONE_BEACH;
+			case COLD_BEACH:
+				return Biome.COLD_BEACH;
+			case BIRCH_FOREST:
+				return Biome.BIRCH_FOREST;
+			case BIRCH_FOREST_HILLS:
+				return Biome.BIRCH_FOREST_HILLS;
+			case ROOFED_FOREST:
+				return Biome.ROOFED_FOREST;
+			case COLD_TAIGA:
+				return Biome.COLD_TAIGA;
+			case COLD_TAIGA_HILLS:
+				return Biome.COLD_TAIGA_HILLS;
+			case MEGA_TAIGA:
+				return Biome.MEGA_TAIGA;
+			case MEGA_TAIGA_HILLS:
+				return Biome.MEGA_TAIGA_HILLS;
+			case EXTREME_HILLS_PLUS:
+				return Biome.EXTREME_HILLS_PLUS;
+			case SAVANNA:
+				return Biome.SAVANNA;
+			case SAVANNA_PLATEAU:
+				return Biome.SAVANNA_PLATEAU;
+			case MESA:
+				return Biome.MESA;
+			case MESA_PLATEAU:
+				return Biome.MESA_PLATEAU;
+			case MESA_PLATEAU_F:
+				return Biome.MESA_PLATEAU_FOREST;
+		}
+		return null;
+	}
 }

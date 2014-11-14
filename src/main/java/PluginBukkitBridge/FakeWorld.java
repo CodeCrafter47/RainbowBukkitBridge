@@ -217,8 +217,7 @@ public class FakeWorld implements World {
 
     @Override
     public Biome getBiome(int arg0, int arg1) {
-        MyPlugin.fixme();
-        return null;
+        return Util.wrapBiome(world.getBiomeTypeAt(arg0, arg1));
     }
 
     @Override
@@ -601,7 +600,7 @@ public class FakeWorld implements World {
 
     @Override
     public void setBiome(int arg0, int arg1, Biome arg2) {
-        MyPlugin.fixme();
+        world.setBiomeTypeAt(arg0, arg1, Util.wrapBiome(arg2));
     }
 
     @Override
