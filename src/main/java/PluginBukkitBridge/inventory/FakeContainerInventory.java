@@ -45,7 +45,8 @@ public abstract class FakeContainerInventory implements Inventory{
     @Override
     public String getName() {
         MyPlugin.fixme();
-        return null;
+		// better than null but still wrong
+        return this.toString();
     }
 
     @Override
