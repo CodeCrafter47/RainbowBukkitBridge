@@ -424,10 +424,6 @@ public class MyPlugin extends PluginReference.PluginBase {
             logger.info("BukkitBridge -- " + logMsg);
         }
 
-        // refresh reference
-        PlayerManager.removePlayer(plr.getUUID());
-        PlayerManager.addPlayer(plr);
-
         // don't call events if no one listens
         if (PlayerRespawnEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
