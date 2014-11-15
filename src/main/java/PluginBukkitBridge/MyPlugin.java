@@ -631,6 +631,10 @@ public class MyPlugin extends PluginReference.PluginBase {
 
     @Override
     public void onAttemptItemPickup(MC_Player plr, MC_ItemStack is, boolean isXpOrb, MC_EventInfo ei) {
+		if(isXpOrb){
+			// this is not an item!!!
+			return;
+		}
 
         // don't call events if no one listens
         if (PlayerPickupItemEvent.getHandlerList().getRegisteredListeners().length == 0) return;
