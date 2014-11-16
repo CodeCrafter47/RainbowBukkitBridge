@@ -19,6 +19,10 @@ import java.util.UUID;
 public class FakeEntity implements Entity {
     public MC_Entity m_ent;
 
+	public void refreshReference(MC_Entity entity){
+		m_ent = entity;
+	}
+
 	public void setDamageCause(EntityDamageEvent.DamageCause damageCause) {
 		this.damageCause = damageCause;
 	}

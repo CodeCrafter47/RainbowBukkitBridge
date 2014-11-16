@@ -38,6 +38,11 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
         permissions = new PermissibleBase(this);
     }
 
+	public void refreshReference(MC_Player entity){
+		super.refreshReference(entity);
+		player = entity;
+	}
+
     @Override
     public String getName() {
         return player.getName();

@@ -18,6 +18,7 @@ public class PlayerManager {
     public static Map<String, FakePlayer> nameMap = new HashMap<>();
 
     public static void addPlayer(MC_Player player){
+		if(uuidMap.containsKey(player.getUUID()))return;
         FakePlayer player1 = new FakePlayer(player);
         uuidMap.put(player1.getUniqueId(), player1);
         nameMap.put(player1.getName(), player1);
@@ -32,7 +33,14 @@ public class PlayerManager {
     }
 
     public static Player getPlayer(MC_Player player){
-        return uuidMap.get(player.getUUID());
+		FakePlayer fakePlayer = uuidMap.get(player.getUUID());
+		if(fakePlayer == null){
+			MyPlugin.fixme("INCONSISTENT DATA: NO PLAYER WRAPPER AVAILABLE");
+			addPlayer(player);
+			fakePlayer = uuidMap.get(player.getUUID());
+		}
+		fakePlayer.refreshReference(player);
+		return fakePlayer;
     }
 
     public static Player getPlayer(UUID uuid){
