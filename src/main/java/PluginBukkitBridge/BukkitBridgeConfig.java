@@ -13,7 +13,7 @@ import java.util.logging.Level;
  * Created by florian on 04.11.14.
  */
 public class BukkitBridgeConfig {
-	private YamlConfiguration config;
+	public YamlConfiguration config;
 
 	public BukkitBridgeConfig() {
 		File dir = new File("plugins_mod/PluginBukkitBridge");

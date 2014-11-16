@@ -6,7 +6,11 @@ import PluginBukkitBridge.scoreboard.FakeScoreboardManager;
 import PluginReference.MC_Block;
 import PluginReference.MC_Player;
 import PluginReference.MC_Server;
+import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
+import com.avaje.ebean.config.dbplatform.SQLitePlatform;
+import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
+import org.apache.commons.lang.Validate;
 import org.bukkit.*;
 import org.bukkit.BanList.Type;
 import org.bukkit.Warning.WarningState;
@@ -235,8 +239,22 @@ public class FakeCraftServer implements Server {
     }
 
     @Override
-    public void configureDbConfig(ServerConfig arg0) {
-        MyPlugin.fixme();
+    public void configureDbConfig(ServerConfig config) {
+		Validate.notNull(config, "Config cannot be null");
+
+		DataSourceConfig ds = new DataSourceConfig();
+		ds.setDriver(MyPlugin.bridgeConfig.config.getString("database.driver"));
+		ds.setUrl(MyPlugin.bridgeConfig.config.getString("database.url"));
+		ds.setUsername(MyPlugin.bridgeConfig.config.getString("database.username"));
+		ds.setPassword(MyPlugin.bridgeConfig.config.getString("database.password"));
+		ds.setIsolationLevel(TransactionIsolation.getLevel(MyPlugin.bridgeConfig.config.getString("database.isolation")));
+
+		if (ds.getDriver().contains("sqlite")) {
+			config.setDatabasePlatform(new SQLitePlatform());
+			config.getDatabasePlatform().getDbDdlSyntax().setIdentity("");
+		}
+
+		config.setDataSourceConfig(ds);
     }
 
     @Override
