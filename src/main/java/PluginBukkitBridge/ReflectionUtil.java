@@ -33,7 +33,7 @@ public class ReflectionUtil {
     public static MC_ItemStack getItemStackOfEntityItem(MC_Entity entity) {
         try {
             Object mcEntity = getMember(Class.forName("WrapperObjects.Entities.EntityWrapper"), entity, "ent");
-            Method method = Class.forName("joebkt.EntityGeneric").getDeclaredMethod("getItemStack", null);
+            Method method = Class.forName("joebkt.ItemEntity").getDeclaredMethod("getItemStack", null);
             method.setAccessible(true);
             Object mcItemStack = method.invoke(mcEntity, null);
             MC_ItemStack is = MyPlugin.server.createItemStack(1, 1, 1);
