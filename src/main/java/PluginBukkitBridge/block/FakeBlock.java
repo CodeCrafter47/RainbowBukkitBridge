@@ -176,14 +176,12 @@ public class FakeBlock implements Block
 
     @Override
     public Biome getBiome() {
-        MyPlugin.fixme();
-        return null;
+        return Util.wrapBiome(world.getBiomeTypeAt(x,z));
     }
 
     @Override
     public void setBiome(Biome bio) {
-        MyPlugin.fixme();
-
+        world.setBiomeTypeAt(x,z,Util.wrapBiome(bio));
     }
 
     @Override

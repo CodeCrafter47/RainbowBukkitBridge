@@ -380,8 +380,13 @@ public class FakeWorld implements World {
 
     @Override
     public Chunk[] getLoadedChunks() {
-        MyPlugin.fixme();
-        return new Chunk[0];
+		List<MC_Chunk> loadedChunks = world.getLoadedChunks();
+		Chunk[] chunks = new Chunk[loadedChunks.size()];
+		for (int i = 0; i < loadedChunks.size(); i++) {
+			MC_Chunk mc_chunk = loadedChunks.get(i);
+			chunks[i] = new FakeChunk(mc_chunk.getCX(), mc_chunk.getCZ(), this);
+		}
+		return chunks;
     }
 
     @Override
@@ -541,18 +546,18 @@ public class FakeWorld implements World {
 
     @Override
     public void loadChunk(Chunk arg0) {
-        MyPlugin.fixme();
+        loadChunk(arg0.getX(), arg0.getZ());
     }
 
     @Override
     public void loadChunk(int arg0, int arg1) {
-        MyPlugin.fixme();
+        loadChunk(arg0, arg1, false);
     }
 
     @Override
-    public boolean loadChunk(int arg0, int arg1, boolean arg2) {
-        MyPlugin.fixme();
-        return false;
+    public boolean loadChunk(int arg0, int arg1, boolean ignored) {
+		world.loadChunk(arg0, arg1);
+        return true;
     }
 
     @Override
