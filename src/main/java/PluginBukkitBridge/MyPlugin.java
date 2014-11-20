@@ -813,4 +813,22 @@ public class MyPlugin extends PluginReference.PluginBase {
             pluginManager.callEvent(event);
         }
     }
+
+	@Override public void onSignChanging(MC_Player plr, MC_Sign sign, MC_Location loc, List<String> newLines, MC_EventInfo ei) {
+		if(SignChangeEvent.getHandlerList().getRegisteredListeners().length > 0) {
+			String[] lines = new String[newLines.size()];
+			for (int i = 0; i < newLines.size(); i++) {
+				String s = newLines.get(i);
+				lines[i] = s;
+			}
+			SignChangeEvent event = new SignChangeEvent(new FakeBlock(loc.getBlockX(), loc.getBlockY(),
+					loc.getBlockZ(), server.getWorld(loc.dimension)), PlayerManager.getPlayer(plr), lines);
+			event.setCancelled(ei.isCancelled);
+			pluginManager.callEvent(event);
+			ei.isCancelled = event.isCancelled();
+			ei.isModified = true;
+			newLines.clear();
+			Collections.addAll(newLines, lines);
+		}
+	}
 }
