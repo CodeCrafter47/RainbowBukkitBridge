@@ -593,7 +593,6 @@ public class FakeCraftServer implements Server {
 
     @Override
     public WarningState getWarningState() {
-        MyPlugin.fixme();
         return WarningState.DEFAULT;
     }
 
