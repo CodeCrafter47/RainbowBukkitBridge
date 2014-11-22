@@ -1,11 +1,8 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.ReflectionUtil;
 import PluginBukkitBridge.Util;
-import PluginReference.MC_Entity;
-import PluginReference.MC_ItemStack;
-import org.bukkit.Material;
+import PluginReference.MC_ItemEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,23 +10,21 @@ import org.bukkit.inventory.ItemStack;
  * Created by florian on 12.10.14.
  */
 public class FakeItem extends FakeEntity implements Item{
-    public FakeItem(MC_Entity argEnt) {
+	MC_ItemEntity itemEntity;
+
+    public FakeItem(MC_ItemEntity argEnt) {
         super(argEnt);
+		itemEntity = argEnt;
     }
 
     @Override
     public ItemStack getItemStack() {
-        MC_ItemStack itemStack = ReflectionUtil.getItemStackOfEntityItem(m_ent);
-        if(itemStack == null){
-            MyPlugin.logger.warning("itemstack is null");
-            return new ItemStack(Material.AIR);
-        }
-        return Util.getItemStack(itemStack);
+        return Util.getItemStack(itemEntity.getItemStack());
     }
 
     @Override
     public void setItemStack(ItemStack itemStack) {
-        MyPlugin.fixme("stub method");
+        itemEntity.setItemStack(Util.getItemStack(itemStack));
     }
 
     @Override

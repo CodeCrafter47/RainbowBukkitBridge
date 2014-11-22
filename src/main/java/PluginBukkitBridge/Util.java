@@ -310,7 +310,7 @@ public class Util {
                 case FIREWORK:
                     return new FakeFirework(entity);
                 case ITEM:
-                    return new FakeItem(entity);
+                    return new FakeItem((MC_ItemEntity) entity);
                 case MINECART:
                     return new FakeMinecart(entity);
                 case BOAT:
