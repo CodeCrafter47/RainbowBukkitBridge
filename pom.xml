@@ -21,7 +21,7 @@
                 <updatePolicy>always</updatePolicy>
             </releases>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
             <url>file://${project.basedir}/repository/</url>
         </repository>
