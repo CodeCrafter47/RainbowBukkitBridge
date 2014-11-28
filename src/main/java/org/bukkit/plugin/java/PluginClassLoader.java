@@ -239,6 +239,7 @@ final class PluginClassLoader extends URLClassLoader {
 
         public String map( String name )
         {
+			/*
             String value = name;
             String prefix = "";
             String suffix = "";
@@ -253,7 +254,8 @@ final class PluginClassLoader extends URLClassLoader {
             if(name.contains("google") && !name.contains("gson") && !name.contains("voxelsniper")){
                 value = prefix + "remapped/" + name + suffix;
             }
-            return value;
+            */
+            return name;
         }
     }
 

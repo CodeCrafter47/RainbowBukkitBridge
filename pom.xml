@@ -55,6 +55,12 @@
             <version>1.8-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -129,12 +135,6 @@
                                 <relocation>
                                     <pattern>com.google.gson</pattern>
                                     <shadedPattern>org.bukkit.craftbukkit.libs.com.google.gson</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.google.common</pattern>
-                                    <shadedPattern>remapped.com.google.common</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
