@@ -17,7 +17,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
@@ -526,16 +525,6 @@ public class FakeWorld implements World {
                 return null;
             }
         };
-    }
-
-    @Override
-    public void showParticle(Location location, Particle particle, float v, float v2, float v3, float v4, int i) {
-        for(Player player: getPlayers())player.showParticle(location, particle, v, v2, v3, v4, i);
-    }
-
-    @Override
-    public void showParticle(Location location, Particle particle, MaterialData materialData, float v, float v2, float v3, float v4, int i) {
-        for(Player player: getPlayers())player.showParticle(location, particle, materialData, v, v2, v3, v4, i);
     }
 
     @Override

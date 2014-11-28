@@ -13,7 +13,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.map.MapView;
-import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
@@ -539,16 +538,6 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void loadData() {
-        MyPlugin.fixme();
-    }
-
-    @Override
-    public void showParticle(Location location, Particle particle, float v, float v2, float v3, float v4, int i) {
-        MyPlugin.fixme();
-    }
-
-    @Override
-    public void showParticle(Location location, Particle particle, MaterialData materialData, float v, float v2, float v3, float v4, int i) {
         MyPlugin.fixme();
     }
 

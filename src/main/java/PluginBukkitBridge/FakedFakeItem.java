@@ -258,7 +258,25 @@ public class FakedFakeItem implements Item {
         return null;
     }
 
-    @Override
+	@Override public void setCustomName(String s) {
+		MyPlugin.fixme();
+	}
+
+	@Override public String getCustomName() {
+		MyPlugin.fixme();
+		return null;
+	}
+
+	@Override public void setCustomNameVisible(boolean b) {
+		MyPlugin.fixme();
+	}
+
+	@Override public boolean isCustomNameVisible() {
+		MyPlugin.fixme();
+		return false;
+	}
+
+	@Override
     public Spigot spigot() {
         return new Spigot(){
             @Override

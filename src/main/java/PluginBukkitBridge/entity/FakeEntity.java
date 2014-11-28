@@ -33,6 +33,27 @@ public class FakeEntity implements Entity {
         m_ent = argEnt;
     }
 
+	@Override
+	public void setCustomName(String name) {
+		m_ent.setCustomName(name);
+	}
+
+	@Override
+	public String getCustomName() {
+		return m_ent.getCustomName();
+	}
+
+	@Override
+	public void setCustomNameVisible(boolean arg0) {
+		// we can ignore this as the custom name is always visible
+	}
+
+	@Override
+	public boolean isCustomNameVisible() {
+		MyPlugin.fixme();
+		return false;
+	}
+
     @Override
     public List<MetadataValue> getMetadata(String arg0) {
         return MyPlugin.entityMetadataStore.getMetadata(this, arg0);

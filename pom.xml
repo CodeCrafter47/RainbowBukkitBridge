@@ -50,9 +50,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>rainbow</groupId>
-            <artifactId>Glowkit</artifactId>
-            <version>1.8</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

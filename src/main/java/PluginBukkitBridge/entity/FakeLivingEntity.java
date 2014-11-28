@@ -260,27 +260,6 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     }
 
     @Override
-    public void setCustomName(String name) {
-        m_ent.setCustomName(name);
-    }
-
-    @Override
-    public String getCustomName() {
-        return m_ent.getCustomName();
-    }
-
-    @Override
-    public void setCustomNameVisible(boolean arg0) {
-        // we can ignore this as the custom name is always visible
-    }
-
-    @Override
-    public boolean isCustomNameVisible() {
-        MyPlugin.fixme();
-        return false;
-    }
-
-    @Override
     public boolean isLeashed() {
         MyPlugin.fixme();
         return false;
@@ -321,16 +300,6 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     @Override
     public void damage(double arg0, Entity arg1) {
         damage(arg0);
-    }
-
-    @Override
-    public void damage(double v, EntityDamageEvent.DamageCause damageCause) {
-        damage(v);
-    }
-
-    @Override
-    public void damage(double v, Entity entity, EntityDamageEvent.DamageCause damageCause) {
-        damage(v, entity);
     }
 
     @Override

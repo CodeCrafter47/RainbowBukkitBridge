@@ -9,8 +9,6 @@ import com.google.common.collect.Maps;
 import org.bukkit.inventory.ItemStack;
 import org.jnbt.*;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 
@@ -128,7 +126,7 @@ public class Attributes {
             return Operation.fromId(((IntTag) data.getValue().get("Operation")).getValue());
         }
 
-        public void setOperation(@Nonnull Operation operation) {
+        public void setOperation(Operation operation) {
             Preconditions.checkNotNull(operation, "operation cannot be NULL.");
             data.getValue().put("Operation", new IntTag("Operation",operation.getId()));
         }
@@ -138,7 +136,7 @@ public class Attributes {
             return AttributeType.fromId(((StringTag)data.getValue().get("AttributeName")).getValue());
         }
 
-        public void setAttributeType(@Nonnull AttributeType type) {
+        public void setAttributeType(AttributeType type) {
             Preconditions.checkNotNull(type, "type cannot be NULL.");
             data.getValue().put("AttributeName", new StringTag("AttributeName", type.getMinecraftId()));
         }
@@ -148,7 +146,7 @@ public class Attributes {
             return ((StringTag)data.getValue().get("Name")).getValue();
         }
 
-        public void setName(@Nonnull String name) {
+        public void setName(String name) {
             Preconditions.checkNotNull(name, "name cannot be NULL.");
             data.getValue().put("Name", new StringTag("Name", name));
         }
@@ -157,7 +155,7 @@ public class Attributes {
             return new UUID(((LongTag)data.getValue().get("UUIDMost")).getValue(), ((LongTag)data.getValue().get("UUIDLeast")).getValue());
         }
 
-        public void setUUID(@Nonnull UUID id) {
+        public void setUUID(UUID id) {
             Preconditions.checkNotNull("id", "id cannot be NULL.");
             data.getValue().put("UUIDLeast", new LongTag("UUIDLeast", id.getLeastSignificantBits()));
             data.getValue().put("UUIDMost", new LongTag("UUIDMost", id.getMostSignificantBits()));
@@ -330,7 +328,7 @@ public class Attributes {
                 return Iterators.transform(attributes.getValue().iterator(),
                   new Function<Object, Attribute>() {
                     @Override
-                    public Attribute apply(@Nullable Object element) {
+                    public Attribute apply(Object element) {
                         return new Attribute((CompoundTag) element);
                     }
                 });
