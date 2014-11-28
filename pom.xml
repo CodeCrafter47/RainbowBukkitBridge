@@ -22,6 +22,8 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
+                <checksumPolicy>ignore</checksumPolicy>
+                <updatePolicy>always</updatePolicy>
             </snapshots>
             <url>file://${project.basedir}/repository/</url>
         </repository>
@@ -107,6 +109,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.14.8</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+            <type>jar</type>
             <scope>provided</scope>
         </dependency>
     </dependencies>
