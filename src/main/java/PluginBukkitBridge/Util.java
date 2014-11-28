@@ -235,8 +235,7 @@ public class Util {
                 case PIG:
                     return new FakePig((MC_EntityAgeable) entity);
                 case RABBIT:
-                    // fixme
-                    return new FakeAnimal((MC_EntityAgeable) entity);
+                    return new FakeRabbit((MC_EntityAgeable) entity);
                 case SHEEP:
                     return new FakeSheep((MC_EntityAgeable) entity);
                 case SNOWMAN:
@@ -262,15 +261,13 @@ public class Util {
                 case ENDERMAN:
                     return new FakeEnderman((MC_Enderman) entity);
                 case ENDERMITE:
-                    // fixme
-                    break;
+                    return new FakeEndermite(entity);
                 case GHAST:
                     return new FakeGhast(entity);
                 case GIANT:
                     return new FakeGiant(entity);
                 case GUARDIAN:
-                    // fixme
-                    break;
+                    return new FakeGuardian(entity);
                 case LAVA_SLIME:
                     return new FakeMagmaCube(entity);
                 case PIG_ZOMBIE:
@@ -322,17 +319,16 @@ public class Util {
                 case HANGING:
                     return new FakeHanging(entity);
                 case ARMOR_STAND:
-                    // fixme
-                    break;
+                    return new FakeArmorStand((MC_ArmorStand) entity);
                 case XP_ORB:
                     return new FakeExperienceOrb(entity);
                 case ENDER_CRYSTAL:
                     return new FakeEnderCrystal(entity);
             }
         } catch (Exception ignored) {
-            if (MyPlugin.DebugMode) ignored.printStackTrace();
+            ignored.printStackTrace();
         }
-        if (MyPlugin.DebugMode) MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
+        MyPlugin.fixme("unable to create specific wrapper for " + entity.getType());
         return new FakeEntity(entity);
     }
 
@@ -494,7 +490,9 @@ public class Util {
                 return MC_EntityType.FALLING_SAND;
             case FIREWORK:
                 return MC_EntityType.FIREWORK;
-            case MINECART_COMMAND:
+			case ARMOR_STAND:
+				return MC_EntityType.ARMOR_STAND;
+			case MINECART_COMMAND:
                 // fixme
                 return MC_EntityType.MINECART;
             case BOAT:
@@ -550,7 +548,11 @@ public class Util {
                 return MC_EntityType.BAT;
             case WITCH:
                 return MC_EntityType.WITCH;
-            case PIG:
+			case ENDERMITE:
+				return MC_EntityType.ENDERMITE;
+			case GUARDIAN:
+				return MC_EntityType.GUARDIAN;
+			case PIG:
                 return MC_EntityType.PIG;
             case SHEEP:
                 return MC_EntityType.SHEEP;
@@ -572,7 +574,9 @@ public class Util {
                 return MC_EntityType.VILLAGER_GOLEM;
             case HORSE:
                 return MC_EntityType.HORSE;
-            case VILLAGER:
+			case RABBIT:
+				return MC_EntityType.RABBIT;
+			case VILLAGER:
                 return MC_EntityType.VILLAGER;
             case ENDER_CRYSTAL:
                 return MC_EntityType.ENDER_CRYSTAL;
