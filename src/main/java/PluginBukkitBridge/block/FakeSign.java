@@ -24,7 +24,7 @@ public class FakeSign extends FakeBlockState implements Sign{
 
     @Override
     public String getLine(int i) throws IndexOutOfBoundsException {
-        return lines.get(i);
+        return lines.get(i).replaceFirst("^(§0)*", "");
     }
 
     @Override
