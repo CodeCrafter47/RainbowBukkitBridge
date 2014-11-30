@@ -16,6 +16,10 @@ import org.bukkit.BanList.Type;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe;
+import org.bukkit.craftbukkit.inventory.CraftRecipe;
+import org.bukkit.craftbukkit.inventory.CraftShapedRecipe;
+import org.bukkit.craftbukkit.inventory.CraftShapelessRecipe;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.help.HelpMap;
@@ -31,7 +35,9 @@ import org.bukkit.util.CachedServerIcon;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -223,9 +229,32 @@ public class FakeCraftServer implements Server {
     }
 
     @Override
-    public boolean addRecipe(Recipe arg0) {
-        MyPlugin.fixme();
-        return false;
+    public boolean addRecipe(Recipe recipe) {
+		try {
+		CraftRecipe toAdd;
+		if (recipe instanceof CraftRecipe) {
+			toAdd = (CraftRecipe) recipe;
+		} else {
+			if (recipe instanceof ShapedRecipe) {
+				toAdd = CraftShapedRecipe.fromBukkitRecipe((ShapedRecipe) recipe);
+			} else if (recipe instanceof ShapelessRecipe) {
+				toAdd = CraftShapelessRecipe.fromBukkitRecipe((ShapelessRecipe) recipe);
+			} else if (recipe instanceof FurnaceRecipe) {
+				toAdd = CraftFurnaceRecipe.fromBukkitRecipe((FurnaceRecipe) recipe);
+			} else {
+				return false;
+			}
+		}
+		toAdd.addToCraftingManager();
+			Object RecipeBook = Class.forName("joebkt.RecipeBook").getMethod("getRecipeBook").invoke(null);
+			Constructor<?> constructor = Class.forName("joebkt.CraftingResultEntry2").getDeclaredConstructor(RecipeBook.getClass());
+			constructor.setAccessible(true);
+			Collections.sort((List) Class.forName("joebkt.RecipeBook").getMethod("getCraftingResultEntries").invoke(RecipeBook), (Comparator) constructor.newInstance(RecipeBook));
+		} catch (Throwable th){
+			MyPlugin.logger.log(Level.WARNING, "addRecipe() failed", th);
+			return false;
+		}
+		return true;
     }
 
     @Override
