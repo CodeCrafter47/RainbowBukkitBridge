@@ -474,7 +474,7 @@ public class FakeWorld implements World {
 
     @Override
     public WorldType getWorldType() {
-        MyPlugin.fixme();
+		// What else should it be...
         return WorldType.NORMAL;
     }
 
