@@ -49,12 +49,12 @@ public class FakeCraftServer implements Server {
 
     @Override
     public String getVersion() {
-        return "RB" + server.getRainbowVersion() + ":1.8";
+        return "v" + server.getRainbowVersion() + " (MC: 1.8)";
     }
 
     @Override
     public String getBukkitVersion() {
-        return "1.8";
+        return "v" + server.getRainbowVersion();
     }
 
     @Override
