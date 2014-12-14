@@ -42,4 +42,8 @@ public class BukkitBridgeConfig {
 	public List<String> getIgnoredCommands(){
 		return config.getStringList("ignoreCommands");
 	}
+
+	public boolean impersonateGlowstone(){
+		return config.getBoolean("impersonateGlowstone", true);
+	}
 }

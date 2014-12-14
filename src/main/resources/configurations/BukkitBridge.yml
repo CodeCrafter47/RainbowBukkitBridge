@@ -8,6 +8,8 @@ ignoreCommands:
   - bal
   - help
 
+impersonateGlowstone: true
+
 database:
     username: bukkit
     isolation: SERIALIZABLE

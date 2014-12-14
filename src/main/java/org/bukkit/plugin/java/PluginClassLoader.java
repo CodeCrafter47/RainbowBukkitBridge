@@ -1,5 +1,6 @@
 package org.bukkit.plugin.java;
 
+import PluginBukkitBridge.MyPlugin;
 import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.InvalidPluginException;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -133,30 +134,32 @@ final class PluginClassLoader extends URLClassLoader {
             InputStream inputStream = getResourceAsStream(name + ".class");
             if(inputStream == null)
                 throw new ClassNotFoundException(name + " not found in " + this);
-            ClassReader classReader = new ClassReader(inputStream);
-            ClassWriter classWriter = new ClassWriter(0);
+            byte[] b = null;
+            if(MyPlugin.bridgeConfig.impersonateGlowstone()) {
+                ClassReader classReader = new ClassReader(inputStream);
+                ClassWriter classWriter = new ClassWriter(0);
 
-            final String pkg = name.substring( 0, name.lastIndexOf( '/' ) + 1 );
-            ClassVisitor cv = new RemappingClassAdapter( classWriter, relocatorRemapper )
-            {
-                @Override
-                public void visitSource( final String source, final String debug )
-                {
-                    if ( source == null )
-                    {
-                        super.visitSource( source, debug );
+                final String pkg = name.substring(0, name.lastIndexOf('/') + 1);
+                ClassVisitor cv = new RemappingClassAdapter(classWriter, relocatorRemapper) {
+                    @Override
+                    public void visitSource(final String source, final String debug) {
+                        if (source == null) {
+                            super.visitSource(source, debug);
+                        }
+                        else {
+                            final String fqSource = pkg + source;
+                            final String mappedSource = remapper.map(fqSource);
+                            final String filename = mappedSource.substring(mappedSource.lastIndexOf('/') + 1);
+                            super.visitSource(filename, debug);
+                        }
                     }
-                    else
-                    {
-                        final String fqSource = pkg + source;
-                        final String mappedSource = remapper.map( fqSource );
-                        final String filename = mappedSource.substring( mappedSource.lastIndexOf( '/' ) + 1 );
-                        super.visitSource( filename, debug );
-                    }
-                }
-            };
-            classReader.accept( cv, ClassReader.EXPAND_FRAMES );
-            byte[] b = classWriter.toByteArray();
+                };
+                classReader.accept(cv, ClassReader.EXPAND_FRAMES);
+                b = classWriter.toByteArray();
+            } else {
+                b = new byte[inputStream.available()];
+                inputStream.read(b);
+            }
             String packageName = null;
             int lastDot = name.lastIndexOf('/');
             if (lastDot != -1)
