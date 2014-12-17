@@ -831,4 +831,8 @@ public class MyPlugin extends PluginReference.PluginBase {
 			Collections.addAll(newLines, lines);
 		}
 	}
+
+    public void onWorldLoaded(MC_World world){
+        WorldManager.refresh();
+    }
 }
