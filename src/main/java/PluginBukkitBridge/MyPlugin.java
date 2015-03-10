@@ -304,6 +304,10 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
         invokeLater.clear();
         scheduler.mainThreadHeartbeat(tickNumber);
+        // refresh all player references, to avoid the cache deleting them
+        for(MC_Player player: server.getPlayers()){
+            PlayerManager.getPlayer(player);
+        }
     }
 
     public void onPlayerLogin(String playerName, UUID uuid, String ip) {
