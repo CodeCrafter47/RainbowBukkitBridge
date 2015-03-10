@@ -7,6 +7,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.commons.RemappingClassAdapter;
 
@@ -137,7 +138,7 @@ final class PluginClassLoader extends URLClassLoader {
             byte[] b = null;
             if(MyPlugin.bridgeConfig.impersonateGlowstone()) {
                 ClassReader classReader = new ClassReader(inputStream);
-                ClassWriter classWriter = new ClassWriter(0);
+                ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 
                 final String pkg = name.substring(0, name.lastIndexOf('/') + 1);
                 ClassVisitor cv = new RemappingClassAdapter(classWriter, relocatorRemapper) {
