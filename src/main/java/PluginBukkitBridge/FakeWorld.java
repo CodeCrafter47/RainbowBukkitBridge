@@ -56,23 +56,19 @@ public class FakeWorld implements World {
 
     @Override
     public boolean isChunkLoaded(Chunk chunk) {
-        // fixme
-        // rainbow doesn't care
-        return true;
+        return isChunkLoaded(chunk.getX(), chunk.getZ());
     }
 
     @Override
     public boolean isChunkLoaded(int x, int z) {
-        // fixme
-        // rainbow doesn't care
-        return true;
+        return world.isChunkLoaded(x, z);
     }
 
     @Override
     public List<Player> getPlayers() {
         List<Player> list = new ArrayList<>();
         for (MC_Player player : MyPlugin.server.getPlayers()) {
-            if (player.getWorld().equals(world)) list.add(PlayerManager.getPlayer(player));
+            if (player.getWorld().getName().equals(world.getName())) list.add(PlayerManager.getPlayer(player));
         }
         return list;
     }
