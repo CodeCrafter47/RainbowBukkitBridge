@@ -3,6 +3,7 @@ package PluginBukkitBridge.entity;
 import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_Entity;
 import org.bukkit.entity.Minecart;
+import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 /**
@@ -77,5 +78,27 @@ public class FakeMinecart extends FakeVehicle implements Minecart {
     @Override
     public void setDerailedVelocityMod(Vector vector) {
         MyPlugin.fixme("stub method");
+    }
+
+    @Override
+    public void setDisplayBlock(MaterialData materialData) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public MaterialData getDisplayBlock() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setDisplayBlockOffset(int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public int getDisplayBlockOffset() {
+        MyPlugin.fixme();
+        return 0;
     }
 }

@@ -3,6 +3,7 @@ package PluginBukkitBridge.scoreboard;
 import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.ReflectionUtil;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -68,7 +69,18 @@ public class FakeTeam implements Team {
 		MyPlugin.fixme();
 	}
 
-	@Override public Set<OfflinePlayer> getPlayers() throws IllegalStateException {
+    @Override
+    public NameTagVisibility getNameTagVisibility() throws IllegalArgumentException {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setNameTagVisibility(NameTagVisibility nameTagVisibility) throws IllegalArgumentException {
+        MyPlugin.fixme();
+    }
+
+    @Override public Set<OfflinePlayer> getPlayers() throws IllegalStateException {
 		MyPlugin.fixme();
 		return null;
 	}

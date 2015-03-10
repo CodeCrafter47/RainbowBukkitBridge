@@ -8,10 +8,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -158,12 +162,28 @@ public class FakedFakeItem implements Item {
     @Override
     public boolean isValid() {
         MyPlugin.fixme();
-        return false;
+        return true;
+    }
+
+    @Override
+    public void sendMessage(String s) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void sendMessage(String[] strings) {
+        MyPlugin.fixme();
     }
 
     @Override
     public Server getServer() {
         return Bukkit.getServer();
+    }
+
+    @Override
+    public String getName() {
+        MyPlugin.fixme();
+        return null;
     }
 
     @Override
@@ -236,13 +256,11 @@ public class FakedFakeItem implements Item {
 
     @Override
     public EntityType getType() {
-        MyPlugin.fixme();
-        return null;
+        return EntityType.DROPPED_ITEM;
     }
 
     @Override
     public boolean isInsideVehicle() {
-        MyPlugin.fixme();
         return false;
     }
 
@@ -254,7 +272,6 @@ public class FakedFakeItem implements Item {
 
     @Override
     public Entity getVehicle() {
-        MyPlugin.fixme();
         return null;
     }
 
@@ -306,6 +323,81 @@ public class FakedFakeItem implements Item {
 
     @Override
     public void removeMetadata(String s, Plugin plugin) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean isPermissionSet(String s) {
+        MyPlugin.fixme();
+        return true;
+    }
+
+    @Override
+    public boolean isPermissionSet(Permission permission) {
+        MyPlugin.fixme();
+        return true;
+    }
+
+    @Override
+    public boolean hasPermission(String s) {
+        MyPlugin.fixme();
+        return true;
+    }
+
+    @Override
+    public boolean hasPermission(Permission permission) {
+        MyPlugin.fixme();
+        return true;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin, String s, boolean b) {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin) {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin, String s, boolean b, int i) {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public PermissionAttachment addAttachment(Plugin plugin, int i) {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void removeAttachment(PermissionAttachment permissionAttachment) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void recalculatePermissions() {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public Set<PermissionAttachmentInfo> getEffectivePermissions() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public boolean isOp() {
+        MyPlugin.fixme();
+        return true;
+    }
+
+    @Override
+    public void setOp(boolean b) {
         MyPlugin.fixme();
     }
 }

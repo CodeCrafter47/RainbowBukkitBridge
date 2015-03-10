@@ -528,6 +528,12 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public WorldBorder getWorldBorder() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
     public boolean isThundering() {
         MyPlugin.fixme();
         return false;

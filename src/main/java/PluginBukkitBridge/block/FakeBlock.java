@@ -135,6 +135,12 @@ public class FakeBlock implements Block
     }
 
     @Override
+    public void setType(Material material, boolean b) {
+        // MyPlugin.fixme()
+        setType(material);
+    }
+
+    @Override
     public boolean setTypeId(int type) {
         world.setBlockAt(x,y,z,getBlock(type), getData());
         return true;

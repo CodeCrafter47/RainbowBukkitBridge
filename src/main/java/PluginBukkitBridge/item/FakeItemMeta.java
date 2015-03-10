@@ -1,18 +1,17 @@
 package PluginBukkitBridge.item;
 
+import PluginBukkitBridge.MyPlugin;
 import lombok.SneakyThrows;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.jnbt.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FakeItemMeta implements ItemMeta, Repairable {
     CompoundTag tag;
@@ -201,6 +200,28 @@ public class FakeItemMeta implements ItemMeta, Repairable {
     @Override
     public boolean hasConflictingEnchant(Enchantment enchantment) {
         return checkConflictingEnchants(getEnchants(), enchantment);
+    }
+
+    @Override
+    public void addItemFlags(ItemFlag... itemFlags) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void removeItemFlags(ItemFlag... itemFlags) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public Set<ItemFlag> getItemFlags() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public boolean hasItemFlag(ItemFlag itemFlag) {
+        MyPlugin.fixme();
+        return false;
     }
 
     @Override

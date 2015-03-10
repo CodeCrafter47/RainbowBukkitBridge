@@ -7,7 +7,11 @@ import PluginBukkitBridge.inventory.FakeEntityEquipment;
 import PluginReference.MC_Entity;
 import PluginReference.MC_Player;
 import PluginReference.MC_PotionEffect;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Sets;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -74,14 +78,44 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     }
 
     @Override
+    public List<Block> getLineOfSight(Set<Material> set, int i) {
+        return getLineOfSight(Sets.newHashSet(Iterables.transform(set, new Function<Material, Byte>() {
+            @Override
+            public Byte apply(Material material) {
+                return (byte)material.getId();
+            }
+        })), i);
+    }
+
+    @Override
     public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance) {
         List<Block> blocks = getLineOfSight(transparent, maxDistance, 1);
         return blocks.get(0);
     }
 
     @Override
+    public Block getTargetBlock(Set<Material> set, int i) {
+        return getTargetBlock(Sets.newHashSet(Iterables.transform(set, new Function<Material, Byte>() {
+            @Override
+            public Byte apply(Material material) {
+                return (byte)material.getId();
+            }
+        })), i);
+    }
+
+    @Override
     public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance) {
         return getLineOfSight(transparent, maxDistance, 2);
+    }
+
+    @Override
+    public List<Block> getLastTwoTargetBlocks(Set<Material> set, int i) {
+        return getLastTwoTargetBlocks(Sets.newHashSet(Iterables.transform(set, new Function<Material, Byte>() {
+            @Override
+            public Byte apply(Material material) {
+                return (byte)material.getId();
+            }
+        })), i);
     }
 
     @Override
