@@ -614,7 +614,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void setFlySpeed(float arg0) throws IllegalArgumentException {
-        player.setFlySpeed(arg0);
+        MyPlugin.fixme();
     }
 
     @Override
@@ -679,7 +679,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void setWalkSpeed(float arg0) throws IllegalArgumentException {
-        player.setWalkSpeed(arg0);
+        MyPlugin.fixme();
     }
 
     @Override
