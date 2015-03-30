@@ -174,11 +174,11 @@ public class FakeWorld implements World {
 
     @Override
     public boolean createExplosion(double arg0, double arg1, double arg2, float arg3, boolean arg4, boolean breakBlocks) {
-        if(breakBlocks){
-            return createExplosion(arg0, arg1, arg2, arg3, arg4);
-        }
-        MyPlugin.fixme();
-        return false;
+        boolean old = world.getGameRuleBool(MC_GameRuleType.MOB_GRIEFING);
+        world.setGameRule(MC_GameRuleType.MOB_GRIEFING, breakBlocks);
+        boolean result = createExplosion(arg0, arg1, arg2, arg3, arg4);
+        world.setGameRule(MC_GameRuleType.MOB_GRIEFING, old);
+        return result;
     }
 
     @Override
