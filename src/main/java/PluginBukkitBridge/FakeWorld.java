@@ -528,14 +528,14 @@ public class FakeWorld implements World {
 
             @Override
             public LightningStrike strikeLightning(Location loc, boolean isSilent) {
-                MyPlugin.fixme();
-                return null;
+                MyPlugin.fixme("ignored parameter isSilent");
+                return FakeWorld.this.strikeLightning(loc);
             }
 
             @Override
             public LightningStrike strikeLightningEffect(Location loc, boolean isSilent) {
-                MyPlugin.fixme();
-                return null;
+                MyPlugin.fixme("ignored parameter isSilent");
+                return FakeWorld.this.strikeLightningEffect(loc);
             }
         };
     }
@@ -954,14 +954,27 @@ public class FakeWorld implements World {
 
     @Override
     public LightningStrike strikeLightning(Location arg0) {
-        MyPlugin.fixme();
+        if(world.getDimension() == 0){
+            world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, false);
+            MyPlugin.server.executeCommand("summon LightningBolt " + arg0.getX() + " " + arg0.getY() + " " + arg0.getZ());
+            world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, true);
+        } else {
+            Iterator<Player> iterator = getPlayers().iterator();
+            if(iterator.hasNext()){
+                world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, false);
+                MyPlugin.server.executeCommand("execute " + iterator.next().getName() + " ~ ~ ~ summon LightningBolt " + arg0.getX() + " " + arg0.getY() + " " + arg0.getZ());
+                world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, true);
+            } else {
+                MyPlugin.fixme();
+            }
+        }
         return null;
     }
 
     @Override
     public LightningStrike strikeLightningEffect(Location arg0) {
-        MyPlugin.fixme();
-        return null;
+        MyPlugin.fixme("ignore no damage");
+        return strikeLightning(arg0);
     }
 
     @Override
