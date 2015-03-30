@@ -136,30 +136,47 @@ public class FakeWorld implements World {
 
     @Override
     public boolean createExplosion(Location arg0, float arg1) {
-        MyPlugin.fixme();
-        return false;
+        return createExplosion(arg0, arg1, false);
     }
 
     @Override
     public boolean createExplosion(Location arg0, float arg1, boolean arg2) {
-        MyPlugin.fixme();
-        return false;
+        return createExplosion(arg0.getX(), arg0.getY(), arg0.getZ(), arg1, arg2);
     }
 
     @Override
     public boolean createExplosion(double arg0, double arg1, double arg2, float arg3) {
-        MyPlugin.fixme();
+        return createExplosion(arg0, arg1, arg2, arg3, false);
+    }
+
+    @Override
+    public boolean createExplosion(double x, double y, double z, float arg3, boolean setFire) {
+        if(setFire)
+            MyPlugin.fixme("ignored parameter setFire");
+        if(world.getDimension() == 0){
+            world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, false);
+            MyPlugin.server.executeCommand("summon Creeper " + x + " " + y + " " + z + " {Silent:1,ExplosionRadius:" + ((byte) arg3) + ",Fuse:0}");
+            world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, true);
+            return true;
+        } else {
+            Iterator<Player> iterator = getPlayers().iterator();
+            if(iterator.hasNext()){
+                world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, false);
+                MyPlugin.server.executeCommand("execute " + iterator.next().getName() + " ~ ~ ~ summon Creeper " + x + " " + y + " " + z + " {Silent:1,ExplosionRadius:" + ((byte) arg3) + ",Fuse:0}");
+                world.setGameRule(MC_GameRuleType.SEND_COMMAND_FEEDBACK, true);
+                return true;
+            } else {
+                MyPlugin.fixme();
+            }
+        }
         return false;
     }
 
     @Override
-    public boolean createExplosion(double arg0, double arg1, double arg2, float arg3, boolean arg4) {
-        MyPlugin.fixme();
-        return false;
-    }
-
-    @Override
-    public boolean createExplosion(double arg0, double arg1, double arg2, float arg3, boolean arg4, boolean arg5) {
+    public boolean createExplosion(double arg0, double arg1, double arg2, float arg3, boolean arg4, boolean breakBlocks) {
+        if(breakBlocks){
+            return createExplosion(arg0, arg1, arg2, arg3, arg4);
+        }
         MyPlugin.fixme();
         return false;
     }
