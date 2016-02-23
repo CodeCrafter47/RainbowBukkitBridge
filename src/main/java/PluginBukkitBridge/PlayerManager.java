@@ -17,17 +17,19 @@ import java.util.concurrent.TimeUnit;
  */
 public class PlayerManager {
 
-    public static Cache<UUID, FakePlayer> uuidMap = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.SECONDS).build();
-    public static Cache<String, FakePlayer> nameMap = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.SECONDS).build();
+    public static Cache<UUID, FakePlayer> uuidMap = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
+    public static Cache<String, FakePlayer> nameMap = CacheBuilder.newBuilder().expireAfterAccess(30, TimeUnit.MINUTES).build();
 
-    public static void addPlayer(MC_Player player){
-		if(uuidMap.getIfPresent(player.getUUID()) != null)return;
+    public static FakePlayer addPlayer(MC_Player player){
+        FakePlayer old = uuidMap.getIfPresent(player.getUUID());
+        if(old != null)return old;
         FakePlayer player1 = new FakePlayer(player);
         uuidMap.put(player1.getUniqueId(), player1);
         nameMap.put(player1.getName(), player1);
         for(Player p: Bukkit.getOnlinePlayers()){
             if(p.getPlayerListName() != null)ReflectionUtil.sendPlayerListItemChangeDisplayName(player, ((FakePlayer)p).player, p.getPlayerListName());
         }
+        return player1;
     }
 
     public static void removePlayer(UUID player){
@@ -40,8 +42,7 @@ public class PlayerManager {
     public static Player getPlayer(MC_Player player){
 		FakePlayer fakePlayer = uuidMap.getIfPresent(player.getUUID());
 		if(fakePlayer == null){
-			addPlayer(player);
-			fakePlayer = uuidMap.getIfPresent(player.getUUID());
+			fakePlayer = addPlayer(player);
 		}
 		fakePlayer.refreshReference(player);
 		return fakePlayer;
