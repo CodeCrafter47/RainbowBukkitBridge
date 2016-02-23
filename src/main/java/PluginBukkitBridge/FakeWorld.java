@@ -74,6 +74,12 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public Collection<Entity> getNearbyEntities(Location location, double x, double y, double z) {
+        MyPlugin.fixme();
+        return Collections.emptyList();
+    }
+
+    @Override
     public Location getSpawnLocation() {
         return Util.getLocation(world.getSpawnLocation());
     }

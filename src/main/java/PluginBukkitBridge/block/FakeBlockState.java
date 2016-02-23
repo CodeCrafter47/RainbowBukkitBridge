@@ -131,6 +131,11 @@ public class FakeBlockState implements BlockState {
     }
 
     @Override
+    public boolean isPlaced() {
+        return true;
+    }
+
+    @Override
     public void setType(Material arg0) {
         type = arg0.getId();
     }
