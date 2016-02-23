@@ -95,15 +95,7 @@ public class Util {
     @SneakyThrows
     public static MC_ItemStack getItemStack(final ItemStack is) {
         if (is == null || is.getType() == Material.AIR) {
-            MC_ItemStack is2 = MyPlugin.server.createItemStack(1, 1, 1);
-            try {
-                is2.getClass().getDeclaredField("is").set(is2, null);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-            return is2;
+            return null;
         }
         MC_ItemStack is2 = MyPlugin.server.createItemStack(is.getTypeId(), is.getAmount(), is.getDurability());
         ByteArrayInputStream is1 = new ByteArrayInputStream(is2.serialize());

@@ -243,7 +243,7 @@ public class FakeEntity implements Entity {
 
     @Override
     public void remove() {
-        m_ent.kill();
+        m_ent.removeEntity();
     }
 
     @Override
