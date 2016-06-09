@@ -7,6 +7,7 @@ import PluginBukkitBridge.entity.FakeEntity;
 import PluginBukkitBridge.entity.FakePlayer;
 import PluginBukkitBridge.logging.MyLogHandler;
 import PluginReference.*;
+import com.google.common.base.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -334,7 +335,11 @@ public class MyPlugin extends PluginReference.PluginBase {
         if (PlayerQuitEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
         // fixme message
-        pluginManager.callEvent(new PlayerQuitEvent(PlayerManager.getPlayer(uuid), ""));
+        Player player = PlayerManager.getPlayer(uuid);
+        if (player == null) {
+            logger.warning("player is null");
+        }
+        pluginManager.callEvent(new PlayerQuitEvent(player, ""));
         PlayerManager.removePlayer(uuid);
     }
 
