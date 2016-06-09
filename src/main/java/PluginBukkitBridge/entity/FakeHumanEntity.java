@@ -11,10 +11,12 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
@@ -59,6 +61,12 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
     }
 
     @Override
+    public MainHand getMainHand() {
+        MyPlugin.fixme();
+        return MainHand.RIGHT;
+    }
+
+    @Override
     public boolean setWindowProperty(InventoryView.Property arg0, int arg1) {
         MyPlugin.fixme("stub method");
         return false;
@@ -85,6 +93,12 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
     @Override
     public void openInventory(InventoryView arg0) {
         MyPlugin.fixme("stub method");
+    }
+
+    @Override
+    public InventoryView openMerchant(Villager villager, boolean b) {
+        MyPlugin.fixme();
+        return null;
     }
 
     @Override

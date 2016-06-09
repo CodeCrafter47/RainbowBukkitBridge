@@ -2,6 +2,7 @@ package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_Entity;
+import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Boat;
 
 /**
@@ -10,6 +11,17 @@ import org.bukkit.entity.Boat;
 public class FakeBoat extends FakeVehicle implements Boat {
     public FakeBoat(MC_Entity argEnt) {
         super(argEnt);
+    }
+
+    @Override
+    public TreeSpecies getWoodType() {
+        MyPlugin.fixme("stub method");
+        return TreeSpecies.GENERIC;
+    }
+
+    @Override
+    public void setWoodType(TreeSpecies treeSpecies) {
+        MyPlugin.fixme("stub method");
     }
 
     @Override

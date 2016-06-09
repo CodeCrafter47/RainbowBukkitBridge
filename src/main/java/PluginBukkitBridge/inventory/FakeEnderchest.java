@@ -2,6 +2,7 @@ package PluginBukkitBridge.inventory;
 
 import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_Player;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
@@ -82,6 +83,16 @@ public class FakeEnderchest implements Inventory{
     public void setContents(ItemStack[] itemStacks) throws IllegalArgumentException {
         MyPlugin.fixme("stub method");
 
+    }
+
+    @Override
+    public ItemStack[] getStorageContents() {
+        return getContents();
+    }
+
+    @Override
+    public void setStorageContents(ItemStack[] itemStacks) throws IllegalArgumentException {
+        setContents(itemStacks);
     }
 
     @Override
@@ -231,6 +242,11 @@ public class FakeEnderchest implements Inventory{
     @Override
     public ListIterator<ItemStack> iterator(int i) {
         MyPlugin.fixme("stub method");
+        return null;
+    }
+
+    @Override
+    public Location getLocation() {
         return null;
     }
 }

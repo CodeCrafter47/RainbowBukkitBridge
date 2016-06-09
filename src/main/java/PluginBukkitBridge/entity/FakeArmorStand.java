@@ -188,6 +188,17 @@ public class FakeArmorStand extends FakeLivingEntity implements ArmorStand {
 		MyPlugin.fixme();
 	}
 
+	@Override
+	public boolean isMarker() {
+		MyPlugin.fixme();
+		return false;
+	}
+
+	@Override
+	public void setMarker(boolean b) {
+		MyPlugin.fixme();
+	}
+
 	EulerAngle getEulerAngle(MC_FloatTriplet floatTriplet){
 		return new EulerAngle(floatTriplet.x, floatTriplet.y, floatTriplet.z);
 	}

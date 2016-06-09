@@ -1,6 +1,6 @@
 package PluginBukkitBridge.block;
 
-import PluginBukkitBridge.ReflectionUtil;
+import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.Util;
 import PluginBukkitBridge.inventory.FakeFurnaceInventory;
 import PluginReference.MC_Container;
@@ -12,34 +12,30 @@ import org.bukkit.inventory.FurnaceInventory;
  */
 public class FakeFurnace extends FakeContainerBlockState implements Furnace {
 
-    int burnTime;
-    int cookTime;
-
     public FakeFurnace(FakeBlock arg) {
         super(arg);
-        MC_Container furnace = arg.world.getContainerAt(Util.getLocation(arg.getLocation()));
-        burnTime = ReflectionUtil.readFurnaceBurnTime(furnace);
-        cookTime = ReflectionUtil.readFurnaceCookTime(furnace);
     }
 
     @Override
     public short getBurnTime() {
-        return (short) burnTime;
+        MyPlugin.fixme();
+        return (short) 0;
     }
 
     @Override
     public void setBurnTime(short i) {
-        burnTime = i;
+        MyPlugin.fixme();
     }
 
     @Override
     public short getCookTime() {
-        return (short) cookTime;
+        MyPlugin.fixme();
+        return (short) 0;
     }
 
     @Override
     public void setCookTime(short i) {
-        cookTime = i;
+        MyPlugin.fixme();
     }
 
     @Override
@@ -50,10 +46,6 @@ public class FakeFurnace extends FakeContainerBlockState implements Furnace {
     @Override
     public boolean update(boolean force, boolean applyPhysics) {
         if(super.update(force, applyPhysics)){
-            FakeBlock arg = (FakeBlock) getBlock();
-            MC_Container furnace = arg.world.getContainerAt(Util.getLocation(arg.getLocation()));
-            ReflectionUtil.writeFurnaceBurnTime(furnace, burnTime);
-            ReflectionUtil.writeFurnaceCookTime(furnace, cookTime);
             return true;
         }
         return false;

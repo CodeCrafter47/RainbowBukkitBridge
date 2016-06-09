@@ -80,8 +80,7 @@ public class FakeHelper {
 				return EntityType.GIANT;
 			case GHAST:
 				return EntityType.GHAST;
-			// fixme that's not true - it could also be an item frame
-			case HANGING:
+			case PAINTING:
 				return EntityType.PAINTING;
 			case HORSE:
 				return EntityType.HORSE;
@@ -99,6 +98,8 @@ public class FakeHelper {
 				return EntityType.PIG;
 			case PIG_ZOMBIE:
 				return EntityType.PIG_ZOMBIE;
+			case UNSPECIFIED:
+				break;
 			case PLAYER:
 				return EntityType.PLAYER;
 			case PRIMED_TNT:
@@ -143,9 +144,30 @@ public class FakeHelper {
 				return EntityType.EXPERIENCE_ORB;
 			case ZOMBIE:
 				return EntityType.ZOMBIE;
+			case WITHER_SKULL:
+				return EntityType.WITHER_SKULL;
+			case LEASH_KNOT:
+				return EntityType.LEASH_HITCH;
+			case ITEM_FRAME:
+				return EntityType.ITEM_FRAME;
+			case LIGHTNING_BOLT:
+				return EntityType.LIGHTNING;
+			case SHULKER:
+				return EntityType.SHULKER;
+			case SHULKER_BULLET:
+				return EntityType.SHULKER_BULLET;
+			case AREA_EFFECT_CLOUD:
+				return EntityType.AREA_EFFECT_CLOUD;
+			case SPECTRAL_ARROW:
+				return EntityType.SPECTRAL_ARROW;
+			case DRAGON_FIREBALL:
+				return EntityType.DRAGON_FIREBALL;
+			case POLAR_BEAR:
+				return EntityType.POLAR_BEAR;
 			default:
-				return EntityType.UNKNOWN;
-		}
+                return EntityType.UNKNOWN;
+        }
+        return EntityType.UNKNOWN;
     }
 
 }

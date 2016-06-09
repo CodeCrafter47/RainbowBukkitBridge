@@ -1,8 +1,6 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.ReflectionUtil;
-import PluginBukkitBridge.Util;
 import PluginReference.MC_Entity;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
@@ -17,20 +15,12 @@ public class FakeCreature extends FakeLivingEntity implements Creature {
 
     @Override
     public void setTarget(LivingEntity livingEntity) {
-        try {
-            ReflectionUtil.setTarget(m_ent, ((FakeEntity)livingEntity).m_ent);
-        } catch (Exception e) {
-            MyPlugin.fixme("execution failed");
-        }
+        MyPlugin.fixme();
     }
 
     @Override
     public LivingEntity getTarget() {
-        try {
-            return (LivingEntity) Util.wrapEntity(ReflectionUtil.getTarget(m_ent));
-        } catch (Exception ex){
-            MyPlugin.fixme("execution failed");
-            return null;
-        }
+        MyPlugin.fixme();
+        return null;
     }
 }

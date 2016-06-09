@@ -2,14 +2,92 @@ package PluginBukkitBridge;
 
 import PluginBukkitBridge.block.FakeBlock;
 import PluginBukkitBridge.entity.FakeFallingBlock;
-import PluginReference.*;
+import PluginReference.MC_Chunk;
+import PluginReference.MC_Entity;
+import PluginReference.MC_EntityType;
+import PluginReference.MC_GameRuleType;
+import PluginReference.MC_Player;
+import PluginReference.MC_World;
 import com.google.common.base.Charsets;
 import org.apache.commons.lang.Validate;
-import org.bukkit.*;
+import org.bukkit.BlockChangeDelegate;
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.ChunkSnapshot;
+import org.bukkit.Difficulty;
+import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.TreeType;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
+import org.bukkit.WorldType;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.metadata.BlockMetadataStore;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ambient;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Bat;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.CaveSpider;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.ComplexLivingEntity;
+import org.bukkit.entity.Cow;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.EnderPearl;
+import org.bukkit.entity.EnderSignal;
+import org.bukkit.entity.Enderman;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.Ghast;
+import org.bukkit.entity.Giant;
+import org.bukkit.entity.Golem;
+import org.bukkit.entity.Hanging;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LightningStrike;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.MagmaCube;
+import org.bukkit.entity.Minecart;
+import org.bukkit.entity.MushroomCow;
+import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Pig;
+import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Sheep;
+import org.bukkit.entity.Silverfish;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowball;
+import org.bukkit.entity.Snowman;
+import org.bukkit.entity.Spider;
+import org.bukkit.entity.Squid;
+import org.bukkit.entity.StorageMinecart;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Tameable;
+import org.bukkit.entity.ThrownExpBottle;
+import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Villager;
+import org.bukkit.entity.Weather;
+import org.bukkit.entity.Witch;
+import org.bukkit.entity.Wither;
+import org.bukkit.entity.WitherSkull;
+import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.SpawnerMinecart;
@@ -22,7 +100,13 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class FakeWorld implements World {
     public MC_World world = null;
@@ -94,6 +178,11 @@ public class FakeWorld implements World {
         for (Player player : getPlayers()) {
             player.playSound(location, sound, volume, pitch);
         }
+    }
+
+    @Override
+    public void playSound(Location location, String s, float v, float v1) {
+
     }
 
     @Override
@@ -255,16 +344,6 @@ public class FakeWorld implements World {
 
     @Override
     public Difficulty getDifficulty() {
-		try{
-			return Difficulty.valueOf(ReflectionUtil.getProperty("difficulty"));
-		}catch(Exception ignored){
-
-		}
-		try{
-			return Difficulty.getByValue(Integer.valueOf(ReflectionUtil.getProperty("difficulty")));
-		}catch(Exception ignored){
-
-		}
         MyPlugin.fixme();
         return Difficulty.NORMAL;
     }
@@ -420,7 +499,8 @@ public class FakeWorld implements World {
 
     @Override
     public boolean getPVP() {
-        return Boolean.valueOf(ReflectionUtil.getProperty("pvp"));
+        MyPlugin.fixme();
+        return true;
     }
 
     @Override
@@ -437,7 +517,8 @@ public class FakeWorld implements World {
 
     @Override
     public long getSeed() {
-        return ReflectionUtil.getWorldSeed(world);
+        MyPlugin.fixme();
+        return 0;
     }
 
     @Override
@@ -499,7 +580,8 @@ public class FakeWorld implements World {
 
     @Override
     public boolean hasStorm() {
-        return ReflectionUtil.hasStorm(world);
+        MyPlugin.fixme();
+        return false;
     }
 
     @Override
@@ -553,6 +635,66 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public void spawnParticle(Particle particle, Location location, int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public boolean isThundering() {
         MyPlugin.fixme();
         return false;
@@ -602,8 +744,8 @@ public class FakeWorld implements World {
 
     @Override
     public boolean regenerateChunk(int arg0, int arg1) {
-        ReflectionUtil.regenChunk(world, arg0, arg1);
-        return true;
+        MyPlugin.fixme();
+        return false;
     }
 
     @Override
@@ -730,13 +872,9 @@ public class FakeWorld implements World {
     }
 
     @Override
-    public LivingEntity spawnCreature(Location arg0, EntityType arg1) {
-        return (LivingEntity) world.spawnEntity(Util.getEntityType(arg1), Util.getLocation(arg0), null);
-    }
-
-    @Override
-    public LivingEntity spawnCreature(Location loc, CreatureType creatureType) {
-        return spawnCreature(loc, creatureType.toEntityType());
+    public <T extends Arrow> T spawnArrow(Location location, Vector vector, float v, float v1, Class<T> aClass) {
+        MyPlugin.fixme();
+        return null;
     }
 
     @Override

@@ -26,6 +26,17 @@ public class FakeBrewingStand extends FakeContainerBlockState implements Brewing
     }
 
     @Override
+    public int getFuelLevel() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public void setFuelLevel(int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public BrewerInventory getInventory() {
         return new FakeBrewerInventory(this, 64);
     }

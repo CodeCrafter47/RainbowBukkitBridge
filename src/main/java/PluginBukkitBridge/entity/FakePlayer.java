@@ -1,10 +1,19 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.ReflectionUtil;
 import PluginBukkitBridge.Util;
 import PluginReference.MC_Player;
-import org.bukkit.*;
+import org.bukkit.Achievement;
+import org.bukkit.Bukkit;
+import org.bukkit.Effect;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Note;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.Statistic;
+import org.bukkit.WeatherType;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.craftbukkit.CraftSound;
@@ -18,7 +27,11 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 
 public class FakePlayer extends FakeHumanEntity implements Player {
@@ -52,9 +65,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
     @Override
     public void setPlayerListName(String name) {
         playerListName = name;
-        for (Player p : Bukkit.getOnlinePlayers()) {
-            ReflectionUtil.sendPlayerListItemChangeDisplayName(((FakePlayer) p).player, player, name);
-        }
+        MyPlugin.fixme();
     }
 
     @Override
@@ -281,6 +292,94 @@ public class FakePlayer extends FakeHumanEntity implements Player {
     }
 
     @Override
+    public Entity getSpectatorTarget() {
+        return Util.wrapEntity(player.getEntitySpectated());
+    }
+
+    @Override
+    public void setSpectatorTarget(Entity entity) {
+        player.spectateEntity(((FakeEntity) entity).m_ent);
+    }
+
+    /**
+     * @param s
+     * @param s1
+     * @deprecated
+     */
+    @Override
+    public void sendTitle(String s, String s1) {
+        MyPlugin.fixme();
+    }
+
+    /**
+     * @deprecated
+     */
+    @Override
+    public void resetTitle() {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6, T t) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public void sendMessage(String message) {
         player.sendMessage(message);
     }
@@ -348,7 +447,8 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public boolean hasPlayedBefore() {
-        return !ReflectionUtil.isFirstJoin(player);
+        MyPlugin.fixme();
+        return true;
     }
 
     @Override
@@ -386,9 +486,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void sendPluginMessage(Plugin arg0, String arg1, byte[] arg2) {
-        // fixme shall we check whether a plugin has registered for a channel?
-        // it seems kind of useless
-        ReflectionUtil.sendPluginMessage(player, arg1, arg2);
+        MyPlugin.fixme();
     }
 
     @Override
@@ -440,7 +538,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public Location getBedSpawnLocation() {
-        return ReflectionUtil.getBedSpawnLocation(player);
+        return Util.getLocation(player.getBedRespawnLocation());
     }
 
     @Override
@@ -457,7 +555,8 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public float getSaturation() {
-        return ReflectionUtil.getFoodSaturation(player);
+        MyPlugin.fixme();
+        return 0;
     }
 
     @Override
@@ -558,7 +657,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void saveData() {
-        ReflectionUtil.savePlayerData(player);
+        MyPlugin.fixme();
     }
 
     @Override
@@ -639,7 +738,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public void setSaturation(float arg0) {
-        ReflectionUtil.setFoodSaturation(player, arg0);
+        MyPlugin.fixme();
     }
 
     @Override

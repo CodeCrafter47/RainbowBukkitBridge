@@ -1,5 +1,6 @@
 package PluginBukkitBridge.inventory;
 
+import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.block.FakeContainerBlockState;
 import org.bukkit.block.BrewingStand;
 import org.bukkit.event.inventory.InventoryType;
@@ -23,6 +24,17 @@ public class FakeBrewerInventory extends FakeContainerInventory implements Brewe
     @Override
     public void setIngredient(ItemStack itemStack) {
         setItem(3, itemStack);
+    }
+
+    @Override
+    public ItemStack getFuel() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setFuel(ItemStack itemStack) {
+        MyPlugin.fixme();
     }
 
     @Override

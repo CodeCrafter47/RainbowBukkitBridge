@@ -1,8 +1,10 @@
 package PluginBukkitBridge.item;
 
+import PluginBukkitBridge.MyPlugin;
 import lombok.SneakyThrows;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jnbt.*;
@@ -17,6 +19,17 @@ import java.util.List;
 public class FakePotionMeta extends FakeItemMeta implements PotionMeta {
     public FakePotionMeta(CompoundTag tag) {
         super(tag);
+    }
+
+    @Override
+    public void setBasePotionData(PotionData potionData) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public PotionData getBasePotionData() {
+        MyPlugin.fixme();
+        return null;
     }
 
     @Override

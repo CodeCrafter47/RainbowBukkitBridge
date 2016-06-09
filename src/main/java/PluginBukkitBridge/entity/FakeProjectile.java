@@ -1,7 +1,9 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.Util;
 import PluginReference.MC_Entity;
+import PluginReference.MC_Projectile;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.projectiles.ProjectileSource;
@@ -16,14 +18,12 @@ public class FakeProjectile extends FakeEntity implements Projectile {
 
     @Override
     public LivingEntity _INVALID_getShooter() {
-        MyPlugin.fixme("stub method");
-        return null;
+        return (LivingEntity) Util.wrapEntity(((MC_Projectile)m_ent).getProjectileSource());
     }
 
     @Override
     public ProjectileSource getShooter() {
-        MyPlugin.fixme("stub method");
-        return null;
+        return (ProjectileSource) Util.wrapEntity(((MC_Projectile)m_ent).getProjectileSource());
     }
 
     @Override

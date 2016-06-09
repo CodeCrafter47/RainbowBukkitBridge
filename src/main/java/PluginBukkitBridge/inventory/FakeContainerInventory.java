@@ -4,6 +4,7 @@ import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.Util;
 import PluginBukkitBridge.block.FakeContainerBlockState;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.inventory.InventoryIterator;
 import org.bukkit.entity.HumanEntity;
@@ -18,7 +19,7 @@ import java.util.ListIterator;
 /**
  * Created by florian on 28.10.14.
  */
-public abstract class FakeContainerInventory implements Inventory{
+public abstract class FakeContainerInventory implements Inventory {
     FakeContainerBlockState blockState;
     int maxStackSize;
 
@@ -427,5 +428,26 @@ public abstract class FakeContainerInventory implements Inventory{
             index += getSize() + 1; // ie, with -1, previous() will return the last element
         }
         return new InventoryIterator(this, index);
+    }
+
+    @Override
+    public ItemStack[] getStorageContents() {
+        ItemStack[] stacks = new ItemStack[blockState.container.getSize()];
+        for (int i = 0; i < stacks.length; i++) {
+            stacks[i] = Util.getItemStack(blockState.container.getItemAtIdx(i));
+        }
+        return stacks;
+    }
+
+    @Override
+    public void setStorageContents(ItemStack[] itemStacks) throws IllegalArgumentException {
+        for (int i = 0; i < itemStacks.length; i++) {
+            blockState.container.setItemAtIdx(i, Util.getItemStack(itemStacks[i]));
+        }
+    }
+
+    @Override
+    public Location getLocation() {
+        return blockState.getLocation();
     }
 }

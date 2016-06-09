@@ -1,10 +1,11 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.ReflectionUtil;
 import PluginBukkitBridge.Util;
+import PluginBukkitBridge.entity.attribute.FakeAttributeInstance;
 import PluginBukkitBridge.inventory.FakeEntityEquipment;
 import PluginReference.MC_Entity;
+import PluginReference.MC_LivingEntity;
 import PluginReference.MC_Player;
 import PluginReference.MC_PotionEffect;
 import com.google.common.base.Function;
@@ -12,8 +13,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.potion.PotionEffect;
@@ -21,7 +27,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     public FakeLivingEntity(MC_Entity argEnt) {
@@ -30,7 +41,8 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public double getEyeHeight() {
-        return ReflectionUtil.getEntityHeight(m_ent);
+        MyPlugin.fixme();
+        return 0;
     }
 
     @Override
@@ -116,21 +128,6 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
                 return (byte)material.getId();
             }
         })), i);
-    }
-
-    @Override
-    public Egg throwEgg() {
-        return launchProjectile(Egg.class);
-    }
-
-    @Override
-    public Arrow shootArrow() {
-        return launchProjectile(Arrow.class);
-    }
-
-    @Override
-    public Snowball throwSnowball() {
-        return launchProjectile(Snowball.class);
     }
 
     @Override
@@ -312,6 +309,39 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     }
 
     @Override
+    public boolean isGliding() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setGliding(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setAI(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean hasAI() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setCollidable(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean isCollidable() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
     public void _INVALID_damage(int arg0) {
         damage(arg0);
     }
@@ -390,5 +420,10 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     public <T extends Projectile> T launchProjectile(Class<? extends T> projectile, Vector arg1) {
         MyPlugin.fixme();
         return null;
+    }
+
+    @Override
+    public AttributeInstance getAttribute(Attribute attribute) {
+        return new FakeAttributeInstance(((MC_LivingEntity) m_ent).getAttribute(Util.wrapAttributeType(attribute)));
     }
 }

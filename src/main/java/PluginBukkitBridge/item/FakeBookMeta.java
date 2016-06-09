@@ -1,5 +1,6 @@
 package PluginBukkitBridge.item;
 
+import PluginBukkitBridge.MyPlugin;
 import lombok.SneakyThrows;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.BookMeta;
@@ -76,6 +77,17 @@ public class FakeBookMeta extends FakeItemMeta implements BookMeta{
             tag = new CompoundTag("tag", new HashMap<String, Tag>());
         }
         tag.getValue().put("author", new StringTag("author", s));
+    }
+
+    @Override
+    public Generation getGeneration() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setGeneration(Generation generation) {
+        MyPlugin.fixme();
     }
 
     @Override

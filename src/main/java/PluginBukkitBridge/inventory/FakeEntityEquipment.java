@@ -22,6 +22,28 @@ public class FakeEntityEquipment implements EntityEquipment {
     }
 
     @Override
+    public ItemStack getItemInMainHand() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setItemInMainHand(ItemStack itemStack) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public ItemStack getItemInOffHand() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setItemInOffHand(ItemStack itemStack) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public ItemStack getItemInHand() {
         MyPlugin.fixme();
         return null;
@@ -113,6 +135,28 @@ public class FakeEntityEquipment implements EntityEquipment {
 
     @Override
     public void setItemInHandDropChance(float v) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public float getItemInMainHandDropChance() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public void setItemInMainHandDropChance(float v) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public float getItemInOffHandDropChance() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public void setItemInOffHandDropChance(float v) {
         MyPlugin.fixme();
     }
 

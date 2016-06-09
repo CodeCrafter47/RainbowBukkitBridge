@@ -1,6 +1,7 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.SkullType;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Skull;
@@ -29,6 +30,17 @@ public class FakeSkull extends FakeBlockState implements Skull {
     public boolean setOwner(String s) {
         MyPlugin.fixme();
         return false;
+    }
+
+    @Override
+    public OfflinePlayer getOwningPlayer() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setOwningPlayer(OfflinePlayer offlinePlayer) {
+        MyPlugin.fixme();
     }
 
     @Override

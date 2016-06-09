@@ -6,6 +6,7 @@ import PluginBukkitBridge.Util;
 import PluginReference.MC_ItemStack;
 import PluginReference.MC_Player;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.inventory.InventoryIterator;
 import org.bukkit.entity.HumanEntity;
@@ -13,7 +14,11 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by florian on 06.10.14.
@@ -34,6 +39,12 @@ public class FakePlayerInventory implements PlayerInventory {
             stacks[i++] = Util.getItemStack(is);
         }
         return stacks;
+    }
+
+    @Override
+    public ItemStack[] getExtraContents() {
+        MyPlugin.fixme();
+        return new ItemStack[0];
     }
 
     @Override
@@ -67,6 +78,11 @@ public class FakePlayerInventory implements PlayerInventory {
     }
 
     @Override
+    public void setExtraContents(ItemStack[] itemStacks) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public void setHelmet(ItemStack helmet) {
         ItemStack[] items = getArmorContents();
         items[3] = helmet;
@@ -92,6 +108,26 @@ public class FakePlayerInventory implements PlayerInventory {
         ItemStack[] items = getArmorContents();
         items[0] = boots;
         setArmorContents(items);
+    }
+
+    @Override
+    public ItemStack getItemInMainHand() {
+        return Util.getItemStack(player.getItemInHand());
+    }
+
+    @Override
+    public void setItemInMainHand(ItemStack itemStack) {
+        player.setItemInHand(Util.getItemStack(itemStack));
+    }
+
+    @Override
+    public ItemStack getItemInOffHand() {
+        return Util.getItemStack(player.getItemInOffHand());
+    }
+
+    @Override
+    public void setItemInOffHand(ItemStack itemStack) {
+        player.setItemInOffHand(Util.getItemStack(itemStack));
     }
 
     @Override
@@ -195,6 +231,16 @@ public class FakePlayerInventory implements PlayerInventory {
             inv.add(i, is);
         }
         player.setInventory(inv);
+    }
+
+    @Override
+    public ItemStack[] getStorageContents() {
+        return getContents();
+    }
+
+    @Override
+    public void setStorageContents(ItemStack[] itemStacks) throws IllegalArgumentException {
+        setContents(itemStacks);
     }
 
     @Override
@@ -567,6 +613,11 @@ public class FakePlayerInventory implements PlayerInventory {
             index += getSize() + 1; // ie, with -1, previous() will return the last element
         }
         return new InventoryIterator(this, index);
+    }
+
+    @Override
+    public Location getLocation() {
+        return null;
     }
 
     @Override

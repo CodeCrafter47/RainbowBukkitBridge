@@ -302,7 +302,51 @@ public class FakedFakeHanging implements Hanging {
 		return false;
 	}
 
-	@Override
+    @Override
+    public void setGlowing(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean isGlowing() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setInvulnerable(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public boolean isSilent() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setSilent(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean hasGravity() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setGravity(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public Spigot spigot() {
         MyPlugin.fixme();
         return null;

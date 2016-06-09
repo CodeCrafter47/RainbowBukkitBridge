@@ -116,8 +116,6 @@ public class MyPlugin extends PluginReference.PluginBase {
 
         setupPotionEffectTypes();
 
-        server.registerServerPacketListener(new PacketListener());
-
         // Initialize Bukkit server object...
         fakeServer.server = server;
         Bukkit.setServer(fakeServer);

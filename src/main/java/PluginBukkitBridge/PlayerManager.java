@@ -4,11 +4,8 @@ import PluginBukkitBridge.entity.FakePlayer;
 import PluginReference.MC_Player;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -26,9 +23,6 @@ public class PlayerManager {
         FakePlayer player1 = new FakePlayer(player);
         uuidMap.put(player1.getUniqueId(), player1);
         nameMap.put(player1.getName(), player1);
-        for(Player p: Bukkit.getOnlinePlayers()){
-            if(p.getPlayerListName() != null)ReflectionUtil.sendPlayerListItemChangeDisplayName(player, ((FakePlayer)p).player, p.getPlayerListName());
-        }
         return player1;
     }
 

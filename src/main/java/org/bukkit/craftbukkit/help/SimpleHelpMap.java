@@ -180,10 +180,6 @@ public class SimpleHelpMap implements HelpMap {
     }
 
     private String getCommandPluginName(Command command) {
-        /*
-        if (command instanceof VanillaCommandWrapper) {
-            return "Minecraft";
-        }*/
         if (command instanceof BukkitCommand || command instanceof VanillaCommand) {
             return "Bukkit";
         }

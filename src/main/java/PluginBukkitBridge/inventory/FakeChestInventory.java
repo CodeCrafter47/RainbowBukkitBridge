@@ -6,6 +6,7 @@ import PluginBukkitBridge.block.FakeBlock;
 import PluginReference.MC_Chest;
 import PluginReference.MC_ItemStack;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.craftbukkit.inventory.InventoryIterator;
@@ -221,6 +222,16 @@ public class FakeChestInventory implements Inventory{
             inv.add(i, is);
         }
         getChest().setInventory(inv);
+    }
+
+    @Override
+    public ItemStack[] getStorageContents() {
+        return getContents();
+    }
+
+    @Override
+    public void setStorageContents(ItemStack[] itemStacks) throws IllegalArgumentException {
+        setContents(itemStacks);
     }
 
     @Override
@@ -445,5 +456,10 @@ public class FakeChestInventory implements Inventory{
             index += getSize() + 1; // ie, with -1, previous() will return the last element
         }
         return new InventoryIterator(this, index);
+    }
+
+    @Override
+    public Location getLocation() {
+        return blk.getLocation();
     }
 }

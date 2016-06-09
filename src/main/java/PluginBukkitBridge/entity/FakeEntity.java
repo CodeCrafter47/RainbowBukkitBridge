@@ -1,9 +1,16 @@
 package PluginBukkitBridge.entity;
 
-import PluginBukkitBridge.*;
+import PluginBukkitBridge.FakeHelper;
+import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.Util;
+import PluginBukkitBridge.WorldManager;
 import PluginReference.MC_Entity;
 import PluginReference.MC_MotionData;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.EntityEffect;
+import org.bukkit.Location;
+import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -57,6 +64,50 @@ public class FakeEntity implements Entity {
 		MyPlugin.fixme();
 		return false;
 	}
+
+    @Override
+    public void setGlowing(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean isGlowing() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setInvulnerable(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean isInvulnerable() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public boolean isSilent() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setSilent(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public boolean hasGravity() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setGravity(boolean b) {
+        MyPlugin.fixme();
+    }
 
     @Override
     public List<MetadataValue> getMetadata(String arg0) {
@@ -170,12 +221,7 @@ public class FakeEntity implements Entity {
 
     @Override
     public UUID getUniqueId() {
-        try {
-            return ReflectionUtil.getEntityUUID(m_ent);
-        } catch (Exception e) {
-            MyPlugin.fixme("execution failed");
-        }
-        return null;
+        return m_ent.getUUID();
     }
 
     @Override

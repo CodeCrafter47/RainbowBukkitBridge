@@ -299,12 +299,7 @@ public class FakeBlock implements Block
     }
 
     private MC_Block getBlock(int id){
-        MC_Block block = world.getBlockFromName(BlockHelper.getBlockName(id));
-        if(block == null){
-            MyPlugin.logger.warning("Unknown block: " + Material.getMaterial(id).name() + ", using dirt");
-            block = world.getBlockFromName("dirt");
-        }
-        return block;
+        return MyPlugin.server.getBlock(id);
     }
 
 }

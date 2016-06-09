@@ -7,6 +7,8 @@ import PluginReference.*;
 import lombok.SneakyThrows;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -25,6 +27,19 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
+
+import static PluginReference.MC_WorldBiomeType.BEACH;
+import static PluginReference.MC_WorldBiomeType.COLD_TAIGA;
+import static PluginReference.MC_WorldBiomeType.COLD_TAIGA_HILLS;
+import static PluginReference.MC_WorldBiomeType.EXTREME_HILLS_PLUS;
+import static PluginReference.MC_WorldBiomeType.FLOWER_FOREST;
+import static PluginReference.MC_WorldBiomeType.ICE_PLAINS;
+import static PluginReference.MC_WorldBiomeType.ICE_PLAINS_SPIKES;
+import static PluginReference.MC_WorldBiomeType.MEGA_SPRUCE_TAIGA;
+import static PluginReference.MC_WorldBiomeType.MEGA_TAIGA;
+import static PluginReference.MC_WorldBiomeType.MEGA_TAIGA_HILLS;
+import static PluginReference.MC_WorldBiomeType.REDWOOD_TAIGA_HILLS_M;
+import static PluginReference.MC_WorldBiomeType.TAIGA_M;
 
 public class Util {
 
@@ -308,7 +323,9 @@ public class Util {
                     return new FakeTNTPrimed(entity);
                 case FALLING_SAND:
                     return new FakeFallingBlock(entity);
-                case HANGING:
+                case ITEM_FRAME:
+                case LEASH_KNOT:
+                case PAINTING:
                     return new FakeHanging(entity);
                 case ARMOR_STAND:
                     return new FakeArmorStand((MC_ArmorStand) entity);
@@ -451,11 +468,9 @@ public class Util {
             case EXPERIENCE_ORB:
                 return MC_EntityType.XP_ORB;
             case LEASH_HITCH:
-                //fixme
-                return MC_EntityType.HANGING;
+                return MC_EntityType.LEASH_KNOT;
             case PAINTING:
-                //fixme
-                return MC_EntityType.HANGING;
+                return MC_EntityType.PAINTING;
             case ARROW:
                 return MC_EntityType.ARROW;
             case SNOWBALL:
@@ -471,11 +486,9 @@ public class Util {
             case THROWN_EXP_BOTTLE:
                 return MC_EntityType.THROWN_EXP_BOTTLE;
             case ITEM_FRAME:
-                // fixme
-                return MC_EntityType.HANGING;
+                return MC_EntityType.ITEM_FRAME;
             case WITHER_SKULL:
-                // fixme
-                return MC_EntityType.UNSPECIFIED;
+                return MC_EntityType.WITHER_SKULL;
             case PRIMED_TNT:
                 return MC_EntityType.PRIMED_TNT;
             case FALLING_BLOCK:
@@ -579,8 +592,7 @@ public class Util {
             case FISHING_HOOK:
                 return MC_EntityType.FISHING_HOOK;
             case LIGHTNING:
-                // fixme
-                return MC_EntityType.UNSPECIFIED;
+                return MC_EntityType.LIGHTNING_BOLT;
             case WEATHER:
                 // fixme
                 return MC_EntityType.UNSPECIFIED;
@@ -654,25 +666,25 @@ public class Util {
 				return MC_WorldBiomeType.FROZEN_OCEAN;
 			case FROZEN_RIVER:
 				return MC_WorldBiomeType.FROZEN_RIVER;
-			case ICE_PLAINS:
-				return MC_WorldBiomeType.ICE_PLAINS;
-			case ICE_MOUNTAINS:
+            case ICE_FLATS:
+                break;
+            case ICE_MOUNTAINS:
 				return MC_WorldBiomeType.ICE_MOUNTAINS;
 			case MUSHROOM_ISLAND:
 				return MC_WorldBiomeType.MUSHROOM_ISLAND;
-			case MUSHROOM_SHORE:
-				return MC_WorldBiomeType.MUSHROOM_ISLAND_SHORE;
-			case BEACH:
-				return MC_WorldBiomeType.BEACH;
-			case DESERT_HILLS:
+            case MUSHROOM_ISLAND_SHORE:
+                break;
+            case BEACHES:
+                break;
+            case DESERT_HILLS:
 				return MC_WorldBiomeType.DESERT_HILLS;
 			case FOREST_HILLS:
 				return MC_WorldBiomeType.FOREST_HILLS;
 			case TAIGA_HILLS:
 				return MC_WorldBiomeType.TAIGA_HILLS;
-			case SMALL_MOUNTAINS:
-				return MC_WorldBiomeType.UNSPECIFIED;
-			case JUNGLE:
+            case SMALLER_EXTREME_HILLS:
+                break;
+            case JUNGLE:
 				return MC_WorldBiomeType.JUNGLE;
 			case JUNGLE_HILLS:
 				return MC_WorldBiomeType.JUNGLE_HILLS;
@@ -690,69 +702,11 @@ public class Util {
 				return MC_WorldBiomeType.BIRCH_FOREST_HILLS;
 			case ROOFED_FOREST:
 				return MC_WorldBiomeType.ROOFED_FOREST;
-			case COLD_TAIGA:
-				return MC_WorldBiomeType.COLD_TAIGA;
-			case COLD_TAIGA_HILLS:
-				return MC_WorldBiomeType.COLD_TAIGA_HILLS;
-			case MEGA_TAIGA:
-				return MC_WorldBiomeType.MEGA_TAIGA;
-			case MEGA_TAIGA_HILLS:
-				return MC_WorldBiomeType.MEGA_TAIGA_HILLS;
-			case EXTREME_HILLS_PLUS:
-				return MC_WorldBiomeType.EXTREME_HILLS_PLUS;
-			case SAVANNA:
-				return MC_WorldBiomeType.SAVANNA;
-			case SAVANNA_PLATEAU:
-				return MC_WorldBiomeType.SAVANNA_PLATEAU;
-			case MESA:
-				return MC_WorldBiomeType.MESA;
-			case MESA_PLATEAU_FOREST:
-				return MC_WorldBiomeType.MESA_PLATEAU_F;
-			case MESA_PLATEAU:
-				return MC_WorldBiomeType.MESA_PLATEAU;
-			case SUNFLOWER_PLAINS:
-				return MC_WorldBiomeType.PLAINS;
-			case DESERT_MOUNTAINS:
-				return MC_WorldBiomeType.DESERT_HILLS;
-			case FLOWER_FOREST:
-				return MC_WorldBiomeType.FOREST;
-			case TAIGA_MOUNTAINS:
-				return MC_WorldBiomeType.TAIGA_HILLS;
-			case SWAMPLAND_MOUNTAINS:
-				return MC_WorldBiomeType.SWAMPLAND;
-			case ICE_PLAINS_SPIKES:
-				return MC_WorldBiomeType.ICE_MOUNTAINS;
-			case JUNGLE_MOUNTAINS:
-				return MC_WorldBiomeType.JUNGLE_HILLS;
-			case JUNGLE_EDGE_MOUNTAINS:
-				return MC_WorldBiomeType.JUNGLE_EDGE;
-			case COLD_TAIGA_MOUNTAINS:
-				return MC_WorldBiomeType.COLD_TAIGA_HILLS;
-			case SAVANNA_MOUNTAINS:
-				return MC_WorldBiomeType.SAVANNA;
-			case SAVANNA_PLATEAU_MOUNTAINS:
-				return MC_WorldBiomeType.SAVANNA_PLATEAU;
-			case MESA_BRYCE:
-				return MC_WorldBiomeType.MESA;
-			case MESA_PLATEAU_FOREST_MOUNTAINS:
-				return MC_WorldBiomeType.MESA_PLATEAU_F;
-			case MESA_PLATEAU_MOUNTAINS:
-				return MC_WorldBiomeType.MESA_PLATEAU;
-			case BIRCH_FOREST_MOUNTAINS:
-				return MC_WorldBiomeType.BIRCH_FOREST_HILLS;
-			case BIRCH_FOREST_HILLS_MOUNTAINS:
-				return MC_WorldBiomeType.BIRCH_FOREST_HILLS;
-			case ROOFED_FOREST_MOUNTAINS:
-				return MC_WorldBiomeType.ROOFED_FOREST;
-			case MEGA_SPRUCE_TAIGA:
-				return MC_WorldBiomeType.UNSPECIFIED;
-			case EXTREME_HILLS_MOUNTAINS:
-				return MC_WorldBiomeType.EXTREME_HILLS;
-			case EXTREME_HILLS_PLUS_MOUNTAINS:
-				return MC_WorldBiomeType.EXTREME_HILLS_PLUS;
-			case MEGA_SPRUCE_TAIGA_HILLS:
-				return MC_WorldBiomeType.UNSPECIFIED;
-		}
+            case TAIGA_COLD:
+                return COLD_TAIGA;
+            case TAIGA_COLD_HILLS:
+                return COLD_TAIGA_HILLS;
+        }
 		return MC_WorldBiomeType.UNSPECIFIED;
 	}
 
@@ -785,16 +739,10 @@ public class Util {
 				return Biome.FROZEN_OCEAN;
 			case FROZEN_RIVER:
 				return Biome.FROZEN_RIVER;
-			case ICE_PLAINS:
-				return Biome.ICE_PLAINS;
 			case ICE_MOUNTAINS:
 				return Biome.ICE_MOUNTAINS;
 			case MUSHROOM_ISLAND:
 				return Biome.MUSHROOM_ISLAND;
-			case MUSHROOM_ISLAND_SHORE:
-				return Biome.MUSHROOM_SHORE;
-			case BEACH:
-				return Biome.BEACH;
 			case DESERT_HILLS:
 				return Biome.DESERT_HILLS;
 			case FOREST_HILLS:
@@ -821,27 +769,99 @@ public class Util {
 				return Biome.BIRCH_FOREST_HILLS;
 			case ROOFED_FOREST:
 				return Biome.ROOFED_FOREST;
-			case COLD_TAIGA:
-				return Biome.COLD_TAIGA;
-			case COLD_TAIGA_HILLS:
-				return Biome.COLD_TAIGA_HILLS;
-			case MEGA_TAIGA:
-				return Biome.MEGA_TAIGA;
-			case MEGA_TAIGA_HILLS:
-				return Biome.MEGA_TAIGA_HILLS;
-			case EXTREME_HILLS_PLUS:
-				return Biome.EXTREME_HILLS_PLUS;
 			case SAVANNA:
 				return Biome.SAVANNA;
-			case SAVANNA_PLATEAU:
-				return Biome.SAVANNA_PLATEAU;
 			case MESA:
 				return Biome.MESA;
-			case MESA_PLATEAU:
-				return Biome.MESA_PLATEAU;
-			case MESA_PLATEAU_F:
-				return Biome.MESA_PLATEAU_FOREST;
 		}
 		return null;
 	}
+
+    public static MC_AttributeType wrapAttributeType(Attribute attribute) {
+        switch (attribute) {
+            case GENERIC_MAX_HEALTH:
+                return MC_AttributeType.MAX_HEALTH;
+            case GENERIC_FOLLOW_RANGE:
+                return MC_AttributeType.FOLLOW_RANGE;
+            case GENERIC_KNOCKBACK_RESISTANCE:
+                return MC_AttributeType.KNOCKBACK_RESISTANCE;
+            case GENERIC_MOVEMENT_SPEED:
+                return MC_AttributeType.MOVEMENT_SPEED;
+            case GENERIC_ATTACK_DAMAGE:
+                return MC_AttributeType.ATTACK_DAMAGE;
+            case GENERIC_ATTACK_SPEED:
+                return MC_AttributeType.PLAYER_ATTACK_SPEED;
+            case GENERIC_ARMOR:
+                return MC_AttributeType.ARMOR;
+            case GENERIC_LUCK:
+                return MC_AttributeType.PLAYER_LUCK;
+            case HORSE_JUMP_STRENGTH:
+                return MC_AttributeType.HORSE_JUMP_STRENGTH;
+            case ZOMBIE_SPAWN_REINFORCEMENTS:
+                return MC_AttributeType.ZOMBIE_REINFORCEMENT_CHANCE;
+        }
+        MyPlugin.logger.warning("Unknown attribute " + attribute);
+        return null;
+    }
+
+    public static Attribute unwrapAttributeType(MC_AttributeType attribute) {
+        switch (attribute) {
+            case MAX_HEALTH:
+                return Attribute.GENERIC_MAX_HEALTH;
+            case FOLLOW_RANGE:
+                return Attribute.GENERIC_FOLLOW_RANGE;
+            case KNOCKBACK_RESISTANCE:
+                return Attribute.GENERIC_KNOCKBACK_RESISTANCE;
+            case MOVEMENT_SPEED:
+                return Attribute.GENERIC_MOVEMENT_SPEED;
+            case ATTACK_DAMAGE:
+                return Attribute.GENERIC_ATTACK_DAMAGE;
+            case ARMOR:
+                return Attribute.GENERIC_ARMOR;
+            case PLAYER_ATTACK_SPEED:
+                return Attribute.GENERIC_ATTACK_SPEED;
+            case PLAYER_LUCK:
+                return Attribute.GENERIC_LUCK;
+            case HORSE_JUMP_STRENGTH:
+                return Attribute.HORSE_JUMP_STRENGTH;
+            case ZOMBIE_REINFORCEMENT_CHANCE:
+                return Attribute.ZOMBIE_SPAWN_REINFORCEMENTS;
+        }
+        MyPlugin.logger.warning("Unknown attribute " + attribute);
+        return null;
+    }
+
+    public static AttributeModifier wrapAttributeModifier(MC_AttributeModifier modifier) {
+        return new AttributeModifier(modifier.getUUID(), modifier.getName(), modifier.getValue(), wrapOperator(modifier.getOperator()));
+    }
+
+    public static MC_AttributeModifier wrapAttributeModifier(AttributeModifier modifier) {
+        return MyPlugin.server.createAttributeModifier(modifier.getUniqueId(), modifier.getName(), wrapOperator(modifier.getOperation()), modifier.getAmount());
+    }
+
+    private static AttributeModifier.Operation wrapOperator(MC_AttributeModifier.Operator operator) {
+        switch (operator) {
+            case ADD_CONSTANT:
+                return AttributeModifier.Operation.ADD_NUMBER;
+            case ADD_SCALAR_BASE:
+                return AttributeModifier.Operation.ADD_SCALAR;
+            case ADD_SCALAR:
+                return AttributeModifier.Operation.MULTIPLY_SCALAR_1;
+        }
+        MyPlugin.logger.warning("Unknown operator " + operator);
+        return null;
+    }
+
+    private static MC_AttributeModifier.Operator wrapOperator(AttributeModifier.Operation operation) {
+        switch (operation) {
+            case ADD_NUMBER:
+                return MC_AttributeModifier.Operator.ADD_CONSTANT;
+            case ADD_SCALAR:
+                return MC_AttributeModifier.Operator.ADD_SCALAR_BASE;
+            case MULTIPLY_SCALAR_1:
+                return MC_AttributeModifier.Operator.ADD_SCALAR;
+        }
+        MyPlugin.logger.warning("Unknown operation " + operation);
+        return null;
+    }
 }

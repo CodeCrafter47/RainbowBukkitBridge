@@ -1,6 +1,8 @@
 package PluginBukkitBridge.entity;
 
+import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_Entity;
+import org.bukkit.Location;
 import org.bukkit.entity.EnderCrystal;
 
 /**
@@ -9,5 +11,27 @@ import org.bukkit.entity.EnderCrystal;
 public class FakeEnderCrystal extends FakeEntity implements EnderCrystal {
     public FakeEnderCrystal(MC_Entity argEnt) {
         super(argEnt);
+    }
+
+    @Override
+    public boolean isShowingBottom() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setShowingBottom(boolean b) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public Location getBeamTarget() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setBeamTarget(Location location) {
+        MyPlugin.fixme();
     }
 }

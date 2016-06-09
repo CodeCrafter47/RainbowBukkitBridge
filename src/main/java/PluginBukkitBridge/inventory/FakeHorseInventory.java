@@ -2,6 +2,7 @@ package PluginBukkitBridge.inventory;
 
 import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_Horse;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryType;
@@ -101,6 +102,17 @@ public class FakeHorseInventory implements HorseInventory {
     @Override
     public void setContents(ItemStack[] itemStacks) throws IllegalArgumentException {
         MyPlugin.fixme("stub method");
+    }
+
+    @Override
+    public ItemStack[] getStorageContents() {
+        MyPlugin.fixme();
+        return new ItemStack[0];
+    }
+
+    @Override
+    public void setStorageContents(ItemStack[] itemStacks) throws IllegalArgumentException {
+        MyPlugin.fixme();
     }
 
     @Override
@@ -249,6 +261,12 @@ public class FakeHorseInventory implements HorseInventory {
     @Override
     public ListIterator<ItemStack> iterator(int i) {
         MyPlugin.fixme("stub method");
+        return null;
+    }
+
+    @Override
+    public Location getLocation() {
+        MyPlugin.fixme();
         return null;
     }
 }

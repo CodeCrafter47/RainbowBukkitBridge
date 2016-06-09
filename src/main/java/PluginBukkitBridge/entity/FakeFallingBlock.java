@@ -41,4 +41,15 @@ public class FakeFallingBlock extends FakeEntity implements FallingBlock {
     public void setDropItem(boolean b) {
         MyPlugin.fixme("stub method");
     }
+
+    @Override
+    public boolean canHurtEntities() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setHurtEntities(boolean b) {
+        MyPlugin.fixme();
+    }
 }

@@ -2,7 +2,6 @@ package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
 import org.bukkit.block.CreatureSpawner;
-import org.bukkit.entity.CreatureType;
 import org.bukkit.entity.EntityType;
 
 /**
@@ -11,12 +10,6 @@ import org.bukkit.entity.EntityType;
 public class FakeCreatureSpawner extends FakeBlockState implements CreatureSpawner {
     public FakeCreatureSpawner(FakeBlock arg) {
         super(arg);
-    }
-
-    @Override
-    public CreatureType getCreatureType() {
-        MyPlugin.fixme();
-        return CreatureType.PIG;
     }
 
     @Override
@@ -31,17 +24,6 @@ public class FakeCreatureSpawner extends FakeBlockState implements CreatureSpawn
     }
 
     @Override
-    public void setCreatureType(CreatureType creatureType) {
-        MyPlugin.fixme();
-    }
-
-    @Override
-    public String getCreatureTypeId() {
-        MyPlugin.fixme();
-        return "";
-    }
-
-    @Override
     public void setCreatureTypeByName(String s) {
         MyPlugin.fixme();
     }
@@ -50,11 +32,6 @@ public class FakeCreatureSpawner extends FakeBlockState implements CreatureSpawn
     public String getCreatureTypeName() {
         MyPlugin.fixme();
         return "";
-    }
-
-    @Override
-    public void setCreatureTypeId(String s) {
-        MyPlugin.fixme();
     }
 
     @Override
