@@ -80,6 +80,12 @@ public class FakeBookMeta extends FakeItemMeta implements BookMeta{
     }
 
     @Override
+    public boolean hasGeneration() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
     public Generation getGeneration() {
         MyPlugin.fixme();
         return null;

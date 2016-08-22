@@ -162,6 +162,16 @@ public class FakePlayer extends FakeHumanEntity implements Player {
     }
 
     @Override
+    public void stopSound(Sound sound) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void stopSound(String s) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public void playEffect(Location location, Effect effect, int i) {
         MyPlugin.fixme();
     }
