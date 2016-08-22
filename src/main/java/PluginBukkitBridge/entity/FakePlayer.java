@@ -80,7 +80,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
 
     @Override
     public InetSocketAddress getAddress() {
-        return new InetSocketAddress(player.getIPAddress(), 0);
+        return ((InetSocketAddress) player.getSocketAddress());
     }
 
     @Override
@@ -829,8 +829,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
         return new Player.Spigot() {
             @Override
             public InetSocketAddress getRawAddress() {
-                MyPlugin.fixme();
-                return null;
+                return ((InetSocketAddress) player.getSocketAddress());
             }
 
             @Override

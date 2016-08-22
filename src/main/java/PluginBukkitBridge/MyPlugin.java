@@ -318,6 +318,9 @@ public class MyPlugin extends PluginReference.PluginBase {
         // don't call events if no one listens
         if (AsyncPlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length == 0) return;
 
+        if (ip.startsWith("/")) {
+            ip = ip.substring(1);
+        }
         AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(playerName, new InetSocketAddress(ip, 0).getAddress(), uuid);
         pluginManager.callEvent(event);
         // fixme result
@@ -553,7 +556,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public void onPlayerJoin(MC_Player plr) {
         PlayerManager.addPlayer(plr);
 
-        PlayerLoginEvent event1 = new PlayerLoginEvent(PlayerManager.getPlayer(plr), plr.getIPAddress(), new InetSocketAddress(plr.getIPAddress(), 0).getAddress());
+        PlayerLoginEvent event1 = new PlayerLoginEvent(PlayerManager.getPlayer(plr), plr.getIPAddress(), ((InetSocketAddress) plr.getSocketAddress()).getAddress());
         pluginManager.callEvent(event1);
 
         // fixme result
