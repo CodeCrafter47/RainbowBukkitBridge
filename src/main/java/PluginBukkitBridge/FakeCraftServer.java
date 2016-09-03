@@ -465,7 +465,7 @@ public class FakeCraftServer implements Server {
     @Override
     public String getIp() {
         MyPlugin.fixme();
-        return "127.0.0.0";
+        return "";
     }
 
     @Override
