@@ -338,6 +338,17 @@ public class FakedFakeItem implements Item {
     }
 
     @Override
+    public int getPortalCooldown() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public void setPortalCooldown(int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public Spigot spigot() {
         return new Spigot(){
             @Override

@@ -1,5 +1,6 @@
 package PluginBukkitBridge.block;
 
+import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.inventory.FakeChestInventory;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
@@ -20,5 +21,22 @@ public class FakeChest extends FakeBlockState implements Chest{
     @Override
     public Inventory getInventory() {
         return new FakeChestInventory((FakeBlock) getBlock());
+    }
+
+    @Override
+    public boolean isLocked() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public String getLock() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setLock(String s) {
+        MyPlugin.fixme();
     }
 }

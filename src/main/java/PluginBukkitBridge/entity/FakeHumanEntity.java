@@ -164,6 +164,12 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
     }
 
     @Override
+    public boolean isHandRaised() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
     public int getExpToLevel() {
         MyPlugin.fixme("stub method");
         return 0;

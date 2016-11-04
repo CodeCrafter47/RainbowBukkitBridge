@@ -110,6 +110,17 @@ public class FakeEntity implements Entity {
     }
 
     @Override
+    public int getPortalCooldown() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public void setPortalCooldown(int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public List<MetadataValue> getMetadata(String arg0) {
         return MyPlugin.entityMetadataStore.getMetadata(this, arg0);
     }

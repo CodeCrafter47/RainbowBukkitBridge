@@ -50,4 +50,21 @@ public class FakeFurnace extends FakeContainerBlockState implements Furnace {
         }
         return false;
     }
+
+    @Override
+    public boolean isLocked() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public String getLock() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setLock(String s) {
+        MyPlugin.fixme();
+    }
 }

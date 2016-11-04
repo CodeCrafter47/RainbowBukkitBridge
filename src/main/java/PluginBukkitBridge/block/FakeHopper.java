@@ -1,5 +1,6 @@
 package PluginBukkitBridge.block;
 
+import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.inventory.FakeHopperInventory;
 import org.bukkit.block.Hopper;
 import org.bukkit.inventory.Inventory;
@@ -15,5 +16,22 @@ public class FakeHopper extends FakeContainerBlockState implements Hopper {
     @Override
     public Inventory getInventory() {
         return new FakeHopperInventory(this, 16);
+    }
+
+    @Override
+    public boolean isLocked() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public String getLock() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setLock(String s) {
+        MyPlugin.fixme();
     }
 }

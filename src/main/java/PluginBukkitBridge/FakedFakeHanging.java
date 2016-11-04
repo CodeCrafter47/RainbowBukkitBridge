@@ -347,6 +347,17 @@ public class FakedFakeHanging implements Hanging {
     }
 
     @Override
+    public int getPortalCooldown() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public void setPortalCooldown(int i) {
+        MyPlugin.fixme();
+    }
+
+    @Override
     public Spigot spigot() {
         MyPlugin.fixme();
         return null;

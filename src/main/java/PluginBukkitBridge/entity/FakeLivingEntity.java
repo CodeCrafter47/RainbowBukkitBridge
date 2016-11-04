@@ -27,12 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BlockIterator;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     public FakeLivingEntity(MC_Entity argEnt) {
@@ -94,7 +89,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return getLineOfSight(Sets.newHashSet(Iterables.transform(set, new Function<Material, Byte>() {
             @Override
             public Byte apply(Material material) {
-                return (byte)material.getId();
+                return (byte) material.getId();
             }
         })), i);
     }
@@ -110,7 +105,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return getTargetBlock(Sets.newHashSet(Iterables.transform(set, new Function<Material, Byte>() {
             @Override
             public Byte apply(Material material) {
-                return (byte)material.getId();
+                return (byte) material.getId();
             }
         })), i);
     }
@@ -125,7 +120,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return getLastTwoTargetBlocks(Sets.newHashSet(Iterables.transform(set, new Function<Material, Byte>() {
             @Override
             public Byte apply(Material material) {
-                return (byte)material.getId();
+                return (byte) material.getId();
             }
         })), i);
     }
@@ -198,9 +193,9 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public Player getKiller() {
-        if(m_ent.getAttacker() != null && m_ent.getAttacker() instanceof MC_Player){
-			return (Player) Util.wrapEntity(m_ent.getAttacker());
-		}
+        if (m_ent.getAttacker() != null && m_ent.getAttacker() instanceof MC_Player) {
+            return (Player) Util.wrapEntity(m_ent.getAttacker());
+        }
         return null;
     }
 
@@ -211,7 +206,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public boolean addPotionEffect(PotionEffect arg0, boolean force) {
-        if(!force && hasPotionEffect(arg0.getType()))return false;
+        if (!force && hasPotionEffect(arg0.getType())) return false;
         // remove old effect
         removePotionEffect(arg0.getType());
         // add new one
@@ -236,7 +231,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
     @Override
     public Collection<PotionEffect> getActivePotionEffects() {
         List<PotionEffect> result = new ArrayList<>();
-        for(MC_PotionEffect eff: m_ent.getPotionEffects()){
+        for (MC_PotionEffect eff : m_ent.getPotionEffects()) {
             result.add(new PotionEffect(Util.getPotionEffectType(eff.type), eff.duration, eff.amplifier, eff.ambient));
         }
         return result;
@@ -244,15 +239,21 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public boolean hasPotionEffect(PotionEffectType arg0) {
-        for(PotionEffect p: getActivePotionEffects())if(p.getType() == arg0)return true;
+        for (PotionEffect p : getActivePotionEffects()) if (p.getType() == arg0) return true;
         return false;
+    }
+
+    @Override
+    public PotionEffect getPotionEffect(PotionEffectType potionEffectType) {
+        for (PotionEffect p : getActivePotionEffects()) if (p.getType() == potionEffectType) return p;
+        return null;
     }
 
     @Override
     public void removePotionEffect(PotionEffectType arg0) {
         List<MC_PotionEffect> potionEffects = new ArrayList<>();
-        for(MC_PotionEffect effect: m_ent.getPotionEffects()){
-            if(effect.type != Util.getPotionEffectType(arg0))potionEffects.add(effect);
+        for (MC_PotionEffect effect : m_ent.getPotionEffects()) {
+            if (effect.type != Util.getPotionEffectType(arg0)) potionEffects.add(effect);
         }
         m_ent.setPotionEffects(potionEffects);
     }
@@ -348,13 +349,13 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
 
     @Override
     public void _INVALID_damage(int arg0, Entity arg1) {
-        damage(arg0,arg1);
+        damage(arg0, arg1);
     }
 
     @Override
     public void damage(double arg0) {
-        double newHealth = getHealth()-arg0;
-        if(newHealth <= 0){
+        double newHealth = getHealth() - arg0;
+        if (newHealth <= 0) {
             m_ent.kill();
             return;
         }

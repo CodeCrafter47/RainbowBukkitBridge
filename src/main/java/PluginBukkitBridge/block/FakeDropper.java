@@ -22,4 +22,21 @@ public class FakeDropper extends FakeContainerBlockState implements Dropper {
     public Inventory getInventory() {
         return new FakeDropperInventory(this, 16);
     }
+
+    @Override
+    public boolean isLocked() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public String getLock() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setLock(String s) {
+        MyPlugin.fixme();
+    }
 }

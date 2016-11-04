@@ -50,6 +50,11 @@ public class FakeEnchantment extends Enchantment{
     }
 
     @Override
+    public boolean isTreasure() {
+        return type == MC_EnchantmentType.MENDING || type == MC_EnchantmentType.FROST_WALKER;
+    }
+
+    @Override
     public boolean conflictsWith(Enchantment enchantment) {
         return conflictingEnchants.contains(enchantment.getId());
     }

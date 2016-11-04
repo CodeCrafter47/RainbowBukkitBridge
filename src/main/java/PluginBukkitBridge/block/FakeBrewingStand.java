@@ -40,4 +40,21 @@ public class FakeBrewingStand extends FakeContainerBlockState implements Brewing
     public BrewerInventory getInventory() {
         return new FakeBrewerInventory(this, 64);
     }
+
+    @Override
+    public boolean isLocked() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public String getLock() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setLock(String s) {
+        MyPlugin.fixme();
+    }
 }
