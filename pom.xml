@@ -90,7 +90,7 @@
         <dependency>
             <groupId>org.projectrainbow</groupId>
             <artifactId>PluginReference</artifactId>
-            <version>1.10-SNAPSHOT</version>
+            <version>1.10.2-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -168,24 +168,6 @@
                                     </includes>
                                 </resource>
                             </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.wolvereness</groupId>
-                <artifactId>overmapped</artifactId>
-                <version>0.0.2</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>map</goal>
-                        </goals>
-                        <configuration>
-                            <maps>${basedir}/target/maps.yml</maps>
-                            <input>${basedir}/target/${project.artifactId}.jar</input>
-                            <original>${basedir}/target/unmapped-${project.artifactId}-${project.version}.jar</original>
                         </configuration>
                     </execution>
                 </executions>
