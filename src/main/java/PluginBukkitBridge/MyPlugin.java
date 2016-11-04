@@ -38,6 +38,7 @@ import org.bukkit.scheduler.BukkitWorker;
 import org.bukkit.util.Vector;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.logging.Handler;
@@ -309,7 +310,10 @@ public class MyPlugin extends PluginReference.PluginBase {
         }
     }
 
-    public void onPlayerLogin(String playerName, UUID uuid, String ip) {
+    @Override
+    public void onPlayerLogin(String playerName, UUID uuid, InetAddress address, MC_EventInfo ei) {
+        String ip = address.toString();
+
         if (DebugMode) {
             String logMsg = String.format("%s onPlayerLogin from IP %s. UUID=%s", playerName, ip, uuid.toString());
             logger.info("BukkitBridge -- " + logMsg);
@@ -322,8 +326,13 @@ public class MyPlugin extends PluginReference.PluginBase {
             ip = ip.substring(1);
         }
         AsyncPlayerPreLoginEvent event = new AsyncPlayerPreLoginEvent(playerName, new InetSocketAddress(ip, 0).getAddress(), uuid);
+        event.setLoginResult(ei.isCancelled ? AsyncPlayerPreLoginEvent.Result.KICK_OTHER : AsyncPlayerPreLoginEvent.Result.ALLOWED);
+        event.setKickMessage(ei.tag);
         pluginManager.callEvent(event);
-        // fixme result
+        if (event.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
+            ei.isCancelled = true;
+            ei.tag = event.getKickMessage();
+        }
     }
 
     public void onPlayerLogout(String playerName, UUID uuid) {
