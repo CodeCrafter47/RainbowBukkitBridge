@@ -76,9 +76,7 @@ public class MyPlugin extends PluginReference.PluginBase {
     public static void fixme() {
         if (DebugMode) {
             logger.log(Level.INFO, "FIXME: stub method", new UnsupportedOperationException());
-        } else {
-            logger.info("FIXME: stub method at " + new UnsupportedOperationException().getStackTrace()[1].toString());
-        }
+	}
     }
 
     public static void fixme(String s) {
