@@ -109,4 +109,10 @@ public class FakeChunk implements Chunk {
         MyPlugin.fixme();
         return false;
     }
+
+    @Override
+    public boolean isSlimeChunk() {
+        MyPlugin.fixme();
+        return false;
+    }
 }

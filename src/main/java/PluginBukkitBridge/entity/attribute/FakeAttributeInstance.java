@@ -1,5 +1,6 @@
 package PluginBukkitBridge.entity.attribute;
 
+import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.Util;
 import PluginReference.MC_Attribute;
 import PluginReference.MC_AttributeModifier;
@@ -57,5 +58,11 @@ public class FakeAttributeInstance implements AttributeInstance {
     @Override
     public double getValue() {
         return attribute.getEffectiveValue();
+    }
+
+    @Override
+    public double getDefaultValue() {
+        MyPlugin.fixme();
+        return 0;
     }
 }

@@ -22,12 +22,13 @@ public class FakeHorse extends FakeAnimal implements Horse{
 
     @Override
     public Variant getVariant() {
-        return Util.wrapHorseType(horse.getHorseType());
+        MyPlugin.fixme();
+        return null;
     }
 
     @Override
     public void setVariant(Variant variant) {
-        horse.setHorseType(Util.wrapHorseType(variant));
+        MyPlugin.fixme();
     }
 
     @Override

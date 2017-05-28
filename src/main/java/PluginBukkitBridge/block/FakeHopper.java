@@ -34,4 +34,15 @@ public class FakeHopper extends FakeContainerBlockState implements Hopper {
     public void setLock(String s) {
         MyPlugin.fixme();
     }
+
+    @Override
+    public String getCustomName() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setCustomName(String arg0) {
+        MyPlugin.fixme();   
+    }
 }

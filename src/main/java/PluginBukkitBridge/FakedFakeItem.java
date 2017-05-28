@@ -455,4 +455,52 @@ public class FakedFakeItem implements Item {
     public void setOp(boolean b) {
         MyPlugin.fixme();
     }
+
+    @Override
+    public boolean addPassenger(Entity arg0) {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public boolean addScoreboardTag(String arg0) {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public double getHeight() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public List<Entity> getPassengers() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public Set<String> getScoreboardTags() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public double getWidth() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public boolean removePassenger(Entity arg0) {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public boolean removeScoreboardTag(String arg0) {
+        MyPlugin.fixme();
+        return false;
+    }
 }

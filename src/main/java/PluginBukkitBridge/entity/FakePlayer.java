@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.Statistic;
 import org.bukkit.WeatherType;
 import org.bukkit.conversations.Conversation;
@@ -905,5 +906,35 @@ public class FakePlayer extends FakeHumanEntity implements Player {
     @Override
     public int getNoDamageTicks() {
         return noDamageTicks;
+    }
+
+    @Override
+    public void playSound(Location arg0, Sound arg1, SoundCategory arg2, float arg3, float arg4) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void playSound(Location arg0, String arg1, SoundCategory arg2, float arg3, float arg4) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void sendTitle(String arg0, String arg1, int arg2, int arg3, int arg4) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setResourcePack(String arg0, byte[] arg1) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void stopSound(Sound arg0, SoundCategory arg1) {
+        MyPlugin.fixme(); 
+    }
+
+    @Override
+    public void stopSound(String arg0, SoundCategory arg1) {
+        MyPlugin.fixme();
     }
 }

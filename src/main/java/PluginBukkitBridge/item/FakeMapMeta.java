@@ -1,8 +1,12 @@
 package PluginBukkitBridge.item;
 
 import lombok.SneakyThrows;
+
+import org.bukkit.Color;
 import org.bukkit.inventory.meta.MapMeta;
 import org.jnbt.*;
+
+import PluginBukkitBridge.MyPlugin;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -72,5 +76,39 @@ public class FakeMapMeta extends FakeItemMeta implements MapMeta{
     @Override
     boolean notUncommon(FakeItemMeta meta) {
         return super.notUncommon(meta) && (meta instanceof FakeMapMeta || isMapEmpty());
+    }
+
+    @Override
+    public Color getColor() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public String getLocationName() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public boolean hasColor() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public boolean hasLocationName() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setColor(Color arg0) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setLocationName(String arg0) {
+        MyPlugin.fixme();
     }
 }

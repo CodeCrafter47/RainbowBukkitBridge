@@ -36,6 +36,7 @@ import org.bukkit.craftbukkit.inventory.CraftFurnaceRecipe;
 import org.bukkit.craftbukkit.inventory.CraftRecipe;
 import org.bukkit.craftbukkit.inventory.CraftShapedRecipe;
 import org.bukkit.craftbukkit.inventory.CraftShapelessRecipe;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.generator.ChunkGenerator;
@@ -45,6 +46,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -780,10 +782,22 @@ public class FakeCraftServer implements Server {
         return false;
     }
 
-    @Override
+    //@Override
     public boolean useExactLoginLocation() {
         MyPlugin.fixme();
         return false;
+    }
+
+    @Override
+    public Merchant createMerchant(String arg0) {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public Entity getEntity(UUID arg0) {
+        MyPlugin.fixme();
+        return null;
     }
 
 }
