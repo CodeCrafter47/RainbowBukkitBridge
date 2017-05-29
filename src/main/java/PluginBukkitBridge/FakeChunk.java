@@ -84,12 +84,12 @@ public class FakeChunk implements Chunk {
 
     @Override
     public boolean load(boolean b) {
-        return true;
+        return world.loadChunk(x, y, b);
     }
 
     @Override
     public boolean load() {
-        return true;
+        return world.loadChunk(x, y, true);
     }
 
     @Override
