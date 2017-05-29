@@ -79,7 +79,7 @@ public class FakeChunk implements Chunk {
 
     @Override
     public boolean isLoaded() {
-        return true;
+        return world.isChunkLoaded(x, y);
     }
 
     @Override
