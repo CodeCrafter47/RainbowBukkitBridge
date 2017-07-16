@@ -79,7 +79,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return blocks;
     }
 
-    @Override
+    // 1.12 remove @Override
     public List<Block> getLineOfSight(HashSet<Byte> transparent, int maxDistance) {
         return getLineOfSight(transparent, maxDistance, 0);
     }
@@ -165,7 +165,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return event.getFinalDamage();
     }
 
-    @Override
+    // 1.12 removed @Override
     public int _INVALID_getLastDamage() {
         return ((int) getLastDamage());
     }
@@ -175,7 +175,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         MyPlugin.fixme("stub method");
     }
 
-    @Override
+    // 1.12 removed @Override
     public void _INVALID_setLastDamage(int i) {
         MyPlugin.fixme("stub method");
     }
@@ -342,12 +342,12 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return false;
     }
 
-    @Override
+    // 1.12 removed @Override
     public void _INVALID_damage(int arg0) {
         damage(arg0);
     }
 
-    @Override
+    // 1.12 removed @Override
     public void _INVALID_damage(int arg0, Entity arg1) {
         damage(arg0, arg1);
     }
@@ -372,7 +372,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return m_ent.getHealth();
     }
 
-    @Override
+    // 1.12 removed @Override
     public int _INVALID_getHealth() {
         return (int) m_ent.getHealth();
     }
@@ -382,7 +382,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         m_ent.setHealth((float) health);
     }
 
-    @Override
+    // 1.12 removed @Override
     public void _INVALID_setHealth(int health) {
         m_ent.setHealth(health);
     }
@@ -392,7 +392,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         return m_ent.getMaxHealth();
     }
 
-    @Override
+    // 1.12 removed @Override
     public int _INVALID_getMaxHealth() {
         return (int) m_ent.getMaxHealth();
     }
@@ -402,7 +402,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         m_ent.setMaxHealth((float) arg0);
     }
 
-    @Override
+    // 1.12 removed @Override
     public void _INVALID_setMaxHealth(int arg0) {
         m_ent.setMaxHealth(arg0);
     }

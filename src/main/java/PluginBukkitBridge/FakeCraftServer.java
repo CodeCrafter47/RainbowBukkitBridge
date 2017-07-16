@@ -15,6 +15,7 @@ import org.bukkit.BanList;
 import org.bukkit.BanList.Type;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
@@ -22,12 +23,14 @@ import org.bukkit.UnsafeValues;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.advancement.Advancement;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -97,7 +100,7 @@ public class FakeCraftServer implements Server {
         return "v" + server.getRainbowVersion();
     }
 
-    @Override
+    //@Override // 1.12 No Override
     public Player[] _INVALID_getOnlinePlayers() {
         Collection<? extends Player> players = getOnlinePlayers();
         Player pls[] = new Player[players.size()];
@@ -301,7 +304,7 @@ public class FakeCraftServer implements Server {
         MyPlugin.fixme();
     }
 
-    @Override
+    //@Override 1.12 no override
     public void configureDbConfig(ServerConfig config) {
         Validate.notNull(config, "Config cannot be null");
 
@@ -619,6 +622,18 @@ public class FakeCraftServer implements Server {
                 MyPlugin.fixme();
                 return null;
             }
+
+            @Override
+            public Advancement loadAdvancement(NamespacedKey arg0, String arg1) {
+                MyPlugin.fixme();
+                return null;
+            }
+
+            @Override
+            public boolean removeAdvancement(NamespacedKey arg0) {
+                MyPlugin.fixme();
+                return false;
+            }
         };
     }
 
@@ -800,4 +815,20 @@ public class FakeCraftServer implements Server {
         return null;
     }
 
+    @Override
+    public Iterator<Advancement> advancementIterator() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public Advancement getAdvancement(NamespacedKey arg0) {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void reloadData() {
+        MyPlugin.fixme();
+    }
 }

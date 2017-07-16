@@ -88,7 +88,7 @@ public class FakeOfflinePlayer implements OfflinePlayer {
         return true;
     }
 
-    @Override
+    // @Override setBanned removed as of 1.12
     public void setBanned(boolean banned) {
         MyPlugin.server.executeCommand((banned?"ban ":"pardon") + getName());
     }

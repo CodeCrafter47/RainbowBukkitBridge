@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Hanging;
@@ -506,5 +507,11 @@ public class FakedFakeHanging implements Hanging {
     public boolean removeScoreboardTag(String arg0) {
         MyPlugin.fixme();
         return false;
+    }
+
+    @Override
+    public PistonMoveReaction getPistonMoveReaction() {
+        MyPlugin.fixme();
+        return null;
     }
 }

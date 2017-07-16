@@ -10,6 +10,7 @@ import PluginReference.MC_Player;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -295,6 +296,28 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
 
     @Override
     public void setCooldown(Material arg0, int arg1) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public Entity getShoulderEntityLeft() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public Entity getShoulderEntityRight() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setShoulderEntityLeft(Entity arg0) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setShoulderEntityRight(Entity arg0) {
         MyPlugin.fixme();
     }
 }

@@ -15,6 +15,8 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Statistic;
 import org.bukkit.WeatherType;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.craftbukkit.CraftSound;
@@ -474,7 +476,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
         return false;
     }
 
-    @Override
+    // 1.12 removed @Override
     public void setBanned(boolean arg0) {
         MyPlugin.fixme();
     }
@@ -936,5 +938,17 @@ public class FakePlayer extends FakeHumanEntity implements Player {
     @Override
     public void stopSound(String arg0, SoundCategory arg1) {
         MyPlugin.fixme();
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getLocale() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

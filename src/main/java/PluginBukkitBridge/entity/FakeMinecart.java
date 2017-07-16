@@ -14,7 +14,7 @@ public class FakeMinecart extends FakeVehicle implements Minecart {
         super(argEnt);
     }
 
-    @Override
+    // 1.12 removed @Override
     public void _INVALID_setDamage(int i) {
         MyPlugin.fixme("stub method");
     }
@@ -24,7 +24,7 @@ public class FakeMinecart extends FakeVehicle implements Minecart {
         MyPlugin.fixme("stub method");
     }
 
-    @Override
+    // 1.12 removed @Override
     public int _INVALID_getDamage() {
         MyPlugin.fixme("stub method");
         return 0;

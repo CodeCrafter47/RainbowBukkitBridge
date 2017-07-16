@@ -7,9 +7,10 @@ import org.apache.commons.lang.Validate;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.defaults.VanillaCommand;
+//import org.bukkit.command.defaults.VanillaCommand;
 import org.bukkit.help.HelpMap;
 import org.bukkit.help.HelpTopic;
 import org.bukkit.help.HelpTopicComparator;
@@ -18,7 +19,7 @@ import org.bukkit.util.ChatPaginator;
 
 import java.util.*;
 
-public class HelpCommand extends VanillaCommand {
+public class HelpCommand extends Command {
     public HelpCommand() {
         super("bbhelp");
         this.description = "Shows the help menu";

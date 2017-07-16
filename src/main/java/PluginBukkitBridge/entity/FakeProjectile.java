@@ -16,7 +16,7 @@ public class FakeProjectile extends FakeEntity implements Projectile {
         super(argEnt);
     }
 
-    @Override
+    // 1.12 removed @Override
     public LivingEntity _INVALID_getShooter() {
         return (LivingEntity) Util.wrapEntity(((MC_Projectile)m_ent).getProjectileSource());
     }
@@ -26,7 +26,7 @@ public class FakeProjectile extends FakeEntity implements Projectile {
         return (ProjectileSource) Util.wrapEntity(((MC_Projectile)m_ent).getProjectileSource());
     }
 
-    @Override
+    // 1.12 removed @Override
     public void _INVALID_setShooter(LivingEntity livingEntity) {
         MyPlugin.fixme("stub method");
     }

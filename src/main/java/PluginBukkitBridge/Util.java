@@ -333,6 +333,8 @@ public class Util {
                     return new FakeExperienceOrb(entity);
                 case ENDER_CRYSTAL:
                     return new FakeEnderCrystal(entity);
+            default:
+                break;
             }
         } catch (Exception ignored) {
             ignored.printStackTrace();

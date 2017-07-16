@@ -11,6 +11,7 @@ import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
+import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -489,5 +490,11 @@ public class FakeEntity implements Entity {
     public boolean removeScoreboardTag(String arg0) {
         MyPlugin.fixme();
         return false;
+    }
+
+    @Override
+    public PistonMoveReaction getPistonMoveReaction() {
+        MyPlugin.fixme();
+        return null;
     }
 }

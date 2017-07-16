@@ -1,6 +1,7 @@
 package PluginBukkitBridge;
 
 import org.bukkit.*;
+import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -502,5 +503,11 @@ public class FakedFakeItem implements Item {
     public boolean removeScoreboardTag(String arg0) {
         MyPlugin.fixme();
         return false;
+    }
+
+    @Override
+    public PistonMoveReaction getPistonMoveReaction() {
+        MyPlugin.fixme();
+        return null;
     }
 }

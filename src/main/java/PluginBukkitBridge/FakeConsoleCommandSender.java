@@ -2,7 +2,9 @@ package PluginBukkitBridge;
 
 import org.apache.logging.log4j.LogManager;
 import org.bukkit.Server;
+import org.bukkit.Server.Spigot;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.permissions.Permission;
@@ -136,4 +138,8 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender {
         MyPlugin.fixme();
     }
 
+    @Override
+    public Spigot spigot() {
+        return new Spigot();
+    }
 }
