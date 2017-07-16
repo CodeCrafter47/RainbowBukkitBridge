@@ -2,12 +2,14 @@ package org.bukkit.craftbukkit.help;
 
 import PluginBukkitBridge.FakeCraftServer;
 import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.commands.VanillaCommand;
+
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import org.bukkit.command.*;
 import org.bukkit.command.defaults.BukkitCommand;
-import org.bukkit.command.defaults.VanillaCommand;
+//import org.bukkit.command.defaults.VanillaCommand;
 import org.bukkit.help.*;
 
 import java.util.*;

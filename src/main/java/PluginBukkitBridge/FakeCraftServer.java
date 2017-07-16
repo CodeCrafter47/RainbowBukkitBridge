@@ -5,10 +5,10 @@ import PluginBukkitBridge.item.FakeItemFactory;
 import PluginReference.MC_Block;
 import PluginReference.MC_Player;
 import PluginReference.MC_Server;
-import com.avaje.ebean.config.DataSourceConfig;
-import com.avaje.ebean.config.ServerConfig;
-import com.avaje.ebean.config.dbplatform.SQLitePlatform;
-import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
+//import com.avaje.ebean.config.DataSourceConfig;
+//import com.avaje.ebean.config.ServerConfig;
+//import com.avaje.ebean.config.dbplatform.SQLitePlatform;
+//import com.avaje.ebeaninternal.server.lib.sql.TransactionIsolation;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Achievement;
 import org.bukkit.BanList;
@@ -305,6 +305,7 @@ public class FakeCraftServer implements Server {
     }
 
     //@Override 1.12 no override
+    /*
     public void configureDbConfig(ServerConfig config) {
         Validate.notNull(config, "Config cannot be null");
 
@@ -322,6 +323,7 @@ public class FakeCraftServer implements Server {
 
         config.setDataSourceConfig(ds);
     }
+    */
 
     @Override
     public Inventory createInventory(InventoryHolder arg0, InventoryType arg1) {
