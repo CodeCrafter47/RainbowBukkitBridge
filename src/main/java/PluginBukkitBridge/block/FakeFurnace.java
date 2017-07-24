@@ -1,9 +1,7 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.Util;
 import PluginBukkitBridge.inventory.FakeFurnaceInventory;
-import PluginReference.MC_Container;
 import org.bukkit.block.Furnace;
 import org.bukkit.inventory.FurnaceInventory;
 
