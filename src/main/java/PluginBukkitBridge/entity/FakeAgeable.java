@@ -1,10 +1,9 @@
 package PluginBukkitBridge.entity;
 
+import org.bukkit.entity.Ageable;
+
 import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_EntityAgeable;
-import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * Created by florian on 12.10.14.
