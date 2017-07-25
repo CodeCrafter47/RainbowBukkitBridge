@@ -209,8 +209,11 @@ public class SimpleHelpMap implements HelpMap {
     }
 
     private class IsCommandTopicPredicate implements Predicate<HelpTopic> {
-
         public boolean apply(HelpTopic topic) {
+            return topic.getName().charAt(0) == '/';
+        }
+
+        public boolean test(HelpTopic topic) {
             return topic.getName().charAt(0) == '/';
         }
     }
