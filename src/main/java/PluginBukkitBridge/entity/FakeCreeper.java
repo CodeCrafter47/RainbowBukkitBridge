@@ -1,8 +1,8 @@
 package PluginBukkitBridge.entity;
 
-import PluginBukkitBridge.MyPlugin;
-import PluginReference.MC_Entity;
 import org.bukkit.entity.Creeper;
+
+import PluginReference.MC_Entity;
 
 /**
  * Created by florian on 12.10.14.

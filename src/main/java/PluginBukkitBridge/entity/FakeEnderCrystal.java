@@ -9,19 +9,21 @@ import org.bukkit.entity.EnderCrystal;
  * Created by florian on 12.10.14.
  */
 public class FakeEnderCrystal extends FakeEntity implements EnderCrystal {
+    private boolean isShowingBottom;
+    
     public FakeEnderCrystal(MC_Entity argEnt) {
         super(argEnt);
+        this.isShowingBottom = false;
     }
 
     @Override
     public boolean isShowingBottom() {
-        MyPlugin.fixme();
-        return false;
+        return this.isShowingBottom;
     }
 
     @Override
     public void setShowingBottom(boolean b) {
-        MyPlugin.fixme();
+        this.isShowingBottom = b;
     }
 
     @Override
