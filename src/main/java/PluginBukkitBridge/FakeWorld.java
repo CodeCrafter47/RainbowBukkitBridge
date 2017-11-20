@@ -8,6 +8,8 @@ import PluginReference.MC_EntityType;
 import PluginReference.MC_GameRuleType;
 import PluginReference.MC_Player;
 import PluginReference.MC_World;
+import PluginReference.RainbowUtils;
+
 import com.google.common.base.Charsets;
 import org.apache.commons.lang.Validate;
 import org.bukkit.BlockChangeDelegate;
@@ -1180,6 +1182,12 @@ public class FakeWorld implements World {
     public FallingBlock spawnFallingBlock(Location arg0, MaterialData arg1) throws IllegalArgumentException {
         MyPlugin.fixme();
         return null;
+    }
+
+    @Override
+    public boolean setSpawnLocation(Location arg0) {
+        MyPlugin.fixme();
+        return false;
     }
 
 }

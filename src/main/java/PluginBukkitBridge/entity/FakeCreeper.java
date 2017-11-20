@@ -23,4 +23,26 @@ public class FakeCreeper extends FakeCreature implements Creeper {
     public void setPowered(boolean b) {
         MyPlugin.fixme();
     }
+
+    @Override
+    public int getExplosionRadius() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public int getMaxFuseTicks() {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public void setExplosionRadius(int arg0) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setMaxFuseTicks(int arg0) {
+        MyPlugin.fixme();
+    }
 }

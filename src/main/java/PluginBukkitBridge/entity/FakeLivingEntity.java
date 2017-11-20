@@ -94,7 +94,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         })), i);
     }
 
-    @Override
+    // TODO @Override
     public Block getTargetBlock(HashSet<Byte> transparent, int maxDistance) {
         List<Block> blocks = getLineOfSight(transparent, maxDistance, 1);
         return blocks.get(0);
@@ -110,7 +110,7 @@ public class FakeLivingEntity extends FakeEntity implements LivingEntity {
         })), i);
     }
 
-    @Override
+    // 1.12.2 removed
     public List<Block> getLastTwoTargetBlocks(HashSet<Byte> transparent, int maxDistance) {
         return getLineOfSight(transparent, maxDistance, 2);
     }
