@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/isaia/Desktop/Folders/server/Rails-1.12-de.jar"/>
 	<classpathentry kind="lib" path="G:/PluginBukkitBridge.jar"/>
 	<classpathentry kind="lib" path="G:/spigot-1.12-R0.1-SNAPSHOT-b1355.jar"/>
+	<classpathentry kind="lib" path="C:/Users/isaia/Desktop/Folders/server/Rails-1.12.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

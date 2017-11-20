@@ -11,8 +11,8 @@ import java.util.logging.LogRecord;
  * Created by florian on 14.10.14.
  */
 public class PluginLogger extends org.bukkit.plugin.PluginLogger {
-    String pluginName;
-    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+    private String pluginName;
+    private SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 
     public PluginLogger(Plugin context) {
         super(context);

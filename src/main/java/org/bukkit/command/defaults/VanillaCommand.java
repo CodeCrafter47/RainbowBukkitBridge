@@ -1,5 +1,5 @@
-// Revert VinillaCommand remove.
-package PluginBukkitBridge.commands;
+// https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/a1cc4b769caf690b2f075f833c83e76d6431f9a7#src/main/java/org/bukkit/command/defaults/VanillaCommand.java
+package org.bukkit.command.defaults;
 
 import java.util.List;
 
