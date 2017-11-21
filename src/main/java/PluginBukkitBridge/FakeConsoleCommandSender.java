@@ -2,9 +2,7 @@ package PluginBukkitBridge;
 
 import org.apache.logging.log4j.LogManager;
 import org.bukkit.Server;
-import org.bukkit.Server.Spigot;
 import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.permissions.Permission;
@@ -12,12 +10,13 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+
 import java.util.Set;
 
 public class FakeConsoleCommandSender implements ConsoleCommandSender {
     @Override
     public String getName() {
-
         return "BukkitBridge";
     }
 
@@ -140,6 +139,16 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender {
 
     @Override
     public Spigot spigot() {
-        return new Spigot();
+        return new Spigot() {
+            @Override
+            public void sendMessage(BaseComponent component) {
+                MyPlugin.fixme();
+            }
+            
+            @Override
+            public void sendMessage(BaseComponent... components) {
+                MyPlugin.fixme();
+            }
+        };
     }
 }

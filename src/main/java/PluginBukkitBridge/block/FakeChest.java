@@ -50,4 +50,10 @@ public class FakeChest extends FakeBlockState implements Chest{
     public void setCustomName(String arg0) {
         MyPlugin.fixme(); 
     }
+
+    @Override
+    public Inventory getSnapshotInventory() {
+        MyPlugin.fixme();
+        return null;
+    }
 }

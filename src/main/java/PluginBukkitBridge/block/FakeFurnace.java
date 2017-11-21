@@ -76,4 +76,10 @@ public class FakeFurnace extends FakeContainerBlockState implements Furnace {
     public void setCustomName(String arg0) {
         MyPlugin.fixme();
     }
+
+    @Override
+    public FurnaceInventory getSnapshotInventory() {
+        MyPlugin.fixme();
+        return null;
+    }
 }
