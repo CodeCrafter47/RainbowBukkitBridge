@@ -64,7 +64,10 @@ import org.bukkit.util.CachedServerIcon;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -92,21 +95,12 @@ public class FakeCraftServer implements Server {
 
     @Override
     public String getVersion() {
-        return "v" + server.getRainbowVersion() + " (MC: 1.8)";
+        return "v" + server.getRainbowVersion() + " (MC: 1.12.2)";
     }
 
     @Override
     public String getBukkitVersion() {
         return "v" + server.getRainbowVersion();
-    }
-
-    //@Override // 1.12 No Override
-    public Player[] _INVALID_getOnlinePlayers() {
-        Collection<? extends Player> players = getOnlinePlayers();
-        Player pls[] = new Player[players.size()];
-        int i = 0;
-        for (Player p : players) pls[i++] = p;
-        return pls;
     }
 
     @Override
@@ -304,27 +298,6 @@ public class FakeCraftServer implements Server {
         MyPlugin.fixme();
     }
 
-    //@Override 1.12 no override
-    /*
-    public void configureDbConfig(ServerConfig config) {
-        Validate.notNull(config, "Config cannot be null");
-
-        DataSourceConfig ds = new DataSourceConfig();
-        ds.setDriver(MyPlugin.bridgeConfig.config.getString("database.driver"));
-        ds.setUrl(MyPlugin.bridgeConfig.config.getString("database.url"));
-        ds.setUsername(MyPlugin.bridgeConfig.config.getString("database.username"));
-        ds.setPassword(MyPlugin.bridgeConfig.config.getString("database.password"));
-        ds.setIsolationLevel(TransactionIsolation.getLevel(MyPlugin.bridgeConfig.config.getString("database.isolation")));
-
-        if (ds.getDriver().contains("sqlite")) {
-            config.setDatabasePlatform(new SQLitePlatform());
-            config.getDatabasePlatform().getDbDdlSyntax().setIdentity("");
-        }
-
-        config.setDataSourceConfig(ds);
-    }
-    */
-
     @Override
     public Inventory createInventory(InventoryHolder arg0, InventoryType arg1) {
         MyPlugin.fixme();
@@ -372,19 +345,32 @@ public class FakeCraftServer implements Server {
         // --> it's allowed
         return true;
     }
+    
+    public String getProp(String name, String def) {
+        File prop = new File("server.properties");
+        if (!prop.exists()) {
+            MyPlugin.fixme("unable to get property " + name);
+            return def; // return default
+        }
+
+        try {
+            for (String s : Files.readAllLines(Paths.get(prop.toURI()))) {
+                if (s.startsWith(name)) return String.valueOf(s.split("=")[1].trim());
+            }
+        } catch (IOException failed) {}
+
+        MyPlugin.fixme("unable to get property " + name);
+        return def; // return default
+    }
 
     @Override
     public boolean getAllowFlight() {
-        MyPlugin.fixme("unable to get property allow-flight");
-        // return default
-        return false;
+        return Boolean.valueOf(getProp("allow-flight", "false"));
     }
 
     @Override
     public boolean getAllowNether() {
-        MyPlugin.fixme("unable to get property allow-nether");
-        // return default
-        return false;
+        return Boolean.valueOf(getProp("allow-nether", "true"));
     }
 
     @Override
@@ -433,16 +419,14 @@ public class FakeCraftServer implements Server {
 
     @Override
     public GameMode getDefaultGameMode() {
-        MyPlugin.fixme("unable to get property gamemode");
-        // return default
-        return GameMode.SURVIVAL;
+        int mode = Integer.valueOf(getProp("gamemode", "0"));
+
+        return GameMode.getByValue(mode);
     }
 
     @Override
     public boolean getGenerateStructures() {
-        MyPlugin.fixme("unable to get property generate-structures");
-        // return default
-        return false;
+        return Boolean.valueOf(getProp("generate-structures", "true"));
     }
 
     @Override
@@ -453,8 +437,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public int getIdleTimeout() {
-        MyPlugin.fixme();
-        return 0;
+        return Integer.valueOf(getProp("player-idle-timeout", "0"));
     }
 
     @Override
@@ -488,9 +471,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public int getMaxPlayers() {
-        MyPlugin.fixme("unable to get property max-players");
-        // return default
-        return 20;
+        return Integer.valueOf(getProp("max-players", "20"));
     }
 
     @Override
@@ -501,7 +482,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public String getMotd() {
-        return server.getServerMOTD() == null ? "MOTD" : server.getServerMOTD();
+        return server.getServerMOTD() == null ? getProp("motd", "MOTD") : server.getServerMOTD();
     }
 
     @Override
@@ -652,9 +633,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public int getViewDistance() {
-        MyPlugin.fixme("unable to get property view-distance");
-        // return default
-        return 10;
+        return Integer.valueOf(getProp("view-distance", "10"));
     }
 
     @Override
@@ -708,9 +687,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public boolean isHardcore() {
-        MyPlugin.fixme("unable to get property hardcore");
-        // return default
-        return false;
+        return Boolean.valueOf(getProp("max-players", "false"));
     }
 
     @Override
