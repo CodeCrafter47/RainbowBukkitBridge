@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by florian on 16.10.14.
  */
-public class PluginsCommand  extends BukkitCommand {
+public class PluginsCommand extends BukkitCommand {
     public PluginsCommand(String name) {
         super(name);
         this.description = "Gets a list of plugins running on the server";

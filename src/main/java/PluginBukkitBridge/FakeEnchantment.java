@@ -63,4 +63,10 @@ public class FakeEnchantment extends Enchantment{
     public boolean canEnchantItem(ItemStack itemStack) {
         return target.includes(itemStack);
     }
+
+    @Override
+    public boolean isCursed() {
+        MyPlugin.fixme();
+        return false;
+    }
 }

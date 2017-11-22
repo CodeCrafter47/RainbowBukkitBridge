@@ -1,8 +1,9 @@
 package PluginBukkitBridge.entity;
 
+import org.bukkit.entity.EnderDragon;
+
 import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_Entity;
-import org.bukkit.entity.EnderDragon;
 
 /**
  * Created by florian on 12.10.14.
@@ -15,7 +16,7 @@ public class FakeEnderdragon extends FakeComplexLivingEntity implements EnderDra
     @Override
     public Phase getPhase() {
         MyPlugin.fixme();
-        return Phase.CIRCLING;
+        return null;
     }
 
     @Override

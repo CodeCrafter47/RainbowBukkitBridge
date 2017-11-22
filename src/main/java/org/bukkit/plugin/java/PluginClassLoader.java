@@ -1,16 +1,5 @@
 package org.bukkit.plugin.java;
 
-import PluginBukkitBridge.MyPlugin;
-import org.apache.commons.lang.Validate;
-import org.bukkit.plugin.InvalidPluginException;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.commons.Remapper;
-import org.objectweb.asm.commons.RemappingClassAdapter;
-
 import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -21,9 +10,21 @@ import java.security.CodeSource;
 import java.security.Permissions;
 import java.security.ProtectionDomain;
 import java.security.cert.Certificate;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang.Validate;
+import org.bukkit.plugin.InvalidPluginException;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.commons.Remapper;
+import org.objectweb.asm.commons.RemappingClassAdapter;
+
+import PluginBukkitBridge.MyPlugin;
 
 /**
  * A ClassLoader for plugins, to allow shared classes across multiple plugins

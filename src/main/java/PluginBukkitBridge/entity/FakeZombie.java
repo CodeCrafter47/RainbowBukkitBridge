@@ -1,6 +1,7 @@
 package PluginBukkitBridge.entity;
 
 import PluginBukkitBridge.MyPlugin;
+import PluginReference.MC_EntityType;
 import PluginReference.MC_Zombie;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Zombie;
@@ -29,7 +30,7 @@ public class FakeZombie extends FakeCreature implements Zombie{
 
     @Override
     public boolean isVillager() {
-        return zombie.isVillager();
+        return zombie.getType() == MC_EntityType.ZOMBIE_VILLAGER;
     }
 
     @Override

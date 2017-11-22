@@ -1,9 +1,7 @@
 package PluginBukkitBridge.block;
 
 import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.Util;
 import PluginBukkitBridge.inventory.FakeFurnaceInventory;
-import PluginReference.MC_Container;
 import org.bukkit.block.Furnace;
 import org.bukkit.inventory.FurnaceInventory;
 
@@ -66,5 +64,22 @@ public class FakeFurnace extends FakeContainerBlockState implements Furnace {
     @Override
     public void setLock(String s) {
         MyPlugin.fixme();
+    }
+
+    @Override
+    public String getCustomName() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setCustomName(String arg0) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public FurnaceInventory getSnapshotInventory() {
+        MyPlugin.fixme();
+        return null;
     }
 }

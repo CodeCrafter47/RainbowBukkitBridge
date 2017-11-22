@@ -333,4 +333,32 @@ public class FakeItemMeta implements ItemMeta, Repairable {
     boolean notUncommon(FakeItemMeta meta) {
         return true;
     }
+
+    @Override
+    public String getLocalizedName() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public boolean hasLocalizedName() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public boolean isUnbreakable() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setLocalizedName(String arg0) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setUnbreakable(boolean arg0) {
+        MyPlugin.fixme();
+    }
 }

@@ -97,4 +97,10 @@ class FakeTask implements BukkitTask, Runnable
 		setPeriod(-2l);
 		return true;
 	}
+
+    @Override
+    public boolean isCancelled() {
+        MyPlugin.fixme();
+        return false;
+    }
 }

@@ -10,6 +10,7 @@ import PluginReference.MC_Player;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MainHand;
+import org.bukkit.inventory.Merchant;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.permissions.PermissibleBase;
 import org.bukkit.permissions.Permission;
@@ -272,5 +274,50 @@ public class FakeHumanEntity extends FakeLivingEntity implements HumanEntity {
     @Override
     public void setLastDamageCause(EntityDamageEvent arg0) {
         lastDamageCause = arg0;
+    }
+
+    @Override
+    public int getCooldown(Material arg0) {
+        MyPlugin.fixme();
+        return 0;
+    }
+
+    @Override
+    public boolean hasCooldown(Material arg0) {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public InventoryView openMerchant(Merchant arg0, boolean arg1) {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setCooldown(Material arg0, int arg1) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public Entity getShoulderEntityLeft() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public Entity getShoulderEntityRight() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setShoulderEntityLeft(Entity arg0) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setShoulderEntityRight(Entity arg0) {
+        MyPlugin.fixme();
     }
 }

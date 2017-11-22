@@ -12,8 +12,11 @@ import org.bukkit.Material;
 import org.bukkit.Note;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.Statistic;
 import org.bukkit.WeatherType;
+import org.bukkit.advancement.Advancement;
+import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.craftbukkit.CraftSound;
@@ -473,7 +476,7 @@ public class FakePlayer extends FakeHumanEntity implements Player {
         return false;
     }
 
-    @Override
+    // 1.12 removed @Override
     public void setBanned(boolean arg0) {
         MyPlugin.fixme();
     }
@@ -905,5 +908,47 @@ public class FakePlayer extends FakeHumanEntity implements Player {
     @Override
     public int getNoDamageTicks() {
         return noDamageTicks;
+    }
+
+    @Override
+    public void playSound(Location arg0, Sound arg1, SoundCategory arg2, float arg3, float arg4) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void playSound(Location arg0, String arg1, SoundCategory arg2, float arg3, float arg4) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void sendTitle(String arg0, String arg1, int arg2, int arg3, int arg4) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void setResourcePack(String arg0, byte[] arg1) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void stopSound(Sound arg0, SoundCategory arg1) {
+        MyPlugin.fixme(); 
+    }
+
+    @Override
+    public void stopSound(String arg0, SoundCategory arg1) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public AdvancementProgress getAdvancementProgress(Advancement arg0) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getLocale() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

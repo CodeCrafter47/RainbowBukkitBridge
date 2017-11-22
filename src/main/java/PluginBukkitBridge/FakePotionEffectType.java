@@ -1,5 +1,6 @@
 package PluginBukkitBridge;
 
+import org.bukkit.Color;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -30,5 +31,11 @@ public class FakePotionEffectType extends PotionEffectType{
     @Override
     public boolean isInstant() {
         return instant;
+    }
+
+    @Override
+    public Color getColor() {
+        MyPlugin.fixme();
+        return null;
     }
 }

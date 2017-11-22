@@ -10,12 +10,13 @@ import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+
 import java.util.Set;
 
 public class FakeConsoleCommandSender implements ConsoleCommandSender {
     @Override
     public String getName() {
-
         return "BukkitBridge";
     }
 
@@ -136,4 +137,18 @@ public class FakeConsoleCommandSender implements ConsoleCommandSender {
         MyPlugin.fixme();
     }
 
+    @Override
+    public Spigot spigot() {
+        return new Spigot() {
+            @Override
+            public void sendMessage(BaseComponent component) {
+                MyPlugin.fixme();
+            }
+            
+            @Override
+            public void sendMessage(BaseComponent... components) {
+                MyPlugin.fixme();
+            }
+        };
+    }
 }

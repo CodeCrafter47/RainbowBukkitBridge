@@ -16,7 +16,7 @@ public class FakeEnderCrystal extends FakeEntity implements EnderCrystal {
     @Override
     public boolean isShowingBottom() {
         MyPlugin.fixme();
-        return false;
+        return true; // Minecraft Default
     }
 
     @Override

@@ -2,6 +2,8 @@ package PluginBukkitBridge.item;
 
 import PluginBukkitBridge.MyPlugin;
 import lombok.SneakyThrows;
+
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -195,5 +197,22 @@ public class FakePotionMeta extends FakeItemMeta implements PotionMeta {
             return (this.hasCustomEffects() ? that.hasCustomEffects() && this.getCustomEffects().equals(that.getCustomEffects()) : !that.hasCustomEffects());
         }
         return true;
+    }
+
+    @Override
+    public Color getColor() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public boolean hasColor() {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void setColor(Color arg0) {
+        MyPlugin.fixme();
     }
 }

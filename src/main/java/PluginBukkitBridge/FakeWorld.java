@@ -8,6 +8,8 @@ import PluginReference.MC_EntityType;
 import PluginReference.MC_GameRuleType;
 import PluginReference.MC_Player;
 import PluginReference.MC_World;
+import PluginReference.RainbowUtils;
+
 import com.google.common.base.Charsets;
 import org.apache.commons.lang.Validate;
 import org.bukkit.BlockChangeDelegate;
@@ -20,6 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
@@ -65,7 +68,7 @@ import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.PoweredMinecart;
+import org.bukkit.entity.minecart.PoweredMinecart;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Silverfish;
@@ -76,7 +79,7 @@ import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Squid;
-import org.bukkit.entity.StorageMinecart;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.ThrownExpBottle;
@@ -95,8 +98,10 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Consumer;
 import org.bukkit.util.Vector;
 
 import java.io.File;
@@ -1153,6 +1158,34 @@ public class FakeWorld implements World {
 
     @Override
     public boolean unloadChunkRequest(int arg0, int arg1, boolean arg2) {
+        MyPlugin.fixme();
+        return false;
+    }
+
+    @Override
+    public void playSound(Location arg0, Sound arg1, SoundCategory arg2, float arg3, float arg4) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public void playSound(Location arg0, String arg1, SoundCategory arg2, float arg3, float arg4) {
+        MyPlugin.fixme(); 
+    }
+
+    @Override
+    public <T extends Entity> T spawn(Location arg0, Class<T> arg1, Consumer<T> arg2) throws IllegalArgumentException {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public FallingBlock spawnFallingBlock(Location arg0, MaterialData arg1) throws IllegalArgumentException {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public boolean setSpawnLocation(Location arg0) {
         MyPlugin.fixme();
         return false;
     }

@@ -1,5 +1,6 @@
 package PluginBukkitBridge.entity;
 
+import PluginBukkitBridge.MyPlugin;
 import PluginBukkitBridge.Util;
 import PluginReference.MC_Skeleton;
 import org.bukkit.entity.Skeleton;
@@ -17,11 +18,12 @@ public class FakeSkeleton extends FakeCreature implements Skeleton {
 
     @Override
     public SkeletonType getSkeletonType() {
-        return Util.getSkeletonType(skeleton.getSkeletonType());
+        MyPlugin.fixme();
+        return SkeletonType.NORMAL;
     }
 
     @Override
     public void setSkeletonType(SkeletonType skeletonType) {
-        skeleton.setSkeletonType(Util.getSkeletonType(skeletonType));
+        MyPlugin.fixme();
     }
 }

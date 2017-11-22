@@ -1,8 +1,9 @@
 package PluginBukkitBridge.entity;
 
+import org.bukkit.entity.Guardian;
+
 import PluginBukkitBridge.MyPlugin;
 import PluginReference.MC_Entity;
-import org.bukkit.entity.Guardian;
 
 /**
  * Created by florian on 28.11.14.

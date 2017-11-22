@@ -1,15 +1,16 @@
 package PluginBukkitBridge.block;
 
-import PluginBukkitBridge.MyPlugin;
-import PluginBukkitBridge.inventory.FakeBeaconInventory;
+import java.util.Collection;
+import java.util.Collections;
+
 import org.bukkit.block.Beacon;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.BeaconInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Collection;
-import java.util.Collections;
+import PluginBukkitBridge.MyPlugin;
+import PluginBukkitBridge.inventory.FakeBeaconInventory;
 
 public class FakeBeacon extends FakeContainerBlockState implements Beacon {
     public FakeBeacon(FakeBlock arg) {
@@ -17,7 +18,7 @@ public class FakeBeacon extends FakeContainerBlockState implements Beacon {
     }
 
     @Override
-    public Inventory getInventory() {
+    public BeaconInventory getInventory() {
         return new FakeBeaconInventory(this, 64);
     }
 
@@ -70,5 +71,22 @@ public class FakeBeacon extends FakeContainerBlockState implements Beacon {
     @Override
     public void setLock(String s) {
         MyPlugin.fixme();
+    }
+
+    @Override
+    public String getCustomName() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public void setCustomName(String arg0) {
+        MyPlugin.fixme();
+    }
+
+    @Override
+    public BeaconInventory getSnapshotInventory() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
