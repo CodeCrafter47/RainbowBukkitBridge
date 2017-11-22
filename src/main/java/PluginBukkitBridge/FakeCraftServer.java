@@ -633,7 +633,7 @@ public class FakeCraftServer implements Server {
 
     @Override
     public int getViewDistance() {
-        return Integer.valueOf(getProp("view-distance", "10"));
+        return server.getViewDistance();
     }
 
     @Override
