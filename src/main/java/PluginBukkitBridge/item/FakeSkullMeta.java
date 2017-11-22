@@ -2,8 +2,11 @@ package PluginBukkitBridge.item;
 
 import lombok.SneakyThrows;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jnbt.*;
+
+import PluginBukkitBridge.MyPlugin;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -84,5 +87,17 @@ public class FakeSkullMeta extends FakeItemMeta implements SkullMeta {
 
     boolean isSkullEmpty() {
         return !(hasOwner());
+    }
+
+    @Override
+    public OfflinePlayer getOwningPlayer() {
+        MyPlugin.fixme();
+        return null;
+    }
+
+    @Override
+    public boolean setOwningPlayer(OfflinePlayer arg0) {
+        MyPlugin.fixme();
+        return false;
     }
 }
